@@ -10,16 +10,26 @@
     }
 
 	$projectTitle = $_POST['projectTitle'];
-	$supervisorID;
-	$projectCourseID;
+	$supervisorID = 1;
+    $courses = $_POST['courses'];
     $projectID = getNextID($connection);
     $projectBrief = $_POST['projectBrief'];
     $maximumStudents = $_POST['maximumStudents'];
     $projectCode = $_POST['projectCode'];
 
 
-	$query = "INSERT INTO project (projectID, projectTitle, supervisorID, projectCourseID, projectBrief, maximumStudents, projectCode, dateAdded, lastEdited)
-	VALUES ('$projectID', '$projectTitle', '$supervisorID', '$projectCourseID', '$projectBrief', '$maximumStudents', '$projectCode', now(), now())";
+	$query = "INSERT INTO project (projectID, projectTitle, supervisorID, projectBrief, maximumStudents, projectCode, dateAdded, lastEdited)
+	VALUES ('$projectID', '$projectTitle', '$supervisorID', '$projectBrief', '$maximumStudents', '$projectCode', now(), now())";
+
+    foreach($courses as $item) {
+        $projectCourseQuery = "INSERT INTO projectCourse (projectID, courseID) VALUES ('$projectID','$item')";
+
+        if ($result = mysqli_query($connection, $projectCourseQuery)) {
+            echo "Course Pair: $item : $projectID added successfully";
+        } else {
+            echo "Error: " . $projectCourseQuery . "<br>" . $connection->error;
+        }
+    }
 
 	if ($result = mysqli_query($connection, $query)) {
 	    echo "Project: $projectTitle added successfully";
@@ -39,8 +49,7 @@
         if ($result = mysqli_query($connection, $query)) {
             if (mysqli_num_rows($result) > 0) {
                 while($row = mysqli_fetch_array($result)) {
-                    echo $row("total");
-                    $projectID = $row + 1;
+                    $projectID = $row["total"] + 1;
                 }
             }
         } else {
@@ -53,6 +62,3 @@
     $connection->close();
 
 ?>
-Error: SELECT COUNT(*) AS total FROM project
-Error: INSERT INTO project (projectID, projectTitle, supervisorID, projectCourseID, projectBrief, maximumStudents, projectCode, dateAdded, lastEdited) VALUES ('', '1', '', '', '11', '1', '1', now(), now())
-Incorrect integer value: '' for column 'projectID' at row 1Error: SELECT COUNT(*) AS total FROM project Error: INSERT INTO project (projectID, projectTitle, supervisorID, projectCourseID, projectBrief, maximumStudents, projectCode, dateAdded, lastEdited) VALUES ('', 's', '', '', 's', 's', 's', now(), now()) Incorrect integer value: '' for column 'projectID' at row 1

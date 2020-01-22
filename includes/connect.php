@@ -8,7 +8,7 @@
 	echo '
 		<meta charset="utf-8">
 	  	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	  	<meta name="description" content="SPAS">
+	  	<meta name="description" content="Student Project Administration System (SPAS)">
 	  	<meta name="author" content="Jake Taylor">
 
 	  	<link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
