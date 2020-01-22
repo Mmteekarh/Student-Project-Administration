@@ -11,10 +11,6 @@
 
         // Gets the project id from the current file name and assigns empty variables for use later.
         $projectID = basename(__FILE__, '.php');
-        $projectTitle = "";
-        $projectBrief = "";
-        $projectCode = "";
-        $supervisorName = "";
 
         // Query to get the project data based on the ID.
         $query = "SELECT * FROM project where projectID='$projectID'";
@@ -25,33 +21,38 @@
                 while($row = mysqli_fetch_array($result)){
                     $projectTitle = $row["projectTitle"];
                     $projectBrief = $row["projectBrief"];
-                    $projectTitle = $row["projectCode"];
-                    $supervisorName = getSupervisorName($connection, $row["supervisorID"]);
+                    $projectCode = $row["projectCode"];
+                    $supervisorRow = getSupervisorDetails($connection, $row["supervisorID"]);
+
+                    $supervisorOffice = $supervisorRow['officeNumber'];
+                    $supervisorEmail = $supervisorRow['emailAddress'];
+
+                    $supervisorTitle = $supervisorRow['supervisorTitle'];
+                    $supervisorFirstName = $supervisorRow['firstName'];
+                    $supervisorLastName = $supervisorRow['lastName'];
+                    $supervisorName = $supervisorTitle . " " . $supervisorFirstName . " " . $supervisorLastName;
                 }
             }
         }
 
 
         // Function uses the ID to get the supervisor name from the supervisor table.
-        function getSupervisorName($connection, $supervisorID) {
+        function getSupervisorDetails($connection, $supervisorID) {
 
-            $supervisorName = "";
+            $row = "";
             $query = "SELECT * FROM supervisor WHERE supervisorID='" . $supervisorID . "'";
 
             if ($result = mysqli_query($connection, $query)) {
                 if (mysqli_num_rows($result) > 0) {
                     while($row = mysqli_fetch_array($result)) {
-                        $supervisorTitle = $row['supervisorTitle'];
-                        $supervisorFirstName = $row['firstName'];
-                        $supervisorLastName = $row['lastName'];
-                        $supervisorName = $supervisorTitle . " " . $supervisorFirstName . " " . $supervisorLastName;
+                        return $row;
                     }
                 }
             } else {
                 echo "Error: " . $query . "<br>" . $connection->error;
             }
 
-            return $supervisorName;
+            return $row;
         }
 
     ?>
@@ -85,10 +86,10 @@
         <div class="row">
 
             <div class="col-md-4">
-                <h2>Title: <?php echo $projectTitle; ?></h2>
-                <h2>Supervisor: <?php echo $supervisorName; ?></h2>
-                <h2>Relevant Courses: </h2>
-                <h2>Project Code: <?php echo $projectCode; ?></h2>
+                <p><b>Title:</b> <?php echo $projectTitle; ?></p><br>
+                <p><b>Supervisor:</b> <?php echo $supervisorName; ?></p><br>
+                <p><b>Relevant Courses:</b> </p><br>
+                <p><b>Project Code:</b> <?php echo $projectCode; ?></p>
             </div>
 
         </div>
@@ -97,17 +98,17 @@
 
         <!-- Right row of content - shows supervisor details -->
         <div class="row">
-            <h3>Supervisor Information</h3>
-            <p><?php echo $supervisorName ?>
-            <p>Office:</p>
-            <p>Email Address:</p>
+            <h4>Supervisor Information</h4><br>
+            <p><?php echo $supervisorName; ?><br>
+            <p><b>Office:</b> <?php echo $supervisorOffice; ?></p><br>
+            <p><b>Email Address:</b> <?php echo $supervisorEmail; ?></p>
         </div>
 
         <br><hr><br>
 
         <!-- Bottom row of content - shows project brief -->
         <div class="row">
-            <h3>Project Brief</h3>
+            <h4>Project Brief</h4><br>
             <p><?php echo $projectBrief ?>
         </div>
 

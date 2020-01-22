@@ -1,5 +1,8 @@
 <?php
 
+    $ip = $_SERVER['REMOTE_ADDR'];
+    $currentDate = date("Y/m/d H:i:sa");
+
     // Attempts to make a connection to the database with given fields.
     $connection = mysqli_connect("localhost", "phpaccess", "t5eXXf0@s3", "SPAS");
            

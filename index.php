@@ -76,10 +76,11 @@
                             while($row = mysqli_fetch_array($result)){
                                 $projectTitle = $row['projectTitle'];
                                 $projectBrief = $row['projectBrief'];
+                                $projectID = $row['projectID'];
                                 $projectSupervisor = getSupervisorName($connection, $row['supervisorID']);
 
                                 echo '<tr>';
-                                echo '<th scope="row">' . $projectTitle . '</th>';
+                                echo '<th scope="row"><a href="../projects/'.$projectID.'.php">' . $projectTitle . '</a></th>';
                                 echo '<td>' . $projectBrief . '</td>';
                                 echo '<td>' . $projectSupervisor . '</td>';
                                 echo '</tr>';

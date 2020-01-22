@@ -103,6 +103,8 @@
                     } else {
                         echo "Error: " . $query . "<br>" . $connection->error;
                     }
+
+                    $connection->close();
                     ?>  
             </div>
           </div>
