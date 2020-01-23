@@ -29,12 +29,9 @@
 
         <div class="row">
 
-            <div class="dropdown">
-                <!-- from https://getbootstrap.com/docs/4.0/components/dropdowns/ -->
-              <button class="btn dropdown-toggle" type="button" id="courseSelector" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Select Course
-              </button>
-              <div class="dropdown-menu" aria-labelledby="courseSelector">
+            <form method="post" action="">
+              <select name="courseID">
+              	<option>Select Course</option>
                  <?php
 
                     $query = "SELECT * FROM course";
@@ -45,17 +42,21 @@
                                 $courseName = $row['courseName'];
                                 $courseID = $row['courseID'];
 
-                                echo '<a class="dropdown-item" href="#">'.$courseName.'</a>';
+                                echo '<option value="'.$courseID.'">' . $courseName . '</option>';
                             }
                         }
                     } else {
                         echo "Error: " . $query . "<br>" . $connection->error;
                     }
                     ?>
-              </div>
-            </div>
 
-            <br><br>
+
+              </select>
+              <button type="submit" name="submit">Submit</button>
+            </form>
+
+            <br>
+            <br>
 
             <table class="table table-striped">
                 <thread>
@@ -69,7 +70,11 @@
 
                 <?php
 
-                    $query = "SELECT * FROM project LIMIT 20";
+	                if(isset($_POST["submit"])) {
+						$courseID = $_POST["courseID"];
+					}
+
+                    $query = "SELECT * FROM projectCourse INNER JOIN project ON projectCourse.projectID = project.projectID WHERE projectCourse.courseID = '$courseID' LIMIT 20";
 
                     if ($result = mysqli_query($connection, $query)) {
                         if (mysqli_num_rows($result) > 0) {
