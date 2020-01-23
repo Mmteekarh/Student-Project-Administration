@@ -11,9 +11,9 @@
 	  	<meta name="description" content="Student Project Administration System (SPAS)">
 	  	<meta name="author" content="Jake Taylor">
 
-	  	<link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	  	<link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
- 		<link href="../css/modern-business.css" rel="stylesheet">
+ 		<link href="../../css/modern-business.css" rel="stylesheet">
 	  	';
 
 	// Attempts to make a connection to the database with given fields.

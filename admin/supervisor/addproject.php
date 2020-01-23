@@ -3,42 +3,15 @@
 
 <head>
 
-  <?php include "../includes/connect.php" ?>
+  <?php include "../../includes/connect.php" ?>
   <title>Add Project - SPAS</title>
 
 </head>
 
 <body>
 
-  <!-- Navigation -->
-  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="admin.php">Admin</a>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link" href="../index.php">Back To Site</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="supervisor.php">Supervisor</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="addproject.php">Add Project</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="editproject.php">Edit Project</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="removeproject.php">Remove Project</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="systemmanagement.php">System Management</a>
-          </li>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <!-- Includes navigation bar -->
+  <?php include "../../includes/supervisornav.php" ?>
 
   <!-- Page Content -->
   <div class="container">
@@ -50,6 +23,9 @@
       <li class="breadcrumb-item">
         <a href="admin.php">Admin</a>
       </li>
+      <li class="breadcrumb-item">
+        <a href="admin.php">Supervisor Tools</a>
+      </li>
       <li class="breadcrumb-item active">Add Project</li>
     </ol>
 
@@ -57,7 +33,7 @@
     <div class="row">
       <div class="col-lg-8 mb-4">
         <h3>Add Project</h3>
-        <form name="projectForm" action="../php/addProject.php" method="post" enctype="multipart/form-data">
+        <form name="projectForm" action="../../php/addProject.php" method="post" enctype="multipart/form-data">
           <div class="control-group form-group">
             <div class="controls">
               <label>Project Title</label>
@@ -119,7 +95,7 @@
 
   </div>
 
-  <?php include "../includes/footer.php" ?>
+  <?php include "../../includes/footer.php" ?>
 
 </body>
 

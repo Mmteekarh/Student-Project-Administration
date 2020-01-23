@@ -4,25 +4,25 @@
 <head>
 
   <?php include "../includes/connect.php" ?>
-  <title>Admin - SPAS</title>
+  <title>Supervisor Tools - SPAS</title>
 
 </head>
 
 <body>
 
   <!-- Includes navigation bar -->
-  <?php include "../includes/adminnav.php" ?>
+  <?php include "../includes/supervisornav.php" ?>
 
   <!-- Page Content -->
   <div class="container">
 
-    <h1 class="mt-4 mb-3">Admin - Home</h1>
+    <h1 class="mt-4 mb-3">Admin - Supervisor Tools</h1>
 
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
         <a href="admin.php">Admin</a>
       </li>
-      <li class="breadcrumb-item active">Home</li>
+      <li class="breadcrumb-item active">Supervisor Tools</li>
     </ol>
 
   </div>
