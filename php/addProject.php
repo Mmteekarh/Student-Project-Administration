@@ -42,7 +42,7 @@
 
     copy('/var/www/html/projectTemplate.php', ('/var/www/html/projects/'.$projectID.'.php'));
 
-	header("Refresh:2; url=../admin/addproject.php");
+	header("Refresh:2; url=../admin/supervisor/addproject.php");
 
     function getNextID($connection) {
         $projectID = "";

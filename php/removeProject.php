@@ -24,6 +24,6 @@
 
 	$connection->close();
 
-	header("Refresh:2; url=../admin/removeproject.php");
+	header("Refresh:2; url=../admin/supervisor/removeproject.php");
 
 ?>
