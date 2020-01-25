@@ -26,7 +26,15 @@ echo '
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="../../admin/addsupervisor.php">Add Supervisor</a>
+                    <a class="nav-link" href="../../admin/systemmanagement/addsupervisor.php">Add Supervisor</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../admin/systemmanagement/addstudent.php">Add Student</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="../../admin/systemmanagement/importstudents.php">Import Students</a>
                 </li>
 
             </ul>
