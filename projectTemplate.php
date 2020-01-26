@@ -126,6 +126,9 @@
                 ?> 
                 </p><br>
                 <p><b>Project Code:</b> <?php echo $projectCode; ?></p>
+
+                <center><button type="button" class="btn btn-success">Select Project</button></center>
+                <br>
             </div>
 
             <br><hr><br>

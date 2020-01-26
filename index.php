@@ -28,35 +28,43 @@
     <div class="container">
 
         <div class="row">
+            <div class="col-md-11">
 
-            <form method="post" action="">
-              <select name="courseID">
-              	<option>Select Course</option>
-                 <?php
+                <form method="post" action="">
+                  <select name="courseID">
+                  	<option>Select Course</option>
+                     <?php
 
-                    $query = "SELECT * FROM course";
+                        $query = "SELECT * FROM course";
 
-                    if ($result = mysqli_query($connection, $query)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while($row = mysqli_fetch_array($result)){
-                                $courseName = $row['courseName'];
-                                $courseID = $row['courseID'];
+                        if ($result = mysqli_query($connection, $query)) {
+                            if (mysqli_num_rows($result) > 0) {
+                                while($row = mysqli_fetch_array($result)){
+                                    $courseName = $row['courseName'];
+                                    $courseID = $row['courseID'];
 
-                                echo '<option value="'.$courseID.'">' . $courseName . '</option>';
+                                    echo '<option value="'.$courseID.'">' . $courseName . '</option>';
+                                }
                             }
+                        } else {
+                            echo "Error: " . $query . "<br>" . $connection->error;
                         }
-                    } else {
-                        echo "Error: " . $query . "<br>" . $connection->error;
-                    }
-                    ?>
+                        ?>
 
 
-              </select>
-              <button type="submit" name="submit">Submit</button>
-            </form>
+                  </select>
+                  <button type="submit" name="submit">Submit</button>
+                </form>
+            </div>
 
-            <br>
-            <br>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-primary">Login</button>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="row">
 
             <table class="table table-striped">
                 <thread>
