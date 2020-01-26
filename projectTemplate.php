@@ -55,6 +55,28 @@
             return $row;
         }
 
+        function getRelevantCourses($connection, $projectID) {
+
+            $courses = array();
+
+            $query = "SELECT * FROM projectCourse INNER JOIN course ON projectCourse.courseID = course.courseID WHERE projectCourse.projectID = '$projectID'";
+
+            if ($result = mysqli_query($connection, $query)) {
+                if (mysqli_num_rows($result) > 0) {
+                    while($row = mysqli_fetch_array($result)){
+                        $courseName = $row['courseName'];
+                        array_push($courses,$courseName);
+                    }
+                }
+            } else {
+                echo "Error: " . $query . "<br>" . $connection->error;
+            }
+
+            return $courses;
+        }
+
+        $relevantCourses = getRelevantCourses($connection, $projectID);
+
     ?>
 
     <!-- Sets title to project title -->
@@ -83,33 +105,52 @@
         </ol>
 
         <!-- Left row of content - shows project info: title, supervisor, course, project code -->
-        <div class="row">
 
-            <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-6 border">
+                <br>
                 <p><b>Title:</b> <?php echo $projectTitle; ?></p><br>
                 <p><b>Supervisor:</b> <?php echo $supervisorName; ?></p><br>
-                <p><b>Relevant Courses:</b> </p><br>
+                <p><b>Relevant Courses:</b>
+                <?php
+                    $i = 0;
+                    $len = count($relevantCourses);
+                    foreach ($relevantCourses as $course) {
+                        if ($i==$len-1) {
+                            echo $course;
+                        } else {
+                            echo $course . ", "; 
+                        }
+                        $i++;
+                    } 
+                ?> 
+                </p><br>
                 <p><b>Project Code:</b> <?php echo $projectCode; ?></p>
             </div>
 
-        </div>
+            <br><hr><br>
 
-        <br><hr><br>
-
-        <!-- Right row of content - shows supervisor details -->
-        <div class="row">
-            <h4>Supervisor Information</h4><br>
-            <p><?php echo $supervisorName; ?><br>
-            <p><b>Office:</b> <?php echo $supervisorOffice; ?></p><br>
-            <p><b>Email Address:</b> <?php echo $supervisorEmail; ?></p>
+            <!-- Right row of content - shows supervisor details -->
+            <div class="col-md-6 border">
+                <br>
+                <h4>Supervisor Information</h4><br>
+                <p><b>Name:</b> <?php echo $supervisorName; ?></p><br>
+                <p><b>Office:</b> <?php echo $supervisorOffice; ?></p><br>
+                <p><b>Email Address:</b> <?php echo $supervisorEmail; ?></p>
+            </div>
         </div>
 
         <br><hr><br>
 
         <!-- Bottom row of content - shows project brief -->
         <div class="row">
-            <h4>Project Brief</h4><br>
-            <p><?php echo $projectBrief ?>
+            <div class="col-md-12 border">
+                <br>
+                <center><h4>Project Brief</h4>
+                <br>
+                <p><?php echo wordwrap($projectBrief, 200, "<br>", true); ?></center>
+                <br>
+            </div>
         </div>
 
     </div>
