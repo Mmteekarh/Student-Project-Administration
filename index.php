@@ -57,9 +57,31 @@
                 </form>
             </div>
 
-            <div class="col-md-1">
-                <button type="button" class="btn btn-primary">Login</button>
-            </div>
+        <?php
+            if ($loggedIn == true) {
+                if ($userType == "student") {
+                    echo '<div class="col-md-1">';
+                    echo '<form action="php/logout.php">';
+                    echo '<button type="submit" class="btn btn-danger">Logout</button>';
+                    echo '</form>';
+                    echo '</div>';
+                } else if ($userType == "supervisor") {
+                    echo '<div class="col-md-1">';
+                    echo '<form action="php/logout.php">';
+                    echo '<button type="submit" class="btn btn-danger">Logout</button>';
+                    echo '</form>';
+                    echo '</div>';
+                } else {
+                    echo "Error: Invalid user type, please contact an administrator.";
+                }
+            } else {
+                    echo '<div class="col-md-1">';
+                    echo '<form action="login.php">';
+                    echo '<button type="submit" class="btn btn-primary">Login</button>';
+                    echo '</form>';
+                    echo '</div>';
+            }
+        ?>
         </div>
 
         <br>

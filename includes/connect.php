@@ -25,4 +25,32 @@
       	die("Oh no! There was a connection error, please contact an administrator.");
     }
 
+    $loggedIn = false;
+        $userType = "none";
+        $studentID;
+        $supervisorID;
+
+        $studentQuery = "SELECT * FROM student where lastIP='$ip' AND loggedIn=1";
+        $supervisorQuery = "SELECT * FROM supervisor where lastIP='$ip' AND loggedIn=1";
+
+        if ($result = mysqli_query($connection, $studentQuery)) {
+            if (mysqli_num_rows($result) > 0) {
+                while($row = mysqli_fetch_array($result)){
+                    $loggedIn = true;
+                    $userType = "student";
+                    $studentID = $row["studentID"];
+                }
+            }
+        }
+
+        if ($result = mysqli_query($connection, $supervisorQuery)) {
+            if (mysqli_num_rows($result) > 0) {
+                while($row = mysqli_fetch_array($result)){
+                    $loggedIn = true;
+                    $userType = "supervisor";
+                    $supervisorID = $row["supervisorID"];
+                }
+            }
+        }
+
 ?>
