@@ -19,9 +19,21 @@
     $officeNumber = $_POST['officeNumber'];
     $emailAddress = $_POST['emailAddress'];
     $password = $_POST['password'];
+    $active = $_POST['activeSupervisor'];
+    $activeSupervisor;
 
-	$query = "INSERT INTO supervisor (supervisorID, supervisorTitle, firstName, lastName, officeNumber, emailAddress, password, dateAdded)
-	VALUES ('$supervisorID', '$supervisorTitle', '$firstName', '$lastName', '$officeNumber', '$emailAddress', '$password', now())";
+    echo $active;
+
+    if($active == "Yes") {
+        $activeSupervisor = 1;
+    } else if ($active == "No") {
+        $activeSupervisor = 0;
+    } else {
+        $activeSupervisor = 0;
+    }
+
+	$query = "INSERT INTO supervisor (supervisorID, supervisorTitle, firstName, lastName, activeSupervisor, officeNumber, emailAddress, password, dateAdded, loggedIn)
+	VALUES ('$supervisorID', '$supervisorTitle', '$firstName', '$lastName', $activeSupervisor, '$officeNumber', '$emailAddress', '$password', now(), 0)";
 
 	if ($result = mysqli_query($connection, $query)) {
 	    echo "Supervisor: $firstName $lastName added successfully";

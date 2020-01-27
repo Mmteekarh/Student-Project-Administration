@@ -37,7 +37,13 @@
           <div class="control-group form-group">
             <div class="controls">
               <label>Supervisor Title</label>
-              <input type="text" class="form-control" name="supervisorTitle" required data-validation-required-message="Supervisor Title">
+              <select name="supervisorTitle">
+                <option>Dr</option>
+                <option>Professor</option>
+                <option>Mr</option>
+                <option>Mrs</option>
+                <option>Miss</option>
+              </select>
             </div>
           </div>
           <div class="control-group form-group">
@@ -68,6 +74,13 @@
             <div class="controls">
               <label>Password</label>
               <input type="text" class="form-control" name="password" required data-validation-required-message="Password">
+            </div>
+          </div>
+          <div class="control-group form-group">
+            <div class="form-check">
+              <label>Active Supervisor?</label><br>
+              <label class="radio-inline"><input value="Yes" type="radio" name="activeSupervisor" checked>Yes</label>
+              <label class="radio-inline"><input value="No" type="radio" name="activeSupervisor">No</label>
             </div>
           </div>
 
