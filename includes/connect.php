@@ -49,6 +49,9 @@
                     $loggedIn = true;
                     $userType = "supervisor";
                     $supervisorID = $row["supervisorID"];
+                    if ($row["admin"] == 1) {
+                        $userType = "admin";
+                    }
                 }
             }
         }

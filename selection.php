@@ -41,11 +41,12 @@
 
     <?php
         
-        } else if ($userType == "supervisor") {
-            header("Refresh:0.01; url=../admin/supervisor.php");
+            } else if ($userType == "supervisor" or $userType == "admin") {
+                header("Refresh:0.01; url=../admin/supervisor.php");
 
             } else {
-                echo "Error: Invalid user type, please contact an administrator.";
+                // Invalid user type
+                header("Refresh:0.01; url=error/usertypeerror.php");
             }
         } else {
             header("Refresh:0.01; url=login.php");

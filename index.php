@@ -65,14 +65,15 @@
                     echo '<button type="submit" class="btn btn-danger">Logout</button>';
                     echo '</form>';
                     echo '</div>';
-                } else if ($userType == "supervisor") {
+                } else if ($userType == "supervisor" or $userType == "admin") {
                     echo '<div class="col-md-1">';
                     echo '<form action="php/logout.php">';
                     echo '<button type="submit" class="btn btn-danger">Logout</button>';
                     echo '</form>';
                     echo '</div>';
                 } else {
-                    echo "Error: Invalid user type, please contact an administrator.";
+                    // Invalid user type
+                    header("Refresh:0.01; url=error/invalidusererror.php");
                 }
             } else {
                     echo '<div class="col-md-1">';

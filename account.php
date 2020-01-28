@@ -12,6 +12,11 @@
 
 <body>
 
+  <?php
+      if ($loggedIn == true) {
+            if ($userType == "student" or $userType == "admin" or $userType == "supervisor") {
+  ?>
+
 	<!-- Includes navbar -->
 	<?php include "includes/nav.php" ?>
 
@@ -60,6 +65,17 @@
   
   	<!-- Includes footer -->
 	<?php include "includes/footer.php" ?>
+
+  <?php
+        
+          } else {
+              // Invalid user type
+              header("Refresh:0.01; url=error/usertypeerror.php");
+          }
+        } else {
+            header("Refresh:0.01; url=login.php");
+        }
+    ?>
 
 </body>
 

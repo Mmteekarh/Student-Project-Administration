@@ -10,6 +10,11 @@
 
 <body>
 
+      <?php
+      if ($loggedIn == true) {
+            if ($userType == "admin") {
+    ?>
+
   <!-- Includes navigation bar -->
   <?php include "../../includes/systemnav.php" ?>
 
@@ -87,6 +92,21 @@
   </div>
 
   <?php include "../../includes/footer.php" ?>
+
+    <?php
+        
+          } else if ($userType == "student" or $userType == "supervisor") {
+            // Invalid Permissions
+            header("Refresh:0.01; url=../../error/permissionerror.php");
+
+          } else {
+              // Invalid user type
+              header("Refresh:0.01; url=../../error/usertypeerror.php");
+          }
+        } else {
+            header("Refresh:0.01; url=../../login.php");
+        }
+    ?>
 
 </body>
 
