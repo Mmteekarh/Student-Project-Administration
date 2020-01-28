@@ -13,7 +13,7 @@
     }
 
 	$projectTitle = $_POST['projectTitle'];
-	$supervisorID = 1;
+	$superID = $_POST['superID'];
     $courses = $_POST['courses'];
     $projectID = getNextID($connection);
     $projectBrief = $_POST['projectBrief'];
@@ -22,7 +22,7 @@
 
 
 	$query = "INSERT INTO project (projectID, projectTitle, supervisorID, projectBrief, maximumStudents, projectCode, dateAdded, lastEdited)
-	VALUES ('$projectID', '$projectTitle', '$supervisorID', '$projectBrief', '$maximumStudents', '$projectCode', now(), now())";
+	VALUES ('$projectID', '$projectTitle', '$superID', '$projectBrief', '$maximumStudents', '$projectCode', now(), now())";
 
     foreach($courses as $item) {
         $projectCourseQuery = "INSERT INTO projectCourse (projectID, courseID) VALUES ('$projectID','$item')";

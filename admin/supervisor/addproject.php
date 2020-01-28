@@ -39,6 +39,9 @@
       <div class="col-lg-8 mb-4">
         <h3>Add Project</h3>
         <form name="projectForm" action="../../php/addProject.php" method="post" enctype="multipart/form-data">
+
+          <input type="hidden" name="superID" value="<?php echo $supervisorID; ?>">
+
           <div class="control-group form-group">
             <div class="controls">
               <label>Project Title</label>
@@ -90,8 +93,6 @@
             </div>
           </div>
 
-          <div id="success"></div>
-          <!-- For success/fail messages -->
           <button type="submit" class="btn btn-primary" id="addButton">Add</button>
         </form>
       </div>

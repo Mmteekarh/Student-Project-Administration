@@ -39,7 +39,7 @@
         <h3>Remove Project</h3>
 
         <?php
-          $query = "SELECT * FROM project";
+          $query = "SELECT * FROM project WHERE supervisorID='$supervisorID'";
 
           if ($result = mysqli_query($connection, $query)) {
             if (mysqli_num_rows($result) > 0) {
