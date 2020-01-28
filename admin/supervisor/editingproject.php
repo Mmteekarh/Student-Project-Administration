@@ -49,13 +49,13 @@
 
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="admin.php">Admin</a>
+        <a href="../admin.php">Admin</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="admin.php">Supervisor Tools</a>
+        <a href="../supervisor.php">Supervisor Tools</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="admin.php">Edit Project</a>
+        <a href="editproject.php">Edit Project</a>
       </li>
       <li class="breadcrumb-item active">Editing Project</li>
     </ol>
@@ -68,25 +68,25 @@
           <div class="control-group form-group">
             <div class="controls">
               <label>Project Title</label>
-              <input type="text" class="form-control" name="projectTitle" placeholder="<?php echo $projectTitle; ?>" required data-validation-required-message="Project Title">
+              <input type="text" class="form-control" name="projectTitle" value="<?php echo $projectTitle; ?>" required data-validation-required-message="Project Title">
             </div>
           </div>
           <div class="control-group form-group">
             <div class="controls">
               <label>Project Brief</label>
-              <textarea rows="10" cols="100" class="form-control" name="projectBrief" placeholder="<?php echo $projectBrief; ?>" required data-validation-required-message="Project Brief" maxlength="999" style="resize:none"></textarea>
+              <textarea rows="10" cols="100" class="form-control" name="projectBrief" required data-validation-required-message="Project Brief" maxlength="999" style="resize:none"><?php echo $projectBrief; ?></textarea>
             </div>
           </div>
           <div class="control-group form-group">
             <div class="controls">
               <label>Maximum Students</label>
-              <input type="text" class="form-control" name="maximumStudents" placeholder="<?php echo $maximumStudents; ?>" required data-validation-required-message="Maximum Students">
+              <input type="text" class="form-control" name="maximumStudents" value="<?php echo $maximumStudents; ?>" required data-validation-required-message="Maximum Students">
             </div>
           </div>
           <div class="control-group form-group">
             <div class="controls">
               <label>Project Code</label>
-              <input type="text" class="form-control" name="projectCode" placeholder="<?php echo $projectCode; ?>" required data-validation-required-message="Project Code">
+              <input type="text" class="form-control" name="projectCode" value="<?php echo $projectCode; ?>" required data-validation-required-message="Project Code">
             </div>
           </div>
 

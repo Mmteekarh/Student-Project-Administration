@@ -26,10 +26,10 @@
 
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
-        <a href="admin.php">Admin</a>
+        <a href="../admin.php">Admin</a>
       </li>
       <li class="breadcrumb-item">
-        <a href="admin.php">System Management</a>
+        <a href="../systemmanagement.php">System Management</a>
       </li>
       <li class="breadcrumb-item active">Add Supervisor</li>
     </ol>
