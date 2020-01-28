@@ -117,7 +117,7 @@
 
                                 echo '<tr>';
                                 echo '<th scope="row"><a href="../projects/'.$projectID.'.php">' . $projectTitle . '</a></th>';
-                                echo '<td>' . $projectBrief . '</td>';
+                                echo '<td>' . substr($projectBrief,0,100) . '...</td>';
                                 echo '<td>' . $projectSupervisor . '</td>';
                                 echo '</tr>';
                             }
