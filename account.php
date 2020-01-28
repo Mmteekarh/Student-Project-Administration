@@ -31,31 +31,34 @@
   	    <!-- Main section - account page -->
   	    <div class="row">
 
-  	    	<form name="changePassword" action="php/changePassword.php" method="post" enctype="multipart/form-data">
-  	    	    <div class="control-group form-group">
-              		<div class="controls">
-                	    <label>Current Password</label>
-                			<input type="password" class="form-control" name="currentPassword" required data-validation-required-message="">
+          <div class="col-md-6 border">
+
+    	    	<form name="changePassword" action="php/changePassword.php" method="post" enctype="multipart/form-data">
+    	    	    <div class="control-group form-group">
+                		<div class="controls">
+                  	    <label>Current Password</label>
+                  			<input type="password" class="form-control" name="currentPassword" required data-validation-required-message="">
+                		</div>
               		</div>
-            		</div>
 
-            		<div class="control-group form-group">
-              		<div class="controls">
-                			<label>New Password</label>
-                			<input type="password" class="form-control" name="newPassword" required data-validation-required-message="">
+              		<div class="control-group form-group">
+                		<div class="controls">
+                  			<label>New Password</label>
+                  			<input type="password" class="form-control" name="newPassword" required data-validation-required-message="">
+                		</div>
               		</div>
-            		</div>
 
-            		<div class="control-group form-group">
-              		<div class="controls">
-                			<label>Confirm New Password</label>
-                			<input type="password" class="form-control" name="confirmNewPassword" required data-validation-required-message="">
+              		<div class="control-group form-group">
+                		<div class="controls">
+                  			<label>Confirm New Password</label>
+                  			<input type="password" class="form-control" name="confirmNewPassword" required data-validation-required-message="">
+                		</div>
               		</div>
-            		</div>
 
-            		<button type="submit" class="btn btn-primary" id="changePasswordButton">Change Password</button>
+              		<button type="submit" class="btn btn-primary" id="changePasswordButton">Change Password</button>
+            </form>
 
-          </form>
+          </div>
 
   	    </div>
 

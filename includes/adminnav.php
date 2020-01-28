@@ -21,10 +21,18 @@ echo '
                     <a class="nav-link" href="../admin/supervisor.php">Supervisor Tools</a>
                 </li>
 
+    ';
+
+    if ($userType == "admin") {
+
+    echo '
                 <li class="nav-item">
                     <a class="nav-link" href="../admin/systemmanagement.php">System Management</a>
                 </li>
+        ';
+    }
 
+    echo '
             </ul>
 
         </div>

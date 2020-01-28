@@ -16,19 +16,35 @@ echo '
                 <li class="nav-item">
                     <a class="nav-link" href="../index.php">Project List</a>
                 </li>
+    ';
 
-                <li class="nav-item">
-                    <a class="nav-link" href="../selection.php">My Selection</a>
-                </li>
+    if ($loggedIn == true) {
+        if ($userType == "student") {
 
-                <li class="nav-item">
-                    <a class="nav-link" href="../account.php">Account</a>
-                </li>
+            echo '
+                        <li class="nav-item">
+                            <a class="nav-link" href="../selection.php">My Selection</a>
+                        </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="../admin/admin.php">Admin</a>
-                </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../account.php">Account</a>
+                        </li>
+                ';
+        } else if ($userType == "admin" or $userType == "supervisor") {
 
+            echo '
+                        <li class="nav-item">
+                            <a class="nav-link" href="../account.php">Account</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="../admin/admin.php">Admin</a>
+                        </li>
+                ';
+        }
+    }
+
+    echo '
             </ul>
 
         </div>
