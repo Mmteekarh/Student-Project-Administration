@@ -22,6 +22,14 @@
         echo "Error: " . $query . "<br>" . $connection->error;
     }
 
+    $projectCourseQuery = "DELETE FROM projectCourse WHERE projectID='$projectID'";
+
+    if ($connection->query($projectCourseQuery) === TRUE) {
+        echo "Success!";
+    } else {
+        echo "Error: " . $query . "<br>" . $connection->error;
+    }
+
 	$connection->close();
 
 	header("Refresh:2; url=../admin/supervisor/removeproject.php");
