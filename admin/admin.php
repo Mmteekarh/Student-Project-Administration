@@ -6,6 +6,39 @@
   <?php include "../includes/connect.php" ?>
   <title>Admin - SPAS</title>
 
+  <?php
+    $studentQuery = "SELECT COUNT(*) AS studentCount FROM student";
+    $supervisorQuery = "SELECT COUNT(*) AS supervisorCount FROM supervisor";
+    $projectQuery = "SELECT COUNT(*) AS projectCount FROM project";
+
+    if ($result = mysqli_query($connection, $studentQuery)) {
+        if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_array($result)){
+                $totalStudents = $row["studentCount"];
+            }
+        }
+    }
+
+    if ($result = mysqli_query($connection, $supervisorQuery)) {
+        if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_array($result)){
+                $totalSupervisors = $row["supervisorCount"];
+            }
+        }
+    }
+
+    if ($result = mysqli_query($connection, $projectQuery)) {
+        if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_array($result)){
+                $totalProjects = $row["projectCount"];
+            }
+        }
+    }
+
+    $connection->close();
+
+  ?>
+
 </head>
 
 <body>
@@ -30,8 +63,50 @@
       <li class="breadcrumb-item active">Home</li>
     </ol>
 
+    <div class="row">
+
+      <center><h2>General Statistics</h2></center>
+
+    </div>
+
+    <div class="row">
+
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <center>
+              <h1><?php echo $totalStudents; ?></h1>
+              <h2>Students</h2>
+            </center>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <center>
+              <h1><?php echo $totalProjects; ?></h1>
+              <h2>Projects</h2>
+            </center>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <center>
+              <h1><?php echo $totalSupervisors; ?></h1>
+              <h2>Supervisors</h2>
+            </center>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
-  <!-- /.container -->
 
   <?php include "../includes/footer.php" ?>
 
