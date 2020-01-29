@@ -12,7 +12,7 @@
         die("Oh no! There was a connection error, please contact an administrator.");
     }
 
-    $supervisorID = getNextID($connection);
+    $supervisorID = $_POST['supervisorID'];
 	$supervisorTitle = $_POST['supervisorTitle'];
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
@@ -20,9 +20,9 @@
     $emailAddress = $_POST['emailAddress'];
     $password = $_POST['password'];
     $active = $_POST['activeSupervisor'];
+    $admin = $_POST['admin'];
     $activeSupervisor;
-
-    echo $active;
+    $adminRow;
 
     if($active == "Yes") {
         $activeSupervisor = 1;
@@ -32,8 +32,16 @@
         $activeSupervisor = 0;
     }
 
-	$query = "INSERT INTO supervisor (supervisorID, supervisorTitle, firstName, lastName, activeSupervisor, officeNumber, emailAddress, password, dateAdded, loggedIn)
-	VALUES ('$supervisorID', '$supervisorTitle', '$firstName', '$lastName', $activeSupervisor, '$officeNumber', '$emailAddress', '$password', now(), 0)";
+    if($admin == "Yes") {
+        $adminRow = 1;
+    } else if ($admin == "No") {
+        $adminRow = 0;
+    } else {
+        $adminRow = 0;
+    }
+
+	$query = "INSERT INTO supervisor (supervisorID, supervisorTitle, firstName, lastName, activeSupervisor, officeNumber, emailAddress, password, dateAdded, loggedIn, admin)
+	VALUES ('$supervisorID', '$supervisorTitle', '$firstName', '$lastName', $activeSupervisor, '$officeNumber', '$emailAddress', '$password', now(), 0, $adminRow)";
 
 	if ($result = mysqli_query($connection, $query)) {
 	    echo "Supervisor: $firstName $lastName added successfully";
@@ -42,24 +50,6 @@
 	}
 
 	header("Refresh:2; url=../admin/systemmanagement/addsupervisor.php");
-
-    function getNextID($connection) {
-        $supervisorID = "";
-        
-        $query = "SELECT COUNT(*) AS total FROM supervisor";
-
-        if ($result = mysqli_query($connection, $query)) {
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_array($result)) {
-                    $supervisorID = $row["total"] + 1;
-                }
-            }
-        } else {
-            echo "Error: " . $query . "<br>" . $connection->error;
-        }
-
-        return $supervisorID;
-    }
 
     $connection->close();
 

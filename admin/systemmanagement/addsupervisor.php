@@ -41,6 +41,12 @@
         <form name="supervisorForm" action="../../php/addSupervisor.php" method="post" enctype="multipart/form-data">
           <div class="control-group form-group">
             <div class="controls">
+              <label>Supervisor ID</label>
+              <input type="text" class="form-control" name="supervisorID" required data-validation-required-message="Supervisor ID">
+            </div>
+          </div>
+          <div class="control-group form-group">
+            <div class="controls">
               <label>Supervisor Title</label>
               <select name="supervisorTitle">
                 <option>Dr</option>
@@ -86,6 +92,13 @@
               <label>Active Supervisor?</label><br>
               <label class="radio-inline"><input value="Yes" type="radio" name="activeSupervisor" checked>Yes</label>
               <label class="radio-inline"><input value="No" type="radio" name="activeSupervisor">No</label>
+            </div>
+          </div>
+          <div class="control-group form-group">
+            <div class="form-check">
+              <label>System Administrator?</label><br>
+              <label class="radio-inline"><input value="Yes" type="radio" name="admin">Yes</label>
+              <label class="radio-inline"><input value="No" type="radio" name="admin" checked>No</label>
             </div>
           </div>
 
