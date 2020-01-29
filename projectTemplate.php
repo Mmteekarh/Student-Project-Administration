@@ -127,7 +127,30 @@
                 </p><br>
                 <p><b>Project Code:</b> <?php echo $projectCode; ?></p>
 
-                <center><button type="button" class="btn btn-success">Select Project</button></center>
+                <form action="../php/selectProject.php" method="post" role="form">
+                    <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
+                    <input type="hidden" name="studentID" value="<?php echo $studentID; ?>">
+                    <input type="hidden" name="choiceNumber" value="1">
+                    <center><button type="submit" class="btn btn-success">Select First Choice</button></center>
+                </form>
+
+                <br>
+
+                <form action="../php/selectProject.php" method="post" role="form">
+                    <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
+                    <input type="hidden" name="studentID" value="<?php echo $studentID; ?>">
+                    <input type="hidden" name="choiceNumber" value="2">
+                    <center><button type="submit" class="btn btn-success">Select Second Choice</button></center>
+                </form>
+
+                <br>
+
+                <form action="../php/selectProject.php" method="post" role="form">
+                    <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
+                    <input type="hidden" name="studentID" value="<?php echo $studentID; ?>">
+                    <input type="hidden" name="choiceNumber" value="3">
+                    <center><button type="submit" class="btn btn-success">Select Third Choice</button></center>
+                </form>
                 <br>
             </div>
 
@@ -149,9 +172,9 @@
         <div class="row">
             <div class="col-md-12 border">
                 <br>
-                <center><h4>Project Brief</h4>
+                <center><h4>Project Brief</h4></center>
                 <br>
-                <p><?php echo wordwrap($projectBrief, 200, "<br>", true); ?></center>
+                <p><?php echo wordwrap($projectBrief, 200, "<br>", true); ?>
                 <br>
             </div>
         </div>
