@@ -12,9 +12,9 @@
         die("Oh no! There was a connection error, please contact an administrator.");
     }
 
-    $studentID = $_POST['studentID'];
+    $stuID = $_POST['stuID'];
 
-    $query = "DELETE FROM student WHERE studentID='$studentID'";
+    $query = "DELETE FROM student WHERE studentID='$stuID'";
 
     if ($connection->query($query) === TRUE) {
         echo "Success!";
@@ -24,6 +24,6 @@
 
 	$connection->close();
 
-	header("Refresh:2; url=../admin/systemmanagement/removestudent.php");
+	header("Refresh:2; url=../admin/systemmanagement/studentlist.php");
 
 ?>

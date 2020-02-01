@@ -12,9 +12,9 @@
         die("Oh no! There was a connection error, please contact an administrator.");
     }
 
-    $supervisorID = $_POST['supervisorID'];
+    $superID = $_POST['superID'];
 
-    $query = "DELETE FROM supervisor WHERE supervisorID='$supervisorID'";
+    $query = "DELETE FROM supervisor WHERE supervisorID='$superID'";
 
     if ($connection->query($query) === TRUE) {
         echo "Success!";
@@ -24,6 +24,6 @@
 
 	$connection->close();
 
-	header("Refresh:2; url=../admin/systemmanagement/removesupervisor.php");
+	header("Refresh:2; url=../admin/systemmanagement/supervisorlist.php");
 
 ?>

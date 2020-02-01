@@ -29,7 +29,7 @@
 	    echo "Error: " . $query . "<br>" . $connection->error;
 	}
 
-	header("Refresh:2; url=../admin/systemmanagement/addstudent.php");
+	header("Refresh:2; url=../admin/systemmanagement/studentlist.php");
 
     $connection->close();
 

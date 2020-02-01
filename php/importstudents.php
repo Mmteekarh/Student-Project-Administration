@@ -37,7 +37,7 @@
         }
     }
 
-	header("Refresh:2; url=../admin/systemmanagement/importstudents.php");
+	header("Refresh:2; url=../admin/systemmanagement/studentlist.php");
 
     $connection->close();
 

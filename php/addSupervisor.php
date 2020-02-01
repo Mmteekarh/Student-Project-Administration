@@ -49,7 +49,7 @@
 	    echo "Error: " . $query . "<br>" . $connection->error;
 	}
 
-	header("Refresh:2; url=../admin/systemmanagement/addsupervisor.php");
+	header("Refresh:2; url=../admin/systemmanagement/supervisorlist.php");
 
     $connection->close();
 
