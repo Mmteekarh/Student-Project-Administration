@@ -12,25 +12,21 @@
         die("Oh no! There was a connection error, please contact an administrator.");
     }
 
-    $studentID = $_POST['studentID'];
-    $firstName = $_POST['firstName'];
-    $middleInitial = $_POST['middleInitial'];
-    $lastName = $_POST['lastName'];
-    $yearOfStudy = $_POST['yearOfStudy'];
-    $plp = $_POST['plp'];
-    $password = $_POST['password'];
     $courseID = $_POST['courseID'];
+	$courseName = $_POST['courseName'];
+    $courseLevel = $_POST['courseLevel'];
+    $courseLeader = $_POST['courseLeader'];
 
-	$query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password, courseID)
-	VALUES ('$studentID', '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', '$plp', '$password', '$courseID')";
+	$query = "INSERT INTO course (courseID, courseName, courseLevel, courseLeader)
+	VALUES ('$courseID', '$courseName', '$courseLevel', '$courseLeader')";
 
 	if ($result = mysqli_query($connection, $query)) {
-	    echo "Student: $firstName $lastName added successfully";
+	    echo "Course: $courseName added successfully";
 	} else {
 	    echo "Error: " . $query . "<br>" . $connection->error;
 	}
 
-	header("Refresh:2; url=../admin/systemmanagement/studentlist.php");
+	header("Refresh:2; url=../admin/systemmanagement/courselist.php");
 
     $connection->close();
 

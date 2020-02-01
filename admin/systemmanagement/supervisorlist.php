@@ -41,7 +41,7 @@
           <button class="btn btn-success" type="submit">Add New Supervisor</button>
         </form>
 
-        <h3>Supervisor List</h3>
+        <br>
 
         <table class="table table-striped">
           <thread>

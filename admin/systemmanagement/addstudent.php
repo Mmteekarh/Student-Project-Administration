@@ -82,6 +82,31 @@
             </div>
           </div>
 
+          <div class="control-group form-group">
+            <div class="controls">
+              <label>Course</label>
+                <select name="courseID">
+                <?php
+
+                    $query = "SELECT * FROM course";
+
+                    if ($result = mysqli_query($connection, $query)) {
+                        if (mysqli_num_rows($result) > 0) {
+                            while($row = mysqli_fetch_array($result)){
+                                $courseName = $row['courseName'];
+                                $courseID = $row['courseID'];
+
+                                echo '<option value="'.$courseID.'">' . $courseName . '</option>';
+                            }
+                        }
+                    } else {
+                        echo "Error: " . $query . "<br>" . $connection->error;
+                    }
+                ?>
+                </select>
+              </div>
+          </div>
+
           <button type="submit" class="btn btn-primary" id="addButton">Add</button>
           
         </form>

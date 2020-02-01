@@ -24,8 +24,9 @@
                 $yearOfStudy = $data[4];
                 $plp = $data[5];
                 $password = $data[6];
+                $courseID = $data[7];
 
-                $query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password) VALUES ('$studentID', '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', '$plp', '$password')";
+                $query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password, courseID) VALUES ('$studentID', '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', '$plp', '$password', '$courseID')";
 
             if ($result = mysqli_query($connection, $query)) {
                 echo "The student file was successfully imported.";
@@ -42,3 +43,4 @@
     $connection->close();
 
 ?>
+

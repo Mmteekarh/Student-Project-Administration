@@ -36,15 +36,18 @@
 
     <div class="row">
       <div class="col-lg-8 mb-4">
-        <h3>Student List</h3>
 
         <form action="addstudent.php" method="post" role="form">
           <button class="btn btn-success" type="submit">Add New Student</button>
         </form>
 
+        <br>
+
         <form action="importstudents.php" method="post" role="form">
           <button class="btn btn-success" type="submit">Import Students</button>
         </form>
+
+        <br>
 
         <table class="table table-striped">
           <thread>
@@ -55,6 +58,7 @@
               <th scope="col">Last Name</th>
               <th scope="col">Year of Study</th>
               <th scope="col">PLP?</th>
+              <th scope="col">Course</th>
               <th scope="col">Logged In?</th>
               <th scope="col">Last IP</th>
               <th scope="col">Edit</th>
@@ -67,7 +71,7 @@
 
             <?php
 
-                    $query = "SELECT * FROM student";
+                    $query = "SELECT * FROM student INNER JOIN course ON student.courseID=course.courseID";
 
                     if ($result = mysqli_query($connection, $query)) {
                         if (mysqli_num_rows($result) > 0) {
@@ -80,6 +84,13 @@
                                 $plp = $row['plp'];
                                 $loggedIn = $row['loggedIn'];
                                 $lastIP = $row['lastIP'];
+                                $courseName;
+
+                                if (is_null($row['courseName'])) {
+                                  $courseName = "No Course";
+                                } else {
+                                  $courseName = $row['courseName'];
+                                }
 
                                 echo '<tr>';
                                 echo '<th scope="row">' . $stuID . '</th>';
@@ -88,6 +99,7 @@
                                 echo '<td>' . $lastName . '</td>';
                                 echo '<td>' . $yearOfStudy . '</td>';
                                 echo '<td>' . $plp . '</td>';
+                                echo '<td>' . $courseName . '</td>';
                                 echo '<td>' . $loggedIn . '</td>';
                                 echo '<td>' . $lastIP . '</td>';
                                 echo '<td>

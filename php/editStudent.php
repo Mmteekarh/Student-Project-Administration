@@ -18,9 +18,10 @@
     $lastName = $_POST['lastName'];
     $yearOfStudy = $_POST['yearOfStudy'];
     $plp = $_POST['plp'];
+    $courseID = $_POST['courseID'];
 
 
-	$query = "UPDATE student SET firstName='$firstName', middleInitial='$middleInitial', lastName='$lastName', yearOfStudy='$yearOfStudy', plp='$plp' WHERE studentID='$stuID'";
+	$query = "UPDATE student SET firstName='$firstName', middleInitial='$middleInitial', lastName='$lastName', yearOfStudy='$yearOfStudy', plp='$plp', courseID='$courseID' WHERE studentID='$stuID'";
 
 	if ($result = mysqli_query($connection, $query)) {
 	    echo "Student: $stuID edited successfully";
