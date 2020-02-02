@@ -66,13 +66,19 @@
           <div class="control-group form-group">
             <div class="controls">
               <label>Year of Study</label>
-              <input type="text" class="form-control" name="yearOfStudy" required data-validation-required-message="Year of study">
+              <select name="yearOfStudy">
+                <option value="2019/2020">2019/2020</option>
+                <option value="2020/2021">2020/2021</option>
+              </select>
             </div>
           </div>
           <div class="control-group form-group">
             <div class="controls">
               <label>PLP</label>
-              <input type="text" class="form-control" name="plp" required data-validation-required-message="PLP">
+              <select name="plp">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+              </select>
             </div>
           </div>
           <div class="control-group form-group">
