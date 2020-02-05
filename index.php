@@ -105,13 +105,13 @@
 
             <!-- Creates a table with headings, used to display the projects clearly. -->
             <table class="table table-striped">
-                <thread>
+                <thead>
                     <tr>
                         <th scope="col">Project Title</th>
                         <th scope="col">Project Brief</th>
                         <th scope="col">Supervisor</th>
                     </tr>
-                </thread>
+                </thead>
                 
                 <tbody>
 

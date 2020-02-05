@@ -1,120 +1,134 @@
+<!-- Page is the landing page of the admin panel, include links to other pages and general statistics. -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-  <?php include "../includes/connect.php" ?>
-  <title>Admin - SPAS</title>
+    <!-- Includes required scripts. -->
+    <?php include "../includes/header.php" ?>
+    <?php include "../includes/connect.php" ?>
+    <?php include "../includes/userscript.php" ?>
+    
+    <title>Admin Home - SPAS</title>
 
-  <?php
-    $studentQuery = "SELECT COUNT(*) AS studentCount FROM student";
-    $supervisorQuery = "SELECT COUNT(*) AS supervisorCount FROM supervisor";
-    $projectQuery = "SELECT COUNT(*) AS projectCount FROM project";
+    <?php
 
-    if ($result = mysqli_query($connection, $studentQuery)) {
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)){
-                $totalStudents = $row["studentCount"];
+        // Queries used to get number of students, supervisors and projects.
+        $studentQuery = "SELECT COUNT(*) AS studentCount FROM student";
+        $studentResult = $connection->query($studentQuery);
+        $supervisorQuery = "SELECT COUNT(*) AS supervisorCount FROM supervisor";
+        $supervisorResult = $connection->query($supervisorQuery);
+        $projectQuery = "SELECT COUNT(*) AS projectCount FROM project";
+        $projectResult = $connection->query($projectQuery);
+
+        // Gets number of students and stores in a variable.
+        if ($studentResult->num_rows > 0) {
+            while($studentRow = $studentResult->fetch_assoc()) {
+                $totalStudents = $studentRow["studentCount"];
             }
         }
-    }
 
-    if ($result = mysqli_query($connection, $supervisorQuery)) {
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)){
-                $totalSupervisors = $row["supervisorCount"];
+        // Gets number of supervisors and stores in a variable.
+        if ($supervisorResult->num_rows > 0) {
+            while($supervisorRow = $supervisorResult->fetch_assoc()) {
+                $totalSupervisors = $supervisorRow["supervisorCount"];
             }
         }
-    }
 
-    if ($result = mysqli_query($connection, $projectQuery)) {
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)){
-                $totalProjects = $row["projectCount"];
+        // Gets number of projects and stores in a variable.
+        if ($projectResult->num_rows > 0) {
+            while($projectRow = $projectResult->fetch_assoc()) {
+                $totalProjects = $projectRow["projectCount"];
             }
         }
-    }
 
-    $connection->close();
+        // Close connection
+        $connection->close();
 
-  ?>
+    ?>
 
 </head>
 
 <body>
 
-	<?php
-    	if ($loggedIn == true) {
+    <!-- Check if the user is logged in and are a supervisor or admin -->
+  	<?php
+      	if ($loggedIn == true) {
             if ($userType == "supervisor" or $userType == "admin") {
     ?>
 
-  <!-- Includes navigation bar -->
-  <?php include "../includes/adminnav.php" ?>
+    <!-- Includes admin navigation bar -->
+    <?php include "../includes/adminnav.php" ?>
 
-  <!-- Page Content -->
-  <div class="container">
+    <!-- Main page content - shows general statistics -->
+    <div class="container">
 
-    <center><h1 class="mt-4 mb-3">Admin - Home</h1></center>
+        <center>
+            <h1 class="mt-4 mb-3">Admin - Home</h1>
+        </center>
 
-    <br><br>
+        <br>
+        <br>
 
-    <div class="row">
+        <!-- Row includes statistics - separated using cards which give the statistics a cleaner look -->
+        <div class="row">
 
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <center>
-              <h1><?php echo $totalStudents; ?></h1>
-              <h2>Students</h2>
-            </center>
-          </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <center>
+                            <h1><?php echo $totalStudents; ?></h1>
+                            <h2>Students</h2>
+                        </center>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <center>
+                            <h1><?php echo $totalProjects; ?></h1>
+                            <h2>Projects</h2>
+                        </center>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <center>
+                            <h1><?php echo $totalSupervisors; ?></h1>
+                            <h2>Supervisors</h2>
+                        </center>
+                    </div>
+                </div>
+            </div>
+
         </div>
-      </div>
 
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <center>
-              <h1><?php echo $totalProjects; ?></h1>
-              <h2>Projects</h2>
-            </center>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <center>
-              <h1><?php echo $totalSupervisors; ?></h1>
-              <h2>Supervisors</h2>
-            </center>
-          </div>
-        </div>
-      </div>
+        <br>
+        <br>
 
     </div>
 
-    <br><br>
+    <!-- Includes footer -->
+    <?php include "../includes/footer.php" ?>
 
-  </div>
+    <?php
+              // If user is a student, redirect to no permissions error page.
+            	} else if ($userType == "student") {
+                	header("Refresh:0.01; url=../error/permissionerror.php");
 
-  <?php include "../includes/footer.php" ?>
-
-  <?php
-        
-        	} else if ($userType == "student") {
-        		// Invalid Permissions
-            	header("Refresh:0.01; url=../error/permissionerror.php");
-
-        	} else {
-            	// Invalid user type
-           		header("Refresh:0.01; url=../error/usertypeerror.php");
-        	}
-        } else {
-            header("Refresh:0.01; url=../login.php");
-        }
-    ?>
+            	} else {
+                	// Invalid user type
+               		header("Refresh:0.01; url=../error/usertypeerror.php");
+            	}
+          } else {
+              header("Refresh:0.01; url=../login.php");
+          }
+      ?>
 
 </body>
 

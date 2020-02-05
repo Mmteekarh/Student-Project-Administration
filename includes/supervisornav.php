@@ -21,18 +21,6 @@ echo '
                         <a class="nav-link" href="../../admin/supervisor.php">Supervisor Tools</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="../../admin/supervisor/addproject.php">Add Project</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="../../admin/supervisor/editproject.php">Edit Project</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="../../admin/supervisor/removeproject.php">Remove Project</a>
-                    </li>
-
                 </ul>
 
             </div>

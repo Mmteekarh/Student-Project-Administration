@@ -1,9 +1,12 @@
+<!-- User friendly error page to display when there is a user type error -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
     <?php include "../includes/connect.php" ?>
+    <?php include "../includes/header.php" ?>
+    
     <title>Error - SPAS</title>
 
 </head>

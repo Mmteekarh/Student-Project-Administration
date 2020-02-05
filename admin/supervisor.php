@@ -1,249 +1,300 @@
+<!-- Page for supervisor tools in the admin panel -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-  <?php include "../includes/connect.php" ?>
-  <title>Supervisor Tools - SPAS</title>
+    <!-- Includes required scripts. -->
+    <?php include "../includes/header.php" ?>
+    <?php include "../includes/connect.php" ?>
+    <?php include "../includes/userscript.php" ?>
 
-  <?php
-    $studentQuery = "SELECT COUNT(*) AS studentCount FROM student INNER JOIN project ON student.projectID = project.projectID WHERE supervisorID='$supervisorID'";
-    $projectQuery = "SELECT COUNT(*) AS projectCount FROM project WHERE supervisorID='$supervisorID'";
-    $allocationQuery = "SELECT * FROM management";
+    <title>Supervisor Tools - SPAS</title>
 
-    if ($result = mysqli_query($connection, $studentQuery)) {
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)){
-                $totalStudents = $row["studentCount"];
+    <?php
+
+        // Queries to get statistics from the database. Includes student count, project count and gets if the projects have been allocated
+        $studentQuery = "SELECT COUNT(*) AS studentCount FROM student INNER JOIN project ON student.projectID = project.projectID WHERE supervisorID='$loggedInSupervisorID'";
+        $studentResult = $connection->query($studentQuery);
+        $projectQuery = "SELECT COUNT(*) AS projectCount FROM project WHERE supervisorID='$loggedInSupervisorID'";
+        $projectResult = $connection->query($projectQuery);
+        $allocationQuery = "SELECT * FROM management";
+        $allocationResult = $connection->query($allocationQuery);
+
+        // Gets number of students related to the supervisor and stores in a variable.
+        if ($studentResult->num_rows > 0) {
+            while($studentRow = $studentResult->fetch_assoc()) {
+                $totalStudents = $studentRow["studentCount"];
             }
         }
-    }
 
-    if ($result = mysqli_query($connection, $projectQuery)) {
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)){
-                $totalProjects = $row["projectCount"];
+        // Gets number of projects related to the supervisor and stores in a variable.
+        if ($projectResult->num_rows > 0) {
+            while($projectRow = $projectResult->fetch_assoc()) {
+                $totalProjects = $projectRow["projectCount"];
             }
         }
-    }
-
-    if ($result = mysqli_query($connection, $allocationQuery)) {
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)){
-                $projectsAllocated = $row["projectsAllocated"];
+    
+        // Gets if the projects have been allocated and stores in a variable.
+        if ($allocationResult->num_rows > 0) {
+            while($allocationRow = $allocationResult->fetch_assoc()) {
+                $projectsAllocated = $allocationRow["projectsAllocated"];
             }
         }
-    }
 
-    $connection->close();
-
-  ?>
+    ?>
 
 </head>
 
 <body>
 
-  <?php
-    if ($loggedIn == true) {
-      if ($userType == "supervisor" or $userType == "admin") {
-  ?>
+    <!-- Check if the user is logged in and are a supervisor or admin -->
+    <?php
+        if ($loggedIn == true) {
+            if ($userType == "supervisor" or $userType == "admin") {
+    ?>
 
-  <!-- Includes navigation bar -->
-  <?php include "../includes/supervisornav.php" ?>
+    <!-- Includes admin navigation bar -->
+    <?php include "../includes/supervisornav.php" ?>
 
-  <!-- Page Content -->
-  <div class="container">
+    <!-- Main page content - shows supervisor specific statistics -->
+    <div class="container">
 
-    <h1 class="mt-4 mb-3">Admin - Supervisor Tools</h1>
+        <center>
+            <h1 class="mt-4 mb-3">Supervisor Tools</h1>
+        </center>
 
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="admin.php">Admin</a>
-      </li>
-      <li class="breadcrumb-item active">Supervisor Tools</li>
-    </ol>
+        <!-- Breadcrumb shows links to previous pages -->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="admin.php">Admin</a>
+            </li>
+            <li class="breadcrumb-item active">Supervisor Tools</li>
+        </ol>
 
-    <div class="row">
+        <!-- First row shows general supervisor statistics -->
+        <div class="row">
 
-      <?php
-        if ($projectsAllocated == 0) {
-      ?>
+            <!-- Checks if projects have been allocated. If they have not, let the supervisor know -->
+            <?php
+                if ($projectsAllocated == 0) {
+            ?>
 
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-body">
-            <center>
-              <h4>Projects have not<br> been allocated yet</h4>
-              <br>
-            </center>
-          </div>
-        </div>
-      </div>
-
-      <?php
-        } else {
-      ?>
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-body">
-              <center>
-                <h1><?php echo $totalStudents; ?></h1>
-                <h2>Your Students</h2>
-              </center>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <center>
+                            <h4>Projects have not<br> been allocated yet</h4>
+                            <br>
+                        </center>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      <?php
-        }
-      ?>
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-body">
-            <center>
-              <h1><?php echo $totalProjects; ?></h1>
-              <h2>Your Projects</h2>
-            </center>
-          </div>
-        </div>
-      </div>
 
-    </div>
+            <!-- If the projects have been allocated, show the number of students related to the supervisor -->
+            <?php
+                } else {
+            ?>
 
-    <br><br>
-
-    <div class="row">
-
-      <h3>Your Projects:</h3>
-      <table class="table table-striped">
-          <thread>
-            <tr>
-              <th scope="col">Project ID</th>
-              <th scope="col">Title</th>
-              <th scope="col">Maximum Students</th>
-              <th scope="col">Project Code</th>
-
-            </tr>
-          </thread>
-
-          <tbody>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <center>
+                            <h1><?php echo $totalStudents; ?></h1>
+                            <h2>Your Students</h2>
+                        </center>
+                    </div>
+                </div>
+            </div>
 
             <?php
+                }
+            ?>
 
-                    $query = "SELECT * FROM project WHERE supervisorID='$supervisorID'";
+            <!-- Show the number of projects the supervisor has active. -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <center>
+                            <h1><?php echo $totalProjects; ?></h1>
+                            <h2>Your Projects</h2>
+                        </center>
+                    </div>
+                </div>
+            </div>
 
-                    if ($result = mysqli_query($connection, $query)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while($row = mysqli_fetch_array($result)){
-                                $projectID = $row['projectID'];
-                                $projectTitle = $row['projectTitle'];
-                                $maxStudents = $row['maximumStudents'];
-                                $projectCode = $row['projectCode'];
+        </div>
 
-                                echo '<tr>';
-                                echo '<th scope="row">' . $projectID . '</th>';
-                                echo '<td>' . $projectTitle . '</td>';
-                                echo '<td>' . $maxStudents . '</td>';
-                                echo '<td>' . $projectCode . '</td>';
-                                echo '</tr>';
+        <br>
+        <br>
+
+        <!-- Second row shows a list of the supervisors projects in a table with options to edit and remove. -->
+        <div class="row">
+            
+            <div class="col-lg-12">
+
+                <!-- Button to add new projects -->
+                <form action="supervisor/addproject.php" method="POST" role="form">
+                    <button class="btn btn-success" type="submit">Add New Project</button>
+                </form>
+
+                <br>
+
+                <h3>Your Projects:</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Project ID</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Maximum Students</th>
+                            <th scope="col">Project Code</th>
+                            <th scope="col">Edit</th>
+                            <th scope="col">Remove</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <?php
+
+                            // Query to select all projects related to the supervisor.
+                            $selectProjectQuery = "SELECT * FROM project WHERE supervisorID = '$loggedInSupervisorID'";
+                            $selectProjectResult = $connection->query($selectProjectQuery);
+
+                            if ($selectProjectResult->num_rows > 0) {
+                                while($selectProjectRow = $selectProjectResult->fetch_assoc()) {
+
+                                    // Get all project details and add to table.
+                                    $projectID = $selectProjectRow['projectID'];
+                                    $projectTitle = $selectProjectRow['projectTitle'];
+                                    $maxStudents = $selectProjectRow['maximumStudents'];
+                                    $projectCode = $selectProjectRow['projectCode'];
+
+                                    echo '<tr>';
+                                    echo '<th scope="row">' . $projectID . '</th>';
+                                    echo '<td>' . $projectTitle . '</td>';
+                                    echo '<td>' . $maxStudents . '</td>';
+                                    echo '<td>' . $projectCode . '</td>';
+                                    echo '<td>
+                                              <form action="supervisor/editingproject.php" method="POST" role="form">
+                                                  <input type="hidden" name="projectID" value="'. $projectID .'">
+                                                  <button class="btn btn-primary" type="submit">Edit</button>
+                                              </form>
+                                          </td>';
+                                    echo '<td>
+                                              <form action="../php/removeProject.php" method="POST" role="form">
+                                                  <input type="hidden" name="projectID" value="'. $projectID .'">
+                                                  <button class="btn btn-danger" type="submit">Remove</button>
+                                              </form>
+                                          </td>';
+                                    echo '</tr>';
+                                }
+                            } else {
+                                echo "Error: No records found in the table!";
+                            }
+
+                        ?>
+
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+
+        <br>
+        <br>
+
+        <!-- Second row displays a table of students related to the supervisor -->
+        <div class="row">
+
+            <h3>Your Students:</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Student ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Middle Initial</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Year of Study</th>
+                        <th scope="col">PLP?</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <?php
+
+                        // If projects have not been allocated - display an empty table.
+                        if ($projectsAllocated == 0) {
+                            echo '<tr>';
+                            echo '<th scope="row">Not yet allocated</th>';
+                            echo '<td></td>';
+                            echo '<td></td>';
+                            echo '<td></td>';
+                            echo '<td></td>';
+                            echo '<td></td>';
+                            echo '</tr>';
+                        } else {
+
+                            // If projects are allocated, display a list of students related to the supervisor.
+
+                            $showStudentsQuery = "SELECT * FROM student INNER JOIN project ON student.projectID = project.projectID WHERE supervisorID = '$loggedInSupervisorID'";
+                            $showStudentsResult = $connection->query($showStudentsQuery);
+
+                            if ($showStudentsResult->num_rows > 0) {
+                                while($showStudentsRow = $showStudentsResult->fetch_assoc()) {
+                                    $studentID = $showStudentsRow['studentID'];
+                                    $firstName = $showStudentsRow['firstName'];
+                                    $middleInitial = $showStudentsRow['middleInitial'];
+                                    $lastName = $showStudentsRow['lastName'];
+                                    $yearOfStudy = $showStudentsRow['yearOfStudy'];
+                                    $plp = $showStudentsRow['plp'];
+
+                                    if ($plp == 0) {
+                                      $plpText = "No";
+                                    } else {
+                                      $plpText = "Yes";
+                                    }
+
+                                    echo '<tr>';
+                                    echo '<th scope="row">' . $studentID . '</th>';
+                                    echo '<td>' . $firstName . '</td>';
+                                    echo '<td>' . $middleInitial . '</td>';
+                                    echo '<td>' . $lastName . '</td>';
+                                    echo '<td>' . $yearOfStudy . '</td>';
+                                    echo '<td>' . $plpText . '</td>';
+                                    echo '</tr>';
+                                }
+                            } else {
+                                echo "Error: No records found in the table!";
                             }
                         }
-                    } else {
-                        echo "Error: " . $query . "<br>" . $connection->error;
-                    }
 
-                    // Closes connection
-                    $connection->close();
+                        // Closes connection
+                        $connection->close();
 
-                ?>
+                      ?>
 
-          </tbody>
-        </table>
+                </tbody>
+
+            </table>
+
+        </div>
 
     </div>
 
-    <br><br>
+    <?php include "../includes/footer.php" ?>
 
-    <div class="row">
-
-      <h3>Your Students:</h3>
-      <table class="table table-striped">
-          <thread>
-            <tr>
-              <th scope="col">Student ID</th>
-              <th scope="col">First Name</th>
-              <th scope="col">Middle Initial</th>
-              <th scope="col">Last Name</th>
-              <th scope="col">Year of Study</th>
-              <th scope="col">PLP?</th>
-
-            </tr>
-          </thread>
-
-          <tbody>
-
-            <?php
-              if ($projectsAllocated == 0) {
-                echo '<tr>';
-                echo '<th scope="row">Not yet allocated</th>';
-                echo '<td></td>';
-                echo '<td></td>';
-                echo '<td></td>';
-                echo '<td></td>';
-                echo '<td></td>';
-                echo '</tr>';
-              } else {
-                    $query = "SELECT * FROM student INNER JOIN project ON student.projectID=project.projectID WHERE supervisorID='$supervisorID'";
-
-                    if ($result = mysqli_query($connection, $query)) {
-                        if (mysqli_num_rows($result) > 0) {
-                            while($row = mysqli_fetch_array($result)){
-                                $stuID = $row['studentID'];
-                                $firstName = $row['firstName'];
-                                $middleInitial = $row['middleInitial'];
-                                $lastName = $row['lastName'];
-                                $yearOfStudy = $row['yearOfStudy'];
-                                $plp = $row['plp'];
-
-                                echo '<tr>';
-                                echo '<th scope="row">' . $stuID . '</th>';
-                                echo '<td>' . $firstName . '</td>';
-                                echo '<td>' . $middleInitial . '</td>';
-                                echo '<td>' . $lastName . '</td>';
-                                echo '<td>' . $yearOfStudy . '</td>';
-                                echo '<td>' . $plp . '</td>';
-                                echo '</tr>';
-                            }
-                        }
-                    } else {
-                        echo "Error: " . $query . "<br>" . $connection->error;
-                    }
-                  }
-
-                    // Closes connection
-                    $connection->close();
-
-                ?>
-
-          </tbody>
-        </table>
-
-    </div>
-
-  </div>
-  <!-- /.container -->
-
-  <?php include "../includes/footer.php" ?>
-
-  <?php
+    <?php
         
-          } else if ($userType == "student") {
-            // Invalid Permissions
-            header("Refresh:0.01; url=../error/permissionerror.php");
+            // If user is a student, redirect to no permissions error page.
+            } else if ($userType == "student") {
+                header("Refresh:0.01; url=../error/permissionerror.php");
 
-          } else {
-              // Invalid user type
-              header("Refresh:0.01; url=../error/usertypeerror.php");
-          }
+            } else {
+                // Invalid user type
+                header("Refresh:0.01; url=../error/usertypeerror.php");
+            }
         } else {
             header("Refresh:0.01; url=../login.php");
         }
