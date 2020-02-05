@@ -54,20 +54,9 @@
   <!-- Page Content -->
   <div class="container">
 
-    <h1 class="mt-4 mb-3">Admin - Home</h1>
+    <center><h1 class="mt-4 mb-3">Admin - Home</h1></center>
 
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="admin.php">Admin</a>
-      </li>
-      <li class="breadcrumb-item active">Home</li>
-    </ol>
-
-    <div class="row">
-
-      <center><h2>General Statistics</h2></center>
-
-    </div>
+    <br><br>
 
     <div class="row">
 
@@ -105,6 +94,8 @@
       </div>
 
     </div>
+
+    <br><br>
 
   </div>
 
