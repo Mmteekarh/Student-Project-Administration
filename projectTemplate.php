@@ -126,7 +126,10 @@
                 ?> 
                 </p><br>
                 <p><b>Project Code:</b> <?php echo $projectCode; ?></p>
-
+			<?php
+                if ($loggedIn == true) {
+	                if ($userType == "student") {
+	        ?>
                 <form action="../php/selectProject.php" method="post" role="form">
                     <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
                     <input type="hidden" name="studentID" value="<?php echo $studentID; ?>">
@@ -151,7 +154,14 @@
                     <input type="hidden" name="choiceNumber" value="3">
                     <center><button type="submit" class="btn btn-success">Select Third Choice</button></center>
                 </form>
+
                 <br>
+
+            <?php 
+	            	}
+	            }
+            ?>
+
             </div>
 
             <br><hr><br>
