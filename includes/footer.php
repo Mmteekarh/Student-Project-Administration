@@ -1,16 +1,17 @@
+<!-- Includes the footer used on the website, includes links to accessibility and help pages. -->
 <?php
 
-// Displays footer and bootstrap/jquery scripts
 echo '
-    <footer class="py-5 bg-dark">
-        <div class="container">
-            <p class="m-0 text-center text-white">Student Project Administration System - <a href="../accessibility.php">Accessibility</a> - <a href="../help.php">Help</a></p>
-        </div>
-    </footer>
+	    <footer class="py-5 bg-dark">
+	        <div class="container">
+	            <p class="m-0 text-center text-white">Student Project Administration System - <a href="../accessibility.php">Accessibility</a> - <a href="../help.php">Help</a></p>
+	            <p class="m-0 text-center text-white">Copyright Student Project Administration System (SPAS) - Jake Taylor 2020</p>
+	        </div>
+	    </footer>
 
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+	    <!-- Includes JQuery scripts used to power aspects such as dropdowns -->
+	    <script src="vendor/jquery/jquery.min.js"></script>
+	    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     ';
-
 
 ?>

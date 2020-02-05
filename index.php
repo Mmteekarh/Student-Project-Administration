@@ -1,10 +1,14 @@
+<!-- Main page of the site, access is available to logged out users, contains project list. -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-    <!-- Database connection and title -->
+    <!-- Includes required scripts. -->
+    <?php include "includes/header.php" ?>
     <?php include "includes/connect.php" ?>
+    <?php include "includes/userscript.php" ?>
+
     <title>Project List - SPAS</title>
 
 </head>
@@ -12,8 +16,8 @@
 
 <body>
 
-    <!-- Includes navigation bar -->
-    <?php include "includes/nav.php" ?>
+    <!-- Includes main navigation bar -->
+    <?php include "includes/mainnav.php" ?>
 
     <!-- Header containing the title and subtitle of the page -->
     <header>
@@ -24,70 +28,82 @@
         
     </header>
 
-    <!-- Main Page Content -->
+    <!-- Main page content such as project list and login button contained in a container. -->
     <div class="container">
 
+        <!-- Row includes course selector and login/logout button -->
         <div class="row">
+
+            <!-- Uses first 11 bootrap columns to display the dropdown menu to select a coure. -->
             <div class="col-md-11">
 
-                <form method="post" action="">
-                  <select name="courseID">
-                  	<option value="0">All Courses</option>
-                     <?php
+                <!-- Form used to select a course and post the result to the project list -->
+                <form method="POST">
+                    <select name="courseID">
+                        <!-- Adds an option to select all courses -->
+                  	    <option value="0">All Courses</option>
+                        
+                        <?php
 
+                            // Query to select all courses.
+                            $query = "SELECT * FROM course";
+                            $result = $connection->query($query);
 
-                        $query = "SELECT * FROM course";
-
-                        if ($result = mysqli_query($connection, $query)) {
-                            if (mysqli_num_rows($result) > 0) {
-                                while($row = mysqli_fetch_array($result)){
+                            if ($result->num_rows > 0) {
+                                // Loops through all courses available.
+                                while($row = $result->fetch_assoc()) {
+                                    // Gets course name and course ID and uses them to form a new option.
                                     $courseName = $row['courseName'];
                                     $courseID = $row['courseID'];
                                     echo '<option value="'.$courseID.'">' . $courseName . '</option>';
                                 }
+                            } else {
+                                echo "Error: No results found in the table!";
                             }
-                        } else {
-                            echo "Error: " . $query . "<br>" . $connection->error;
-                        }
                         ?>
 
-                  </select>
-                  <button type="submit" name="submit">Submit</button>
+                    </select>
+
+                    <button type="submit" name="submit">Submit</button>
+
                 </form>
+
             </div>
 
-        <?php
-            if ($loggedIn == true) {
-                if ($userType == "student") {
-                    echo '<div class="col-md-1">';
-                    echo '<form action="php/logout.php">';
-                    echo '<button type="submit" class="btn btn-danger">Logout</button>';
-                    echo '</form>';
-                    echo '</div>';
-                } else if ($userType == "supervisor" or $userType == "admin") {
-                    echo '<div class="col-md-1">';
-                    echo '<form action="php/logout.php">';
-                    echo '<button type="submit" class="btn btn-danger">Logout</button>';
-                    echo '</form>';
-                    echo '</div>';
-                } else {
-                    // Invalid user type
-                    header("Refresh:0.01; url=error/invalidusererror.php");
-                }
-            } else {
-                    echo '<div class="col-md-1">';
-                    echo '<form action="login.php">';
-                    echo '<button type="submit" class="btn btn-primary">Login</button>';
-                    echo '</form>';
-                    echo '</div>';
-            }
-        ?>
+            <!-- The last column is used to display the login/logout button -->
+            <div class="col-md-1">
+
+                <?php
+                    // If the user is logged in, display the logout button.
+                    if ($loggedIn == true) {
+
+                        if ($userType == "student" or $userType == "supervisor" or $userType == "admin") {
+                            echo '<form action="php/logout.php">';
+                            echo '<button type="submit" class="btn btn-danger">Logout</button>';
+                            echo '</form>';
+                        } else {
+                            // Invalid user type, redirects to error page.
+                            header("Refresh:0.01; url=error/invalidusererror.php");
+                        }
+
+                    } else {
+                            // Display the login button if the user is logged out.
+                            echo '<form action="login.php">';
+                            echo '<button type="submit" class="btn btn-primary">Login</button>';
+                            echo '</form>';
+                    }
+                ?>
+
+            </div>
+
         </div>
 
         <br>
 
+        <!-- Next row contains list of projects -->
         <div class="row">
 
+            <!-- Creates a table with headings, used to display the projects clearly. -->
             <table class="table table-striped">
                 <thread>
                     <tr>
@@ -96,113 +112,135 @@
                         <th scope="col">Supervisor</th>
                     </tr>
                 </thread>
+                
                 <tbody>
 
-                <?php
+                    <?php
 
-	                if(isset($_POST["submit"])) {
-						$courseID = $_POST["courseID"];
-					} else {
-						$query = "SELECT * FROM project";
+                        // Checks if the form was submitted and gets the course ID of the requested course.
+    	                if (isset($_POST["submit"])) {
+    						$courseID = $_POST["courseID"];
 
-	                    if ($result = mysqli_query($connection, $query)) {
-	                        if (mysqli_num_rows($result) > 0) {
-	                            while($row = mysqli_fetch_array($result)){
-	                                $projectTitle = $row['projectTitle'];
-	                                $projectBrief = $row['projectBrief'];
-	                                $projectID = $row['projectID'];
-	                                $projectSupervisor = getSupervisorName($connection, $row['supervisorID']);
+    					} else {
 
-	                                echo '<tr>';
-	                                echo '<th scope="row"><a href="../projects/'.$projectID.'.php">' . $projectTitle . '</a></th>';
-	                                echo '<td>' . substr($projectBrief,0,100) . '...</td>';
-	                                echo '<td>' . $projectSupervisor . '</td>';
-	                                echo '</tr>';
-	                            }
-	                        }
-	                    } else {
-	                        echo "Error: " . $query . "<br>" . $connection->error;
-	                    }		
-					}
+                            // If the form was not submitted, display all projects.
+    						$query = "SELECT * FROM project";
+                            $result = $connection->query($query);
 
+    	                    if ($result->num_rows > 0) {
+    	                        while($row = $result->fetch_assoc()) {
 
-					if ($courseID == 0) {
-						$query = "SELECT * FROM project";
+                                    // Gets details from database table.
+                                    $projectTitle = $row['projectTitle'];
+    	                            $projectBrief = $row['projectBrief'];
+    	                            $projectID = $row['projectID'];
+    	                            $projectSupervisor = getSupervisorName($connection, $row['supervisorID']);
 
-	                    if ($result = mysqli_query($connection, $query)) {
-	                        if (mysqli_num_rows($result) > 0) {
-	                            while($row = mysqli_fetch_array($result)){
-	                                $projectTitle = $row['projectTitle'];
-	                                $projectBrief = $row['projectBrief'];
-	                                $projectID = $row['projectID'];
-	                                $projectSupervisor = getSupervisorName($connection, $row['supervisorID']);
+                                    // Create new row of table with new information.
+    	                            echo '<tr>';
+    	                            echo '<th scope="row"><a href="../projects/' . $projectID . '.php">' . $projectTitle . '</a></th>';
+    	                            echo '<td>' . substr($projectBrief, 0, 100) . '...</td>';
+    	                            echo '<td>' . $projectSupervisor . '</td>';
+    	                            echo '</tr>';
+    	                        }
 
-	                                echo '<tr>';
-	                                echo '<th scope="row"><a href="../projects/'.$projectID.'.php">' . $projectTitle . '</a></th>';
-	                                echo '<td>' . substr($projectBrief,0,100) . '...</td>';
-	                                echo '<td>' . $projectSupervisor . '</td>';
-	                                echo '</tr>';
-	                            }
-	                        }
-	                    } else {
-	                        echo "Error: " . $query . "<br>" . $connection->error;
-	                    }		
+    	                    } else {
+                                echo "Error: No records found in the table!";    	                    
+                            }		
+    					}
 
-					} else {
-						$query = "SELECT * FROM projectCourse INNER JOIN project ON projectCourse.projectID = project.projectID WHERE projectCourse.courseID = '$courseID' LIMIT 20";
+                        // Checks if course ID is 0 (all courses have been selected).
+    					if ($courseID == 0) {
 
-	                    if ($result = mysqli_query($connection, $query)) {
-	                        if (mysqli_num_rows($result) > 0) {
-	                            while($row = mysqli_fetch_array($result)){
-	                                $projectTitle = $row['projectTitle'];
-	                                $projectBrief = $row['projectBrief'];
-	                                $projectID = $row['projectID'];
-	                                $projectSupervisor = getSupervisorName($connection, $row['supervisorID']);
+                            // Query to display all projects.
+    						$query = "SELECT * FROM project";
+                            $result = $connection->query($query);
 
-	                                echo '<tr>';
-	                                echo '<th scope="row"><a href="../projects/'.$projectID.'.php">' . $projectTitle . '</a></th>';
-	                                echo '<td>' . substr($projectBrief,0,100) . '...</td>';
-	                                echo '<td>' . $projectSupervisor . '</td>';
-	                                echo '</tr>';
-	                            }
-	                        }
-	                    } else {
-	                        echo "Error: " . $query . "<br>" . $connection->error;
-	                    }		
-					}
+    	                    if ($result->num_rows > 0) {
+                                while($row = $result->fetch_assoc()) {
 
+                                    // Gets details from database table.
+                                    $projectTitle = $row['projectTitle'];
+                                    $projectBrief = $row['projectBrief'];
+                                    $projectID = $row['projectID'];
+                                    $projectSupervisor = getSupervisorName($connection, $row['supervisorID']);
 
-                    // Function uses the ID to get the supervisor name from the supervisor table.
-                    function getSupervisorName($connection, $supervisorID) {
+                                    // Create new row of table with new information.
+                                    echo '<tr>';
+                                    echo '<th scope="row"><a href="../projects/' . $projectID . '.php">' . $projectTitle . '</a></th>';
+                                    echo '<td>' . substr($projectBrief, 0, 100) . '...</td>';
+                                    echo '<td>' . $projectSupervisor . '</td>';
+                                    echo '</tr>';
+                                }
 
-                        $supervisorName = "";
-                        $query = "SELECT * FROM supervisor WHERE supervisorID='" . $supervisorID . "'";
+                            } else {
+                                echo "Error: No records found in the table!";                           
+                            }       		
 
-                        if ($result = mysqli_query($connection, $query)) {
-                            if (mysqli_num_rows($result) > 0) {
-                                while($row = mysqli_fetch_array($result)) {
+                        // If the user has selected a specific course, find it in the projectCourse table.
+    					} else {
+
+                            // Query to join projectCourse and project tables and get the details from each.
+    						$query = "SELECT * FROM projectCourse INNER JOIN project ON projectCourse.projectID = project.projectID WHERE projectCourse.courseID = '$courseID'";
+                            $result = $connection->query($query);
+
+    	                    if ($result->num_rows > 0) {
+                                while($row = $result->fetch_assoc()) {
+
+                                    // Gets details from database table.
+                                    $projectTitle = $row['projectTitle'];
+                                    $projectBrief = $row['projectBrief'];
+                                    $projectID = $row['projectID'];
+                                    $projectSupervisor = getSupervisorName($connection, $row['supervisorID']);
+
+                                    // Create new row of table with new information.
+                                    echo '<tr>';
+                                    echo '<th scope="row"><a href="../projects/' . $projectID . '.php">' . $projectTitle . '</a></th>';
+                                    echo '<td>' . substr($projectBrief, 0, 100) . '...</td>';
+                                    echo '<td>' . $projectSupervisor . '</td>';
+                                    echo '</tr>';
+                                }
+
+                            } else {
+                                echo "Error: No records found in the table!";                           
+                            }       
+    					}
+
+                        // Function uses the supervisor ID to get the supervisor name from the supervisor table.
+                        function getSupervisorName($connection, $supervisorID) {
+
+                            // Queries the database to get the supervisor field.
+                            $query = "SELECT * FROM supervisor WHERE supervisorID = '$supervisorID'";
+                            $result = $connection->query($query);
+
+                            if ($result->num_rows > 0) {
+                                while($row = $result->fetch_assoc()) {
                                     $supervisorTitle = $row['supervisorTitle'];
                                     $supervisorFirstName = $row['firstName'];
                                     $supervisorLastName = $row['lastName'];
                                     $supervisorName = $supervisorTitle . " " . $supervisorFirstName . " " . $supervisorLastName;
                                 }
+                            
+                            } else {
+                                echo "Error: No records found in the table!";
                             }
-                        } else {
-                            echo "Error: " . $query . "<br>" . $connection->error;
+
+                            return $supervisorName;
                         }
 
-                        return $supervisorName;
-                    }
+                        // Closes connection
+                        $connection->close();
 
-                    // Closes connection
-                    $connection->close();
-
-                ?>
+                    ?>
 
                 </tbody>
             </table>
-            <br><br><br>
 
+            <br>
+            <br>
+            <br>
+
+        </div>
     </div>
      
     <!-- Includes footer -->
@@ -211,4 +249,3 @@
 </body>
 
 </html>
-

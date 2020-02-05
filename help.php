@@ -1,10 +1,12 @@
+<!-- Page includes help and FAQ information for users -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-    <!-- Database connection and title -->
-    <?php include "includes/connect.php" ?>
+    <!-- Includes required scripts. -->
+    <?php include "includes/header.php" ?>
+
     <title>Help + FAQ - SPAS</title>
 
 </head>
@@ -12,10 +14,10 @@
 
 <body>
 
-    <!-- Includes navigation bar -->
-    <?php include "includes/nav.php" ?>
+    <!-- Includes main navigation bar -->
+    <?php include "includes/mainnav.php" ?>
 
-    <!-- Header containing the title and subtitle of the page -->
+    <!-- Header containing the title of the page -->
     <header>
 
         <br>
@@ -24,36 +26,45 @@
         
     </header>
 
-    <!-- Main Page Content -->
+    <!-- Main page includes rows for FAQ and information about the project process. -->
     <div class="container">
 
+        <!-- First row includes FAQ -->
         <div class="row">
 
-            <h4>Test question?</h4>
-            <p>Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer </p>
+            <center>
 
-            <br><br>
+                <h4>How do I select my project preferences?</h4>
+                <p>By reading the projects on the project list, these can be clicked on for more information. On each project's specific page are buttons for making your selection.</p>
 
-            <h4>Test question?</h4>
-            <p>Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer </p>
+                <br><br>
 
-            <br><br>
+                <h4>Can I change my selection?</h4>
+                <p>Yes! You can come back and change your selection until the selection deadline, just select a different project and it will replace your current choice.</p>
 
-            <h4>Test question?</h4>
-            <p>Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer </p>
+                <br><br>
 
-            <br><br>
+                <h4>How do I change my password?</h4>
+                <p>You can change your password and view your account details via the account tab at the top of the page.</p>
 
-            <h4>Test question?</h4>
-            <p>Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer Test answer </p>
+                <br><br>
 
-            <br><br>
+                <h4>I forgot my password?/I have not recieved my login details?</h4>
+                <p>Passwords are not the same as your MMU login, if you have not recieved yours, please contact your tutor or course leader.</p>
+
+            </center>
             
         </div>
 
+        <br>
+        <br>
+
+        <!-- Second row includes process information -->
         <div class="row">
+
             <h4>Project Process Information</h4>
-            <p>Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text Text </p>
+            <p>Projects will be assigned at the project selection deadline date. This will be done automatically based on supervisor and project availability and will take into account all three of the students choices.</p>
+            <p>If you have any questions or concerns about your confirmed project, please discuss this with your supervisor or the course leader.</p>
 
         </div>
 
@@ -65,4 +76,3 @@
 </body>
 
 </html>
-

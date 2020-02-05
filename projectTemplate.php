@@ -4,8 +4,10 @@
 
 <head>
 
-    <!-- Database connection -->
+    <!-- Includes required scripts. -->
     <?php include "../includes/connect.php" ?>
+    <?php include "../includes/header.php" ?>
+    <?php include "../includes/userscript.php" ?>
 
     <?php
 
@@ -14,24 +16,24 @@
 
         // Query to get the project data based on the ID.
         $query = "SELECT * FROM project where projectID='$projectID'";
+        $result = $connection->query($query);
 
         // Gets all data and assigns to variables.
-        if ($result = mysqli_query($connection, $query)) {
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_array($result)){
-                    $projectTitle = $row["projectTitle"];
-                    $projectBrief = $row["projectBrief"];
-                    $projectCode = $row["projectCode"];
-                    $supervisorRow = getSupervisorDetails($connection, $row["supervisorID"]);
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $projectTitle = $row["projectTitle"];
+                $projectBrief = $row["projectBrief"];
+                $projectCode = $row["projectCode"];
 
-                    $supervisorOffice = $supervisorRow['officeNumber'];
-                    $supervisorEmail = $supervisorRow['emailAddress'];
+                $supervisorRow = getSupervisorDetails($connection, $row["supervisorID"]);
 
-                    $supervisorTitle = $supervisorRow['supervisorTitle'];
-                    $supervisorFirstName = $supervisorRow['firstName'];
-                    $supervisorLastName = $supervisorRow['lastName'];
-                    $supervisorName = $supervisorTitle . " " . $supervisorFirstName . " " . $supervisorLastName;
-                }
+                $supervisorOffice = $supervisorRow['officeNumber'];
+                $supervisorEmail = $supervisorRow['emailAddress'];
+
+                $supervisorTitle = $supervisorRow['supervisorTitle'];
+                $supervisorFirstName = $supervisorRow['firstName'];
+                $supervisorLastName = $supervisorRow['lastName'];
+                $supervisorName = $supervisorTitle . " " . $supervisorFirstName . " " . $supervisorLastName;
             }
         }
 
@@ -39,42 +41,42 @@
         // Function uses the ID to get the supervisor name from the supervisor table.
         function getSupervisorDetails($connection, $supervisorID) {
 
-            $row = "";
-            $query = "SELECT * FROM supervisor WHERE supervisorID='" . $supervisorID . "'";
+            $query = "SELECT * FROM supervisor WHERE supervisorID='$supervisorID'";
+            $result = $connection->query($query);
 
-            if ($result = mysqli_query($connection, $query)) {
-                if (mysqli_num_rows($result) > 0) {
-                    while($row = mysqli_fetch_array($result)) {
-                        return $row;
-                    }
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    return $row;
                 }
             } else {
-                echo "Error: " . $query . "<br>" . $connection->error;
+                echo "Error: No records found in the table!";
             }
 
             return $row;
         }
 
+        // Function used to get courses which are relevant to the project.
         function getRelevantCourses($connection, $projectID) {
 
             $courses = array();
 
+            // Query joins projectCourse and course tables to get course details specific to the current project.
             $query = "SELECT * FROM projectCourse INNER JOIN course ON projectCourse.courseID = course.courseID WHERE projectCourse.projectID = '$projectID'";
+            $result = $connection->query($query);
 
-            if ($result = mysqli_query($connection, $query)) {
-                if (mysqli_num_rows($result) > 0) {
-                    while($row = mysqli_fetch_array($result)){
-                        $courseName = $row['courseName'];
-                        array_push($courses,$courseName);
-                    }
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $courseName = $row['courseName'];
+                    array_push($courses,$courseName);
                 }
             } else {
-                echo "Error: " . $query . "<br>" . $connection->error;
+                echo "Error: No records found in the table!";
             }
 
             return $courses;
         }
 
+        // Gets relevant courses specific to the project selected.
         $relevantCourses = getRelevantCourses($connection, $projectID);
 
     ?>
@@ -86,13 +88,13 @@
 
 <body>
 
-    <!-- Includes navbar -->
-    <?php include "../includes/nav.php" ?>
+    <!-- Includes main navbar -->
+    <?php include "../includes/mainnav.php" ?>
 
     <!-- Main Page Content -->
     <div class="container">
 
-        <!-- Page Heading/Breadcrumbs -->
+        <!-- Page Heading and breadcrumbs -->
         <h1 class="mt-4 mb-3"><?php echo $projectTitle; ?></h1>
 
         <ol class="breadcrumb">
@@ -104,15 +106,19 @@
             </li>
         </ol>
 
-        <!-- Left row of content - shows project info: title, supervisor, course, project code -->
-
+        <!-- First row contains two columns - project and supervisor info -->
         <div class="row">
+
+            <!-- Left row of content - shows project info: title, supervisor, course, project code -->
             <div class="col-md-6 border">
+
                 <br>
-                <p><b>Title:</b> <?php echo $projectTitle; ?></p><br>
-                <p><b>Supervisor:</b> <?php echo $supervisorName; ?></p><br>
+
+                <p><b>Title: </b><?php echo $projectTitle; ?></p><br>
+                <p><b>Supervisor: </b><?php echo $supervisorName; ?></p><br>
                 <p><b>Relevant Courses:</b>
                 <?php
+                    // Loops through each course in the loop and prints out the course.
                     $i = 0;
                     $len = count($relevantCourses);
                     foreach ($relevantCourses as $course) {
@@ -124,12 +130,19 @@
                         $i++;
                     } 
                 ?> 
-                </p><br>
-                <p><b>Project Code:</b> <?php echo $projectCode; ?></p>
-			<?php
-                if ($loggedIn == true) {
-	                if ($userType == "student") {
-	        ?>
+                </p>
+
+                <br>
+
+                <p><b>Project Code: </b><?php echo $projectCode; ?></p>
+
+                <!-- Checks if user is logged in as a student, if so, display select project buttons -->
+    			<?php
+                    if ($loggedIn == true) {
+    	                if ($userType == "student") {
+    	        ?>
+
+                <!-- Each button posts to the same php script and a hidden value posts the choice number -->
                 <form action="../php/selectProject.php" method="post" role="form">
                     <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
                     <input type="hidden" name="studentID" value="<?php echo $studentID; ?>">
@@ -157,10 +170,10 @@
 
                 <br>
 
-            <?php 
-	            	}
-	            }
-            ?>
+                <?php 
+    	            	}
+    	            }
+                ?>
 
             </div>
 
@@ -168,29 +181,51 @@
 
             <!-- Right row of content - shows supervisor details -->
             <div class="col-md-6 border">
+
                 <br>
-                <h4>Supervisor Information</h4><br>
-                <p><b>Name:</b> <?php echo $supervisorName; ?></p><br>
-                <p><b>Office:</b> <?php echo $supervisorOffice; ?></p><br>
-                <p><b>Email Address:</b> <?php echo $supervisorEmail; ?></p>
+
+                <h4>Supervisor Information</h4>
+
+                <br>
+
+                <p><b>Name: </b><?php echo $supervisorName; ?></p><br>
+                <p><b>Office: </b><?php echo $supervisorOffice; ?></p><br>
+                <p><b>Email Address: </b><?php echo $supervisorEmail; ?></p>
+
             </div>
+
         </div>
 
-        <br><hr><br>
+        <!-- Creates a line below the two sections -->
+        <br>
+        <hr>
+        <br>
 
         <!-- Bottom row of content - shows project brief -->
         <div class="row">
+
             <div class="col-md-12 border">
+
                 <br>
-                <center><h4>Project Brief</h4></center>
+
+                <center>
+                    <h4>Project Brief</h4>
+                </center>
+
                 <br>
+
+                <!-- Project brief uses wordwrap function in order to keep the text on the screen -->
                 <p><?php echo wordwrap($projectBrief, 200, "<br>", true); ?>
+
                 <br>
+
             </div>
+
         </div>
 
     </div>
 
+    <!-- Closes connection -->
     <?php $connection->close(); ?>
 
     <!-- Includes footer -->

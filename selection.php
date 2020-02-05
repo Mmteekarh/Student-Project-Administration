@@ -1,10 +1,14 @@
+<!-- Page contains a students' selected projects and allows them to remove them -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-    <!-- Database connection and title -->
+    <!-- Includes required scripts. -->
     <?php include "includes/connect.php" ?>
+    <?php include "includes/header.php" ?>
+    <?php include "includes/userscript.php" ?>
+
     <title>My Selection - SPAS</title>
 
 </head>
@@ -12,15 +16,16 @@
 
 <body>
 
+    <!-- Checks if the user is logged in as a student -->
     <?php
         if ($loggedIn == true) {
             if ($userType == "student") {
     ?>
 
-    <!-- Includes navigation bar -->
-    <?php include "includes/nav.php" ?>
+    <!-- Includes main navigation bar -->
+    <?php include "includes/mainnav.php" ?>
 
-    <!-- Header containing the title and subtitle of the page -->
+    <!-- Header containing the title of the page -->
     <header>
 
         <br>
@@ -29,86 +34,83 @@
         
     </header>
 
-    <!-- Main Page Content -->
+    <!-- Main page content includes list of selected projects. -->
     <div class="container">
 
         <?php
-            $query = "SELECT * FROM student WHERE studentID='$studentID'";
 
-            if ($result = mysqli_query($connection, $query)) {
-                if (mysqli_num_rows($result) > 0) {
-                    while($row = mysqli_fetch_array($result)){
-                        $firstChoice = $row['projectFirstChoice'];
-                        $secondChoice = $row['projectSecondChoice'];
-                        $thirdChoice = $row['projectThirdChoice'];
-                    }
+            // Query gets students choices using the student ID.
+            $query = "SELECT * FROM student WHERE studentID='$loggedInStudentID'";
+            $result = $connection->query($query);
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $firstChoice = $row['projectFirstChoice'];
+                    $secondChoice = $row['projectSecondChoice'];
+                    $thirdChoice = $row['projectThirdChoice'];
                 }
             } else {
-                echo "Error: " . $query . "<br>" . $connection->error;
+                echo "Error: No records found in the table!";
             }
 
+            // Query to get first choice and displays a hidden form with a button to remove the choice.
             $firstChoiceQuery = "SELECT * FROM project WHERE projectID='$firstChoice'";
+            $firstChoiceResult = $connection->query($firstChoiceQuery);
 
-            if ($result = mysqli_query($connection, $firstChoiceQuery)) {
-                if (mysqli_num_rows($result) > 0) {
-                    while($row = mysqli_fetch_array($result)){
-                        $projectTitle = $row["projectTitle"];
-                        echo "<center><p><b>First Choice:</b> <a href='projects/".$firstChoice.".php'>" . $projectTitle . "</a>";
-                        echo '<form action="php/removeSelection.php" method="post" role="form">';
-                        echo '<input type="hidden" name="studentID" value="'. $studentID .'">';
-                        echo '<input type="hidden" name="choiceNumber" value="1">';
-                        echo '<button type="submit">Remove</button></form></center><br>'; 
-                    }
-                } else {
-                    echo "<center><b>You have not selected a first choice</b></center>";
+            if ($firstChoiceResult->num_rows > 0) {
+                while($firstChoiceRow = $firstChoiceResult->fetch_assoc()) {
+                    $projectTitle = $firstChoiceRow["projectTitle"];
+                    echo "<center><p><b>First Choice:</b> <a href='projects/".$firstChoice.".php'>" . $projectTitle . "</a>";
+                    echo '<form action="php/removeSelection.php" method="post" role="form">';
+                    echo '<input type="hidden" name="studentID" value="'. $studentID .'">';
+                    echo '<input type="hidden" name="choiceNumber" value="1">';
+                    echo '<button type="submit">Remove</button></form></center><br>'; 
                 }
             } else {
-                echo "Error: " . $firstChoiceQuery . "<br>" . $connection->error;
+                echo "<center><b>You have not selected a first choice</b></center>";
             }
 
+            // Query to get second choice and displays a hidden form with a button to remove the choice.
             $secondChoiceQuery = "SELECT * FROM project WHERE projectID='$secondChoice'";
+            $secondChoiceResult = $connection->query($secondChoiceQuery);
 
-            if ($result = mysqli_query($connection, $secondChoiceQuery)) {
-                if (mysqli_num_rows($result) > 0) {
-                    while($row = mysqli_fetch_array($result)){
-                        $projectTitle = $row["projectTitle"];
-                        echo "<center><p><b>Second Choice:</b> <a href='projects/".$firstChoice.".php'>" . $projectTitle . "</a>";
-                        echo '<form action="php/removeSelection.php" method="post" role="form">';
-                        echo '<input type="hidden" name="studentID" value="'. $studentID .'">';
-                        echo '<input type="hidden" name="choiceNumber" value="2">';
-                        echo '<button type="submit">Remove</button></form></center><br>'; 
-                    }
-                } else {
-                    echo "<center><b>You have not selected a second choice</b></center>";
+            if ($secondChoiceResult->num_rows > 0) {
+                while($secondChoiceRow = $secondChoiceResult->fetch_assoc()) {
+                    $projectTitle = $secondChoiceRow["projectTitle"];
+                    echo "<center><p><b>Second Choice:</b> <a href='projects/".$firstChoice.".php'>" . $projectTitle . "</a>";
+                    echo '<form action="php/removeSelection.php" method="post" role="form">';
+                    echo '<input type="hidden" name="studentID" value="'. $studentID .'">';
+                    echo '<input type="hidden" name="choiceNumber" value="2">';
+                    echo '<button type="submit">Remove</button></form></center><br>'; 
                 }
             } else {
-                echo "Error: " . $secondChoiceQuery . "<br>" . $connection->error;
+                echo "<center><b>You have not selected a second choice</b></center>";
             }
 
+            // Query to get third choice and displays a hidden form with a button to remove the choice.
             $thirdChoiceQuery = "SELECT * FROM project WHERE projectID='$thirdChoice'";
+            $thirdChoiceResult = $connection->query($thirdChoiceQuery);
 
-            if ($result = mysqli_query($connection, $thirdChoiceQuery)) {
-                if (mysqli_num_rows($result) > 0) {
-                    while($row = mysqli_fetch_array($result)){
-                        $projectTitle = $row["projectTitle"];
-                        echo "<center><p><b>Third Choice:</b> <a href='projects/".$firstChoice.".php'>" . $projectTitle . "</a>";
-                        echo '<form action="php/removeSelection.php" method="post" role="form">';
-                        echo '<input type="hidden" name="studentID" value="'. $studentID .'">';
-                        echo '<input type="hidden" name="choiceNumber" value="3">';
-                        echo '<button type="submit">Remove</button></form></center><br>'; 
-                    }
-                } else {
-                    echo "<center><b>You have not selected a third choice</b></center>";
+            if ($thirdChoiceResult->num_rows > 0) {
+                while($thirdChoiceRow = $thirdChoiceResult->fetch_assoc()) {
+                    $projectTitle = $thirdChoiceRow["projectTitle"];
+                    echo "<center><p><b>Third Choice:</b> <a href='projects/".$firstChoice.".php'>" . $projectTitle . "</a>";
+                    echo '<form action="php/removeSelection.php" method="post" role="form">';
+                    echo '<input type="hidden" name="studentID" value="'. $studentID .'">';
+                    echo '<input type="hidden" name="choiceNumber" value="3">';
+                    echo '<button type="submit">Remove</button></form></center><br>'; 
                 }
             } else {
-                echo "Error: " . $thirdChoiceQuery . "<br>" . $connection->error;
+                echo "<center><b>You have not selected a third choice</b></center>";
             }
-
+            
+            // Closes connection.
             $connection->close();
 
         ?>
 
-        <br><br>  
+        <br>
+        <br>  
 
     </div>
      
@@ -116,12 +118,12 @@
     <?php include "includes/footer.php" ?>
 
     <?php
-        
+            // If user is supervisor, redirect them to supervisor page.
             } else if ($userType == "supervisor" or $userType == "admin") {
                 header("Refresh:0.01; url=../admin/supervisor.php");
 
             } else {
-                // Invalid user type
+                // Invalid user type, redirect to error page.
                 header("Refresh:0.01; url=error/usertypeerror.php");
             }
         } else {
@@ -132,4 +134,3 @@
 </body>
 
 </html>
-

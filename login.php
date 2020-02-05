@@ -1,17 +1,21 @@
+<!-- Page with login form -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-    <!-- Database connection and title -->
+    <!-- Includes required scripts. -->
     <?php include "includes/connect.php" ?>
+    <?php include "includes/header.php" ?>
+    <?php include "includes/userscript.php" ?>
+
     <title>Login - SPAS</title>
 
 </head>
 
-
 <body>
 
+    <!-- Checks if user is logged in already, if so, redirect them to home page -->
     <?php
         if ($loggedIn == true) {
             header("Refresh:0.01; url=index.php");
@@ -28,10 +32,12 @@
 
     <div class="container">
 
+        <!-- Login form contained inside a card to give it a cleaner look. -->
         <div class="card">
             <div class="card-body">
 
-                <form class="form-signin" name="loginForm" action="php/login.php" method="post" enctype="multipart/form-data">
+                <!-- Login form contains ID and password which is posted to the login script in the php folder. -->
+                <form class="form-signin" name="loginForm" action="php/login.php" method="POST" enctype="multipart/form-data">
 
                     <div class="form-label-group">
                         <center><label>Student / Supervisor ID</label></center>
@@ -53,11 +59,6 @@
         </div>
         
     </div>
-    
-    <?php
-        $connection->close();
-    ?>
-
 
 </body>
 
