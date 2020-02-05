@@ -1,116 +1,124 @@
+<!-- Page used by admin to edit deadlines -->
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
-  <?php include "../../includes/connect.php" ?>
-  <title>Editing Deadline - SPAS</title>
+    <!-- Includes required scripts. -->
+    <?php include "../../includes/header.php" ?>
+    <?php include "../../includes/userscript.php" ?>
+    <?php include "../../includes/connect.php" ?>
 
-  <?php
+    <title>Editing Deadline - SPAS</title>
 
-    $deadlineID = $_POST['deadlineID'];
-    $deadlineName;
-    $deadlineWeighting;
-    $deadlineDate;
-  
-    $query = "SELECT * FROM deadlines WHERE deadlineID='$deadlineID'";
+    <?php
 
-    if ($result = mysqli_query($connection, $query)) {
-      if (mysqli_num_rows($result) > 0) {
-        while($row = mysqli_fetch_array($result)) {
-          $deadlineName = $row["deadlineName"];
-          $deadlineWeighting = $row["deadlineWeighting"];
-          $deadlineDate = $row["deadlineDate"];
+        $deadlineID = $_POST['deadlineID'];
+      
+        $query = "SELECT * FROM deadlines WHERE deadlineID='$deadlineID'";
+        $result = $connection->query($query);
+
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $deadlineName = $row["deadlineName"];
+                $deadlineWeighting = $row["deadlineWeighting"];
+                $deadlineDate = $row["deadlineDate"];
+            }
         }
-      }
-    }
 
-  ?>
+    ?>
 
 </head>
 
 <body>
 
-  <?php
-      if ($loggedIn == true) {
+    <!-- Ensures admin is logged in -->
+    <?php
+        if ($loggedIn == true) {
             if ($userType == "admin") {
-  ?>
+    ?>
 
-  <!-- Includes navigation bar -->
-  <?php include "../../includes/systemnav.php" ?>
+    <!-- Includes navigation bar -->
+    <?php include "../../includes/systemnav.php" ?>
 
-  <!-- Page Content -->
-  <div class="container">
+    <!-- Page content includes add course form. -->
+    <div class="container">
 
-    <!-- Page Heading/Breadcrumbs -->
-    <h1 class="mt-4 mb-3">Editing Deadline</h1>
+        <!-- Page Heading/Breadcrumbs -->
+        <center>
+            <h1 class="mt-4 mb-3">Editing Deadline</h1>
+        </center>
 
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="../admin.php">Admin</a>
-      </li>
-      <li class="breadcrumb-item">
-        <a href="../systemnav.php">System Management</a>
-      </li>
-      <li class="breadcrumb-item">
-        <a href="deadlines.php">Deadline Management</a>
-      </li>
-      <li class="breadcrumb-item active">Editing Deadline</li>
-    </ol>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="../admin.php">Admin</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="../systemnav.php">System Management</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="deadlines.php">Deadline Management</a>
+            </li>
+            <li class="breadcrumb-item active">Editing Deadline</li>
+        </ol>
 
-    <div class="row">
-      <div class="col-lg-8 mb-4">
-        <h3>Editing Deadline</h3>
-        <form name="deadlineForm" action="../../php/editDeadline.php" method="post" enctype="multipart/form-data">
+        <div class="row">
 
-          <input type="hidden" name="deadlineID" value="<?php echo $deadlineID; ?>">
+            <div class="col-lg-8 mb-4">
 
-          <div class="control-group form-group">
-            <div class="controls">
-              <label>Deadline Name</label>
-              <input type="text" class="form-control" name="deadlineName" value="<?php echo $deadlineName; ?>" required data-validation-required-message="Deadline Name">
-            </div>
-          </div>
-          <div class="control-group form-group">
-            <div class="controls">
-              <label>Deadline Weighting</label>
-              <input type="text" class="form-control" name="deadlineWeighting" value="<?php echo $deadlineWeighting; ?>" required data-validation-required-message="Deadline Weighting">
-            </div>
-          </div>
-          <div class="control-group form-group">
-            <div class="controls">
-              <label>Deadline Date</label>
-              <input type="text" class="form-control" name="deadlineDate" value="<?php echo $deadlineDate; ?>" required data-validation-required-message="Deadline Date">
-            </div>
-          </div>
+                <form name="editDeadlineForm" action="../../php/editDeadline.php" method="POST" enctype="multipart/form-data">
+
+                    <input type="hidden" name="deadlineID" value="<?php echo $deadlineID; ?>">
+
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Deadline Name</label>
+                            <input type="text" class="form-control" name="deadlineName" value="<?php echo $deadlineName; ?>" required>
+                        </div>
+                    </div>
+
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Deadline Weighting</label>
+                            <input type="text" class="form-control" name="deadlineWeighting" value="<?php echo $deadlineWeighting; ?>" required>
+                        </div>
+                    </div>
+
+                    <div class="control-group form-group">
+                        <div class="controls">
+                            <label>Deadline Date</label>
+                            <input type="text" class="form-control" name="deadlineDate" value="<?php echo $deadlineDate; ?>" required>
+                        </div>
+                    </div>
           
-          <button type="submit" class="btn btn-primary" id="addButton">Edit</button>
+                    <button type="submit" class="btn btn-primary" id="editButton">Edit</button>
           
-        </form>
-      </div>
+                </form>
+
+            </div>
+
+        </div>
 
     </div>
 
-  </div>
-
-  <?php include "../../includes/footer.php" ?>
+    <?php include "../../includes/footer.php" ?>
 
     <?php
         
-          } else if ($userType == "supervisor" or $userType == "student") {
-            // Invalid Permissions
-              header("Refresh:0.01; url=../../error/permissionerror.php");
+            } else if ($userType == "supervisor" or $userType == "student") {
+                // Invalid Permissions
+                header("Refresh:0.01; url=../../error/permissionerror.php");
 
-          } else {
-              // Invalid user type
-              header("Refresh:0.01; url=../../error/usertypeerror.php");
-          }
+            } else {
+                // Invalid user type
+                header("Refresh:0.01; url=../../error/usertypeerror.php");
+            }
         } else {
             header("Refresh:0.01; url=../../login.php");
         }
+
     ?>
 
 </body>
 
 </html>
-
