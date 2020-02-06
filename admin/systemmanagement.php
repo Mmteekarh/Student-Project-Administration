@@ -23,6 +23,26 @@
             }
         }
 
+        // Query to get the number of students chosen projects.
+        $studentChoiceQuery = "SELECT COUNT(*) AS studentsChosenProjects FROM student WHERE coalesce(projectFirstChoice, projectSecondChoice, projectThirdChoice) is not null";
+        $studentChoiceResult = $connection->query($studentChoiceQuery);
+
+        if ($studentChoiceResult->num_rows > 0) {
+            while($studentChoiceRow = $studentChoiceResult->fetch_assoc()) {
+                $studentsChosenProjects = $studentChoiceRow["studentsChosenProjects"];
+            }
+        }
+
+        // Query to get the number of students.
+        $studentQuery = "SELECT COUNT(*) AS studentCount FROM student";
+        $studentResult = $connection->query($studentQuery);
+
+        if ($studentResult->num_rows > 0) {
+            while($studentRow = $studentResult->fetch_assoc()) {
+                $studentCount = $studentRow["studentCount"];
+            }
+        }
+
         // Closes connection
         $connection->close();
 
@@ -65,10 +85,17 @@
                         <center>
                             <h4>Allocate Projects</h4>
 
+                            <br>
+
                             <!-- Form posts to php scripts which allocates student projects -->
                             <form action="../php/allocateProjects.php" method="POST" role="form">
                                 <button class="btn btn-danger" type="submit">ALLOCATE</button>
                             </form>
+
+                            <br>
+
+                            <small><p><em>Warning: If any students have not chosen their projects, these will have to be allocated manually.</em></p></small>
+
                         </center>
                     </div>
                 </div>
@@ -91,14 +118,17 @@
                 <div class="card">
                     <div class="card-body">
                         <center>
-                            <h1>0</h1>
-                            <h2>Students chosen projects</h2>
+                            <!-- Shows number of students that have completed their choices -->
+                            <h1><?php echo $studentsChosenProjects . "/" . $studentCount; ?></h1>
+                            <h4>Students Completed Choices</h4>
                         </center>
                     </div>
                 </div>
             </div>
 
         </div>
+
+        <br>
 
     </div>
 
