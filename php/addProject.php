@@ -1,59 +1,49 @@
+<!-- Script for adding a project to the database -->
 <?php
 
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $currentDate = date("Y/m/d H:i:sa");
-
-    // Attempts to make a connection to the database with given fields.
-    $connection = mysqli_connect("localhost", "phpaccess", "t5eXXf0@s3", "SPAS");
-           
-    // If the connection failed, log an error and print a user-friendly message.
-    if($connection === false){
-        echo "ERROR: at " . $currentDate . " by " . $ip . " Caused by: " . mysqli_connect_error();
-        die("Oh no! There was a connection error, please contact an administrator.");
-    }
+    include "../includes/vars.php";
+    include "../includes/connect.php";
 
 	$projectTitle = $_POST['projectTitle'];
-	$superID = $_POST['superID'];
+	$supervisorID = $_POST['supervisorID'];
     $courses = $_POST['courses'];
     $projectID = getNextID($connection);
     $projectBrief = $_POST['projectBrief'];
     $maximumStudents = $_POST['maximumStudents'];
     $projectCode = $_POST['projectCode'];
 
-
-	$query = "INSERT INTO project (projectID, projectTitle, supervisorID, projectBrief, maximumStudents, projectCode, dateAdded, lastEdited)
-	VALUES ('$projectID', '$projectTitle', '$superID', '$projectBrief', '$maximumStudents', '$projectCode', now(), now())";
+	$projectQuery = "INSERT INTO project (projectID, projectTitle, supervisorID, projectBrief, maximumStudents, projectCode, dateCreated, lastUpdated)
+	VALUES ('$projectID', '$projectTitle', '$supervisorID', '$projectBrief', '$maximumStudents', '$projectCode', now(), now())";
 
     foreach($courses as $item) {
         $projectCourseQuery = "INSERT INTO projectCourse (projectID, courseID) VALUES ('$projectID','$item')";
 
-        if ($result = mysqli_query($connection, $projectCourseQuery)) {
+        if ($connection->query($projectCourseQuery) === TRUE) {
             echo "Course Pair: $item : $projectID added successfully";
         } else {
             echo "Error: " . $projectCourseQuery . "<br>" . $connection->error;
         }
     }
 
-	if ($result = mysqli_query($connection, $query)) {
+	if ($connection->query($projectQuery) === TRUE) {
 	    echo "Project: $projectTitle added successfully";
 	} else {
 	    echo "Error: " . $query . "<br>" . $connection->error;
 	}
 
-    copy('/var/www/html/projectTemplate.php', ('/var/www/html/projects/'.$projectID.'.php'));
+    copy('/var/www/html/projectTemplate.php', ('/var/www/html/projects/' . $projectID . '.php'));
 
-	header("Refresh:2; url=../admin/supervisor/addproject.php");
+	header("Refresh:2; url=../admin/supervisor.php");
 
     function getNextID($connection) {
         $projectID = "";
         
         $query = "SELECT COUNT(*) AS total FROM project";
+        $result = $connection->query($query);
 
-        if ($result = mysqli_query($connection, $query)) {
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_array($result)) {
-                    $projectID = $row["total"] + 1;
-                }
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                $projectID = $row["total"] + 1;
             }
         } else {
             echo "Error: " . $query . "<br>" . $connection->error;

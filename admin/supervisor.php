@@ -20,6 +20,7 @@
         $projectResult = $connection->query($projectQuery);
         $allocationQuery = "SELECT * FROM management";
         $allocationResult = $connection->query($allocationQuery);
+        $projectsAllocated = 0;
 
         // Gets number of students related to the supervisor and stores in a variable.
         if ($studentResult->num_rows > 0) {

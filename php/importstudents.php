@@ -1,21 +1,18 @@
+<!-- Script used to insert students via a CSV file -->
 <?php
 
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $currentDate = date("Y/m/d H:i:sa");
+    include "../includes/vars.php";
+    include "../includes/connect.php";
 
-    // Attempts to make a connection to the database with given fields.
-    $connection = mysqli_connect("localhost", "phpaccess", "t5eXXf0@s3", "SPAS");
-           
-    // If the connection failed, log an error and print a user-friendly message.
-    if($connection === false){
-        echo "ERROR: at " . $currentDate . " by " . $ip . " Caused by: " . mysqli_connect_error();
-        die("Oh no! There was a connection error, please contact an administrator.");
-    }
-
+    // Check if a file has been posted and get its name.
     if(isset($_POST["Import"])) {
-        $filename = $_FILES["file"]["tmp_name"];    
+        $filename = $_FILES["file"]["tmp_name"]; 
+
+        // Check if the file has any data and opens it.
         if($_FILES["file"]["size"] > 0) {
             $file = fopen($filename, "r");
+
+            // Loops through each line of the file using the comma as a separator, gets each field and stores in a variable.
             while (($data = fgetcsv($file, 10000, ",")) !== FALSE) {
                 $studentID = $data[0];
                 $firstName = $data[1];
@@ -26,13 +23,13 @@
                 $password = $data[6];
                 $courseID = $data[7];
 
-                $query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password, courseID) VALUES ('$studentID', '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', '$plp', '$password', '$courseID')";
+                $query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password, courseID, dateCreated, lastUpdated) VALUES ('$studentID', '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', '$plp', '$password', '$courseID', now(), now())";
 
-            if ($result = mysqli_query($connection, $query)) {
-                echo "The student file was successfully imported.";
-            } else {
-                echo "Error: " . $query . "<br>" . $connection->error;
-            }
+                if ($connection->query($query) === TRUE) {
+                    echo "The student file was successfully imported.";
+                } else {
+                    echo "Error: " . $query . "<br>" . $connection->error;
+                }
 
             }
         }

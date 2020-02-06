@@ -71,8 +71,8 @@
                             $query = "SELECT * FROM deadlines";
                             $result = $connection->query($query);
 
-                            if ($studentResult->num_rows > 0) {
-                                while($studentRow = $studentResult->fetch_assoc()) {
+                            if ($result->num_rows > 0) {
+                                while($row = $result->fetch_assoc()) {
                                     $deadlineID = $row['deadlineID'];
                                     $deadlineName = $row['deadlineName'];
                                     $deadlineWeighting = $row['deadlineWeighting'];

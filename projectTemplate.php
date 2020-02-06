@@ -143,27 +143,27 @@
     	        ?>
 
                 <!-- Each button posts to the same php script and a hidden value posts the choice number -->
-                <form action="../php/selectProject.php" method="post" role="form">
+                <form action="../php/selectProject.php" method="POST" role="form">
                     <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
-                    <input type="hidden" name="studentID" value="<?php echo $studentID; ?>">
+                    <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
                     <input type="hidden" name="choiceNumber" value="1">
                     <center><button type="submit" class="btn btn-success">Select First Choice</button></center>
                 </form>
 
                 <br>
 
-                <form action="../php/selectProject.php" method="post" role="form">
+                <form action="../php/selectProject.php" method="POST" role="form">
                     <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
-                    <input type="hidden" name="studentID" value="<?php echo $studentID; ?>">
+                    <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
                     <input type="hidden" name="choiceNumber" value="2">
                     <center><button type="submit" class="btn btn-success">Select Second Choice</button></center>
                 </form>
 
                 <br>
 
-                <form action="../php/selectProject.php" method="post" role="form">
+                <form action="../php/selectProject.php" method="POST" role="form">
                     <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
-                    <input type="hidden" name="studentID" value="<?php echo $studentID; ?>">
+                    <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
                     <input type="hidden" name="choiceNumber" value="3">
                     <center><button type="submit" class="btn btn-success">Select Third Choice</button></center>
                 </form>

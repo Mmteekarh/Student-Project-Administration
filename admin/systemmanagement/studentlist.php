@@ -99,15 +99,27 @@
                                         $courseName = $row['courseName'];
                                     }
 
+                                    if ($plp == 1) {
+                                        $plpText = "Yes";
+                                    } else {
+                                        $plpText = "No";
+                                    }
+
+                                    if ($loggedIn == 1) {
+                                        $loggedInText = "Yes";
+                                    } else {
+                                        $loggedInText = "No";
+                                    }
+
                                     echo '<tr>';
-                                    echo '<th scope="row">' . $stuID . '</th>';
+                                    echo '<th scope="row">' . $studentID . '</th>';
                                     echo '<td>' . $firstName . '</td>';
                                     echo '<td>' . $middleInitial . '</td>';
                                     echo '<td>' . $lastName . '</td>';
                                     echo '<td>' . $yearOfStudy . '</td>';
-                                    echo '<td>' . $plp . '</td>';
+                                    echo '<td>' . $plpText . '</td>';
                                     echo '<td>' . $courseName . '</td>';
-                                    echo '<td>' . $loggedIn . '</td>';
+                                    echo '<td>' . $loggedInText . '</td>';
                                     echo '<td>' . $lastIP . '</td>';
                                     echo '<td>
                                               <form action="editingstudent.php" method="POST" role="form">

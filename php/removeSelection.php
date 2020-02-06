@@ -1,20 +1,11 @@
+<!-- Script that removes a selected project from a users selection -->
 <?php
 
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $currentDate = date("Y/m/d H:i:sa");
-    
-    // Attempts to make a connection to the database with given fields.
-    $connection = mysqli_connect("localhost", "phpaccess", "t5eXXf0@s3", "SPAS");
-           
-    // If the connection failed, log an error and print a user-friendly message.
-    if($connection === false){
-        echo "ERROR: at " . $currentDate . " by " . $ip . " Caused by: " . mysqli_connect_error();
-        die("Oh no! There was a connection error, please contact an administrator.");
-    }
+    include "../includes/vars.php";
+    include "../includes/connect.php";
 
     $studentID = $_POST['studentID'];
     $choiceNumber = $_POST['choiceNumber'];
-    $selectionRow;
 
     if ($choiceNumber == '1') {
         $selectionRow = "projectFirstChoice";
@@ -26,7 +17,7 @@
         $selectionRow = "";
     }
 
-    $query = "UPDATE student SET $selectionRow = NULL WHERE studentID='$studentID'";
+    $query = "UPDATE student SET $selectionRow = NULL WHERE studentID = '$studentID'";
 
     if ($connection->query($query) === TRUE) {
         echo "Success!";

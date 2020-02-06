@@ -90,26 +90,44 @@
                                     $admin = $row['admin'];
                                     $lastIP = $row['lastIP'];
 
+                                    if ($activeSupervisor == 1) {
+                                        $activeSupervisorText = "Yes";
+                                    } else {
+                                        $activeSupervisorText = "No";
+                                    }
+
+                                    if ($loggedIn == 1) {
+                                        $loggedInText = "Yes";
+                                    } else {
+                                        $loggedInText = "No";
+                                    }
+
+                                    if ($admin == 1) {
+                                        $adminText = "Yes";
+                                    } else {
+                                        $adminText = "No";
+                                    }
+
                                     echo '<tr>';
                                     echo '<th scope="row">' . $supervisorID . '</th>';
                                     echo '<td>' . $title . '</td>';
                                     echo '<td>' . $firstName . '</td>';
                                     echo '<td>' . $lastName . '</td>';
-                                    echo '<td>' . $activeSupervisor . '</td>';
+                                    echo '<td>' . $activeSupervisorText . '</td>';
                                     echo '<td>' . $officeNumber . '</td>';
                                     echo '<td>' . $emailAddress . '</td>';
-                                    echo '<td>' . $loggedIn . '</td>';
-                                    echo '<td>' . $admin . '</td>';
+                                    echo '<td>' . $loggedInText . '</td>';
+                                    echo '<td>' . $adminText . '</td>';
                                     echo '<td>' . $lastIP . '</td>';
                                     echo '<td>
                                               <form action="editingsupervisor.php" method="post" role="form">
-                                                  <input type="hidden" name="superID" value="'. $superID .'">
+                                                  <input type="hidden" name="supervisorID" value="'. $supervisorID .'">
                                                   <button class="btn btn-primary" type="submit">Edit</button>
                                               </form>
                                           </td>';
                                     echo '<td>
                                               <form action="../../php/removeSupervisor.php" method="post" role="form">
-                                                  <input type="hidden" name="superID" value="'. $superID .'">
+                                                  <input type="hidden" name="supervisorID" value="'. $supervisorID .'">
                                                   <button class="btn btn-danger" type="submit">Remove</button>
                                               </form>
                                           </td>';

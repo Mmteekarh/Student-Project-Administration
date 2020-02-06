@@ -40,7 +40,7 @@
         <?php
 
             // Query gets students choices using the student ID.
-            $query = "SELECT * FROM student WHERE studentID='$loggedInStudentID'";
+            $query = "SELECT * FROM student WHERE studentID = '$loggedInStudentID'";
             $result = $connection->query($query);
 
             if ($result->num_rows > 0) {
@@ -54,15 +54,15 @@
             }
 
             // Query to get first choice and displays a hidden form with a button to remove the choice.
-            $firstChoiceQuery = "SELECT * FROM project WHERE projectID='$firstChoice'";
+            $firstChoiceQuery = "SELECT * FROM project WHERE projectID = '$firstChoice'";
             $firstChoiceResult = $connection->query($firstChoiceQuery);
 
             if ($firstChoiceResult->num_rows > 0) {
                 while($firstChoiceRow = $firstChoiceResult->fetch_assoc()) {
                     $projectTitle = $firstChoiceRow["projectTitle"];
-                    echo "<center><p><b>First Choice:</b> <a href='projects/".$firstChoice.".php'>" . $projectTitle . "</a>";
+                    echo "<center><p><b>First Choice:</b> <a href='projects/" . $firstChoice . ".php'>" . $projectTitle . "</a>";
                     echo '<form action="php/removeSelection.php" method="post" role="form">';
-                    echo '<input type="hidden" name="studentID" value="'. $studentID .'">';
+                    echo '<input type="hidden" name="studentID" value="'. $loggedInStudentID .'">';
                     echo '<input type="hidden" name="choiceNumber" value="1">';
                     echo '<button type="submit">Remove</button></form></center><br>'; 
                 }
@@ -71,15 +71,15 @@
             }
 
             // Query to get second choice and displays a hidden form with a button to remove the choice.
-            $secondChoiceQuery = "SELECT * FROM project WHERE projectID='$secondChoice'";
+            $secondChoiceQuery = "SELECT * FROM project WHERE projectID = '$secondChoice'";
             $secondChoiceResult = $connection->query($secondChoiceQuery);
 
             if ($secondChoiceResult->num_rows > 0) {
                 while($secondChoiceRow = $secondChoiceResult->fetch_assoc()) {
                     $projectTitle = $secondChoiceRow["projectTitle"];
-                    echo "<center><p><b>Second Choice:</b> <a href='projects/".$firstChoice.".php'>" . $projectTitle . "</a>";
+                    echo "<center><p><b>Second Choice:</b> <a href='projects/" . $secondChoice . ".php'>" . $projectTitle . "</a>";
                     echo '<form action="php/removeSelection.php" method="post" role="form">';
-                    echo '<input type="hidden" name="studentID" value="'. $studentID .'">';
+                    echo '<input type="hidden" name="studentID" value="'. $loggedInStudentID .'">';
                     echo '<input type="hidden" name="choiceNumber" value="2">';
                     echo '<button type="submit">Remove</button></form></center><br>'; 
                 }
@@ -88,15 +88,15 @@
             }
 
             // Query to get third choice and displays a hidden form with a button to remove the choice.
-            $thirdChoiceQuery = "SELECT * FROM project WHERE projectID='$thirdChoice'";
+            $thirdChoiceQuery = "SELECT * FROM project WHERE projectID = '$thirdChoice'";
             $thirdChoiceResult = $connection->query($thirdChoiceQuery);
 
             if ($thirdChoiceResult->num_rows > 0) {
                 while($thirdChoiceRow = $thirdChoiceResult->fetch_assoc()) {
                     $projectTitle = $thirdChoiceRow["projectTitle"];
-                    echo "<center><p><b>Third Choice:</b> <a href='projects/".$firstChoice.".php'>" . $projectTitle . "</a>";
+                    echo "<center><p><b>Third Choice:</b> <a href='projects/" . $thirdChoice . ".php'>" . $projectTitle . "</a>";
                     echo '<form action="php/removeSelection.php" method="post" role="form">';
-                    echo '<input type="hidden" name="studentID" value="'. $studentID .'">';
+                    echo '<input type="hidden" name="studentID" value="'. $loggedInStudentID .'">';
                     echo '<input type="hidden" name="choiceNumber" value="3">';
                     echo '<button type="submit">Remove</button></form></center><br>'; 
                 }

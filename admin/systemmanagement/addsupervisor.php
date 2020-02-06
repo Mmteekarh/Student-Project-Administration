@@ -97,7 +97,7 @@
                     <div class="control-group form-group">
                         <div class="controls">
                             <label>Password</label>
-                            <input type="text" class="form-control" name="password" required data-validation-required-message="Password">
+                            <input type="password" class="form-control" name="password" required data-validation-required-message="Password">
                         </div>
                     </div>
 

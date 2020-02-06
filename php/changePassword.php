@@ -1,44 +1,9 @@
+<!-- Script changes a users password -->
 <?php
-    // Gets the IP of the user viewing the website and the current date/time.
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $currentDate = date("Y/m/d H:i:sa");
 
-    // Attempts to make a connection to the database with given fields.
-    $connection = mysqli_connect("localhost", "phpaccess", "t5eXXf0@s3", "SPAS");
-           
-    // If the connection failed, log an error and print a user-friendly message.
-    if($connection === false){
-        echo "ERROR: at " . $currentDate . " by " . $ip . " Caused by: " . mysqli_connect_error();
-        die("Oh no! There was a connection error, please contact an administrator.");
-    }
-
-    $loggedIn = false;
-
-    $studentQuery = "SELECT * FROM student where lastIP='$ip' AND loggedIn=1";
-    $supervisorQuery = "SELECT * FROM supervisor where lastIP='$ip' AND loggedIn=1";
-
-    if ($result = mysqli_query($connection, $studentQuery)) {
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)){
-                $loggedIn = true;
-                $userType = "student";
-                $studentID = $row["studentID"];
-            }
-        }
-    }
-
-    if ($result = mysqli_query($connection, $supervisorQuery)) {
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)){
-                $loggedIn = true;
-                $userType = "supervisor";
-                $supervisorID = $row["supervisorID"];
-                if ($row["admin"] == 1) {
-                    $userType = "admin";
-                }
-            }
-        }
-    }
+    include "../includes/vars.php";
+    include "../includes/connect.php";
+    include "../includes/userscript.php";
 
 	$currentPassword = $_POST['currentPassword'];
 	$newPassword = $_POST['newPassword'];
@@ -48,55 +13,59 @@
     if ($userType == "student") {
 
         $studentQuery = "SELECT * FROM student WHERE lastIP = '$ip' AND loggedIn = 1";
+    	$studentResult = $connection->query($studentQuery);
 
-    	if ($result = mysqli_query($connection, $studentQuery)) {
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_array($result)){
-                    if ($currentPassword == $row["password"]) {
-                            if ($newPassword == $confirmNewPassword) {
+        if ($studentResult->num_rows > 0) {
+            while($studentRow = $studentResult->fetch_assoc()) {
 
-                                $update = "UPDATE student SET password='$newPassword' WHERE lastIP='$ip'";
+                if ($currentPassword == $studentRow["password"]) {
+                    if ($newPassword == $confirmNewPassword) {
 
-                                if ($connection->query($update) === TRUE) {
-                                    echo "Changed password!";
-                                } else {
-                                    echo "Error: " . $sql . "<br>" . $connection->error;
-                                }
-                            } else{
-                                echo "Passwords do not match!";
-                            }
+                        $studentUpdateQuery = "UPDATE student SET password = '$newPassword' WHERE lastIP = '$ip'";
+
+                        if ($connection->query($studentUpdateQuery) === TRUE) {
+                            echo "Changed password!";
+                        } else {
+                            echo "Error: " . $sql . "<br>" . $connection->error;
+                        }
+
                     } else {
-                        echo "Incorrect password!";
+                        echo "Passwords do not match!";
                     }
+                } else {
+                    echo "Incorrect password!";
                 }
             }
         }
+
     } else if ($userType == "supervisor" or $userType == "admin") {
 
         $supervisorQuery = "SELECT * FROM supervisor WHERE lastIP = '$ip' AND loggedIn = 1";
+        $supervisorResult = $connection->query($supervisorQuery);
 
-        if ($result = mysqli_query($connection, $supervisorQuery)) {
-            if (mysqli_num_rows($result) > 0) {
-                while($row = mysqli_fetch_array($result)){
-                    if ($currentPassword == $row["password"]) {
-                            if ($newPassword == $confirmNewPassword) {
+        if ($supervisorResult->num_rows > 0) {
+            while($supervisorRow = $supervisorResult->fetch_assoc()) {
 
-                                $update = "UPDATE supervisor SET password='$newPassword' WHERE lastIP='$ip'";
+                if ($currentPassword == $supervisorRow["password"]) {
+                    if ($newPassword == $confirmNewPassword) {
 
-                                if ($connection->query($update) === TRUE) {
-                                    echo "Changed password!";
-                                } else {
-                                    echo "Error: " . $sql . "<br>" . $connection->error;
-                                }
-                            } else{
-                                echo "Passwords do not match!";
-                            }
+                        $supervisorUpdateQuery = "UPDATE supervisor SET password = '$newPassword' WHERE lastIP = '$ip'";
+
+                        if ($connection->query($supervisorUpdateQuery) === TRUE) {
+                            echo "Changed password!";
+                        } else {
+                            echo "Error: " . $sql . "<br>" . $connection->error;
+                        }
+
                     } else {
-                        echo "Incorrect password!";
+                        echo "Passwords do not match!";
                     }
+                } else {
+                    echo "Incorrect password!";
                 }
             }
         }
+
     } else {
         // Invalid user type
         header("Refresh:0.01; url=error/usertypeerror.php");

@@ -15,7 +15,7 @@
 
         $supervisorID = $_POST['supervisorID'];
 
-        $query = "SELECT * FROM supervisor WHERE supervisorID='$supervisorID'";
+        $query = "SELECT * FROM supervisor WHERE supervisorID = '$supervisorID'";
         $result = $connection->query($query);
 
         if ($result->num_rows > 0) {
@@ -58,10 +58,10 @@
                 <a href="../admin.php">Admin</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="../systemnav.php">System Management</a>
+                <a href="../systemmanagement.php">System Management</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="editsupervisor.php">Edit Supervisor</a>
+                <a href="supervisorlist.php">Supervisor List</a>
             </li>
             <li class="breadcrumb-item active">Editing Supervisor</li>
         </ol>
@@ -73,7 +73,7 @@
 
                 <form name="supervisorForm" action="../../php/editSupervisor.php" method="post" enctype="multipart/form-data">
 
-                    <input type="hidden" name="superID" value="<?php echo $superID; ?>">
+                    <input type="hidden" name="supervisorID" value="<?php echo $supervisorID; ?>">
 
                     <div class="control-group form-group">
                         <div class="controls">

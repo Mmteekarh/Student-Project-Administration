@@ -1,20 +1,12 @@
+<!-- Script that removes students from the database -->
 <?php
 
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $currentDate = date("Y/m/d H:i:sa");
-    
-    // Attempts to make a connection to the database with given fields.
-    $connection = mysqli_connect("localhost", "phpaccess", "t5eXXf0@s3", "SPAS");
-           
-    // If the connection failed, log an error and print a user-friendly message.
-    if($connection === false){
-        echo "ERROR: at " . $currentDate . " by " . $ip . " Caused by: " . mysqli_connect_error();
-        die("Oh no! There was a connection error, please contact an administrator.");
-    }
+    include "../includes/vars.php";
+    include "../includes/connect.php";
 
-    $stuID = $_POST['stuID'];
+    $studentID = $_POST['studentID'];
 
-    $query = "DELETE FROM student WHERE studentID='$stuID'";
+    $query = "DELETE FROM student WHERE studentID='$studentID'";
 
     if ($connection->query($query) === TRUE) {
         echo "Success!";

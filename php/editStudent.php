@@ -1,18 +1,10 @@
+<!-- Script used to edit a student -->
 <?php
 
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $currentDate = date("Y/m/d H:i:sa");
+    include "../includes/vars.php";
+    include "../includes/connect.php";
 
-    // Attempts to make a connection to the database with given fields.
-    $connection = mysqli_connect("localhost", "phpaccess", "t5eXXf0@s3", "SPAS");
-           
-    // If the connection failed, log an error and print a user-friendly message.
-    if($connection === false){
-        echo "ERROR: at " . $currentDate . " by " . $ip . " Caused by: " . mysqli_connect_error();
-        die("Oh no! There was a connection error, please contact an administrator.");
-    }
-
-    $stuID = $_POST['stuID'];
+    $studentID = $_POST['studentID'];
     $middleInitial = $_POST['middleInitial'];
     $firstName = $_POST['firstName'];
     $lastName = $_POST['lastName'];
@@ -20,11 +12,10 @@
     $plp = $_POST['plp'];
     $courseID = $_POST['courseID'];
 
+	$query = "UPDATE student SET firstName = '$firstName', middleInitial = '$middleInitial', lastName = '$lastName', yearOfStudy = '$yearOfStudy', plp = '$plp', courseID = '$courseID', lastUpdated = now() WHERE studentID = '$studentID'";
 
-	$query = "UPDATE student SET firstName='$firstName', middleInitial='$middleInitial', lastName='$lastName', yearOfStudy='$yearOfStudy', plp='$plp', courseID='$courseID' WHERE studentID='$stuID'";
-
-	if ($result = mysqli_query($connection, $query)) {
-	    echo "Student: $stuID edited successfully";
+	if ($connection->query($query) === TRUE) {
+	    echo "Student: $studentID edited successfully";
 	} else {
 	    echo "Error: " . $query . "<br>" . $connection->error;
 	}

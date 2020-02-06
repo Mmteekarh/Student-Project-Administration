@@ -1,65 +1,53 @@
+<!-- Script used to log the user into the site. -->
 <?php
 
-    // Gets the IP of the user viewing the website and the current date/time.
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $currentDate = date("Y/m/d H:i:sa");
-
-    // Attempts to make a connection to the database with given fields.
-    $connection = mysqli_connect("localhost", "phpaccess", "t5eXXf0@s3", "SPAS");
-           
-    // If the connection failed, log an error and print a user-friendly message.
-    if($connection === false){
-        echo "ERROR: at " . $currentDate . " by " . $ip . " Caused by: " . mysqli_connect_error();
-        die("Oh no! There was a connection error, please contact an administrator.");
-    }
+    include "../includes/vars.php";
+    include "../includes/connect.php";
 
     $loginID = $_POST["loginID"];
     $loginPassword = $_POST["loginPassword"];
 
-    $studentLoginQuery = "SELECT * FROM student WHERE studentID='$loginID'";
-    $supervisorLoginQuery = "SELECT * FROM supervisor WHERE supervisorID='$loginID'";
+    $studentLoginQuery = "SELECT * FROM student WHERE studentID = '$loginID'";
+    $studentLoginResult = $connection->query($studentLoginQuery);
+    $supervisorLoginQuery = "SELECT * FROM supervisor WHERE supervisorID = '$loginID'";    
+    $supervisorLoginResult = $connection->query($supervisorLoginQuery);
    
-    if ($result = mysqli_query($connection, $studentLoginQuery)) {
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)){
-                $dbpass = $row["password"];
-                if ($loginPassword == $dbpass) {
-                    $query = "UPDATE student SET loggedIn = 1, lastIP = '$ip' WHERE studentID='$loginID'";
-                        if ($result = mysqli_query($connection, $query)) {
-                            header("Refresh:0.01; url=../index.php");
-                        } else {
-                            echo "Error: " . $query . "<br>" . $connection->error;
-                        }
-                    } else {
-                        echo "Error: Incorrect details!";
-                        header("Refresh:2; url=../login.php");
-                    }
-                }   
-        }
-    } else {
-        echo "ERROR: MySQL query result error";
-    }
+    if ($studentLoginResult->num_rows > 0) {
+        while($studentLoginRow = $studentLoginResult->fetch_assoc()) {
+            $passFromDB = $studentLoginRow["password"];
 
-
-    if ($result = mysqli_query($connection, $supervisorLoginQuery)) {
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)){
-                $dbpass = $row["password"];
-                if ($loginPassword == $dbpass) {
-                    $query = "UPDATE supervisor SET loggedIn = 1, lastIP = '$ip' WHERE supervisorID='$loginID'";
-                        if ($result = mysqli_query($connection, $query)) {
-                            header("Refresh:0.01; url=../index.php");
-                        } else {
-                            echo "Error: " . $query . "<br>" . $connection->error;
-                        }
+            if ($loginPassword == $passFromDB) {
+                
+                $updateStudentQuery = "UPDATE student SET loggedIn = 1, lastIP = '$ip', lastLoggedIn = now() WHERE studentID = '$loginID'";
+                
+                if ($connection->query($updateStudentQuery) === TRUE) {
+                    header("Refresh:0.01; url=../index.php");
                 } else {
-                    echo "Error: Incorrect details!";
-                    header("Refresh:2; url=../login.php");
+                    echo "Error: " . $updateStudentQuery . "<br>" . $connection->error;
                 }
+            } else {
+                echo "Error: Incorrect details!";
+                header("Refresh:2; url=../login.php");
+            } 
+        }
+    } else if ($supervisorLoginResult->num_rows > 0) {
+        while($supervisorLoginRow = $supervisorLoginResult->fetch_assoc()) {
+            $passFromDB = $supervisorLoginRow["password"];
+
+            if ($loginPassword == $passFromDB) {
+
+                $updateSupervisorQuery = "UPDATE supervisor SET loggedIn = 1, lastIP = '$ip', lastLoggedIn = now() WHERE supervisorID = '$loginID'";
+                
+                if ($connection->query($updateSupervisorQuery) === TRUE) {
+                    header("Refresh:0.01; url=../index.php");
+                } else {
+                    echo "Error: " . $updateSupervisorQuery . "<br>" . $connection->error;
+                }
+            } else {
+                echo "Error: Incorrect details!";
+                header("Refresh:2; url=../login.php");
             }
-        } 
-    } else {
-        echo "ERROR: MySQL query result error";
+        }
     }
 
     $connection->close();

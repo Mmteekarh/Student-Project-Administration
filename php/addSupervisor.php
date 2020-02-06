@@ -1,16 +1,8 @@
+<!-- Script for adding a supervisor to the database -->
 <?php
 
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $currentDate = date("Y/m/d H:i:sa");
-
-    // Attempts to make a connection to the database with given fields.
-    $connection = mysqli_connect("localhost", "phpaccess", "t5eXXf0@s3", "SPAS");
-           
-    // If the connection failed, log an error and print a user-friendly message.
-    if($connection === false){
-        echo "ERROR: at " . $currentDate . " by " . $ip . " Caused by: " . mysqli_connect_error();
-        die("Oh no! There was a connection error, please contact an administrator.");
-    }
+    include "../includes/vars.php";
+    include "../includes/connect.php";
 
     $supervisorID = $_POST['supervisorID'];
 	$supervisorTitle = $_POST['supervisorTitle'];
@@ -21,8 +13,6 @@
     $password = $_POST['password'];
     $active = $_POST['activeSupervisor'];
     $admin = $_POST['admin'];
-    $activeSupervisor;
-    $adminRow;
 
     if($active == "Yes") {
         $activeSupervisor = 1;
@@ -40,10 +30,10 @@
         $adminRow = 0;
     }
 
-	$query = "INSERT INTO supervisor (supervisorID, supervisorTitle, firstName, lastName, activeSupervisor, officeNumber, emailAddress, password, dateAdded, loggedIn, admin)
-	VALUES ('$supervisorID', '$supervisorTitle', '$firstName', '$lastName', $activeSupervisor, '$officeNumber', '$emailAddress', '$password', now(), 0, $adminRow)";
+	$query = "INSERT INTO supervisor (supervisorID, supervisorTitle, firstName, lastName, activeSupervisor, officeNumber, emailAddress, password, loggedIn, admin, dateCreated, lastUpdated)
+	VALUES ('$supervisorID', '$supervisorTitle', '$firstName', '$lastName', $activeSupervisor, '$officeNumber', '$emailAddress', '$password', 0, $adminRow, now(), now())";
 
-	if ($result = mysqli_query($connection, $query)) {
+	if ($connection->query($query) === TRUE) {
 	    echo "Supervisor: $firstName $lastName added successfully";
 	} else {
 	    echo "Error: " . $query . "<br>" . $connection->error;

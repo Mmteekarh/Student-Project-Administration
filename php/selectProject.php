@@ -1,72 +1,69 @@
+<!-- Script adds a selected project to the database -->
 <?php
 
-    $ip = $_SERVER['REMOTE_ADDR'];
-    $currentDate = date("Y/m/d H:i:sa");
-
-    // Attempts to make a connection to the database with given fields.
-    $connection = mysqli_connect("localhost", "phpaccess", "t5eXXf0@s3", "SPAS");
-           
-    // If the connection failed, log an error and print a user-friendly message.
-    if($connection === false){
-        echo "ERROR: at " . $currentDate . " by " . $ip . " Caused by: " . mysqli_connect_error();
-        die("Oh no! There was a connection error, please contact an administrator.");
-    }
+    include "../includes/vars.php";
+    include "../includes/connect.php";
 
 	$projectID = $_POST['projectID'];
 	$studentID = $_POST['studentID'];
 	$choiceNumber = $_POST['choiceNumber'];
 
-	$query = "SELECT * FROM student";
+	$studentQuery = "SELECT * FROM student WHERE studentID='$studentID'";
+    $studentResult = $connection->query($studentQuery);
 
-	if ($result = mysqli_query($connection, $query)) {
-        if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_array($result)) {
-                $firstChoice = $row["projectFirstChoice"];
-                $secondChoice = $row["projectSecondChoice"];
-                $thirdChoice = $row["projectThirdChoice"];
-            }
+    if ($studentResult->num_rows > 0) {
+        while($studentRow = $studentResult->fetch_assoc()) {
+            $firstChoice = $studentRow["projectFirstChoice"];
+            $secondChoice = $studentRow["projectSecondChoice"];
+            $thirdChoice = $studentRow["projectThirdChoice"];
         }
     } else {
-        echo "Error: " . $query . "<br>" . $connection->error;
+        echo "Error: No records found in table!";
     }
 
     if ($choiceNumber == "1") {
+
+        // Checks if the user has already selected the project.
 		if ($secondChoice == $projectID or $thirdChoice == $projectID) {
     		echo "You have already selected this project!";
 
     	} else {
-	    	$firstChoiceQuery = "UPDATE student SET projectFirstChoice='$projectID' WHERE studentID='$studentID'";
 
-			if ($result = mysqli_query($connection, $firstChoiceQuery)) {
+	    	$firstChoiceQuery = "UPDATE student SET projectFirstChoice = '$projectID' WHERE studentID = '$studentID'";
+
+			if ($connection->query($firstChoiceQuery) === TRUE) {
 				echo "Successfully added $projectID as first choice selection!";
 			} else {
-				echo "Error: " . $firstChoiceQuery . "<br>" . $connection->error;
+				echo "Error: No records found in table!";
 			}
 		}
 
     } else if ($choiceNumber == "2") {
+        
+        // Checks if the user has already selected the project.
     	if ($firstChoice == $projectID or $thirdChoice == $projectID) {
     		echo "You have already selected this project!";
 
     	} else {
 	    	$secondChoiceQuery = "UPDATE student SET projectSecondChoice='$projectID' WHERE studentID='$studentID'";
 
-	    	if ($result = mysqli_query($connection, $secondChoiceQuery)) {
+	    	if ($connection->query($secondChoiceQuery) === TRUE) {
 				echo "Successfully added $projectID as second choice selection!";
 			} else {
 				echo "Error: " . $secondChoiceQuery . "<br>" . $connection->error;
 			}
 		}
 
-
     } else if ($choiceNumber == "3") {
+
+        // Checks if the user has already selected the project.
     	if ($secondChoice == $projectID or $firstChoice == $projectID) {
     		echo "You have already selected this project!";
 
     	} else {
 	    	$thirdChoiceQuery = "UPDATE student SET projectThirdChoice='$projectID' WHERE studentID='$studentID'";
 
-	    	if ($result = mysqli_query($connection, $thirdChoiceQuery)) {
+	    	if ($connection->query($thirdChoiceQuery) === TRUE) {
 				echo "Successfully added $projectID as third choice selection!";
 			} else {
 				echo "Error: " . $thirdChoiceQuery . "<br>" . $connection->error;
