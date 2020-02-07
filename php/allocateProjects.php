@@ -87,60 +87,89 @@
 		        	$projectMax = $firstChoiceRow["maximumStudents"];
 
 		        	// If supervisor max students and project max students reached, skip
-		        	if (array_key_exists($supervisorID, $supervisorsAllocated)) {
-			        	if ($supervisorsAllocated[$supervisorID] == $supervisorMax) {
-			        		continue;
-			        	} else if ($projectsAllocated[$projectID] == $projectMax) {
-			        		continue;
-			        	} else {
-			        		// Assign user first choice
-			        		$projectsAllocated[$projectID] = $projectsAllocated[$projectID] + 1;
-			        		$supervisorsAllocated[$supervisorID] = $supervisorsAllocated[$supervisorID] + 1;
+		        	if ($supervisorsAllocated[$supervisorID] == $supervisorMax OR $projectsAllocated[$projectID] == $projectMax) {
+		        		
+		        		$secondChoiceQuery = "SELECT * FROM student 
+        					INNER JOIN project ON student.projectSecondChoice = project.projectID
+        					INNER JOIN supervisor ON project.supervisorID = supervisor.supervisorID
+        					WHERE studentID = '$studentID'";
+					    $secondChoiceResult = $connection->query($secondChoiceQuery);
 
-			        		$confirmedQuery = "UPDATE student SET projectID = '$projectID' WHERE studentID = '$studentID'";
+					    if ($secondChoiceResult->num_rows > 0) {
+					        while($secondChoiceRow = $secondChoiceResult->fetch_assoc()) {
+					        	$projectID = $secondChoiceRow["projectSecondChoice"];
+					        	$supervisorID = $secondChoiceRow["supervisorID"];
+					        	$supervisorMax = $secondChoiceRow["maxStudents"];
+					        	$projectMax = $secondChoiceRow["maximumStudents"];
 
-							if ($connection->query($confirmedQuery) === TRUE) {
-								echo "true";
-							} else {
-							    echo "Error: " . $confirmedQuery . "<br>" . $connection->error;
-							}
+					        	// If supervisor max students and project max students reached, skip
+					        	if ($supervisorsAllocated[$supervisorID] == $supervisorMax or $projectsAllocated[$projectID] == $projectMax) {
 
-			        	}
-			        } else {
-			        	continue;
-			        }
-		        }
-		    } else {
-		        echo "Error: No records found in table!";
-		    }
+					        		$thirdChoiceQuery = "SELECT * FROM student 
+						            					INNER JOIN project ON student.projectThirdChoice = project.projectID
+						            					INNER JOIN supervisor ON project.supervisorID = supervisor.supervisorID
+						            					WHERE studentID = '$studentID'";
+								    $thirdChoiceResult = $connection->query($thirdChoiceQuery);
 
-		    $secondChoiceQuery = "SELECT * FROM student 
-            					INNER JOIN project ON student.projectSecondChoice = project.projectID
-            					INNER JOIN supervisor ON project.supervisorID = supervisor.supervisorID
-            					WHERE studentID = '$studentID'";
-		    $secondChoiceResult = $connection->query($secondChoiceQuery);
+								    if ($thirdChoiceResult->num_rows > 0) {
+								        while($thirdChoiceRow = $thirdChoiceResult->fetch_assoc()) {
+								        	$projectID = $thirdChoiceRow["projectThirdChoice"];
+								        	$supervisorID = $thirdChoiceRow["supervisorID"];
+								        	$supervisorMax = $thirdChoiceRow["maxStudents"];
+								        	$projectMax = $thirdChoiceRow["maximumStudents"];
 
-		    if ($secondChoiceResult->num_rows > 0) {
-		        while($secondChoiceRow = $secondChoiceResult->fetch_assoc()) {
-		        	$projectID = $secondChoiceRow["projectFirstChoice"];
-		        	$supervisorID = $secondChoiceRow["supervisorID"];
-		        	$supervisorMax = $secondChoiceRow["maxStudents"];
-		        	$projectMax = $secondChoiceRow["maximumStudents"];
+								        	// If supervisor max students and project max students reached, skip
+								        	if ($supervisorsAllocated[$supervisorID] == $supervisorMax or $projectsAllocated[$projectID] == $projectMax) {
+								        		continue 2;
+								        	} else {
+								        		// Assign user third choice
+								        		$projectsAllocated[$projectID] = $projectsAllocated[$projectID] + 1;
+								        		$supervisorsAllocated[$supervisorID] = $supervisorsAllocated[$supervisorID] + 1;
 
-		        	// If supervisor max students and project max students reached, skip
-		        	if ($supervisorsAllocated[$supervisorID] == $supervisorMax) {
-		        		continue;
-		        	} else if ($projectsAllocated[$projectID] == $projectMax) {
-		        		continue;
+								        		$confirmedQuery = "UPDATE student SET projectID = '$projectID' WHERE studentID = '$studentID'";
+
+												if ($connection->query($confirmedQuery) === TRUE) {
+													break 2;
+												} else {
+												    echo "Error: " . $confirmedQuery . "<br>" . $connection->error;
+												}
+
+								        	}
+								        }
+								    } else {
+								        echo "Error: No records found in table!";
+								    }
+					        	
+					        	} else {
+					        		// Assign user second choice
+					        		$projectsAllocated[$projectID] = $projectsAllocated[$projectID] + 1;
+					        		$supervisorsAllocated[$supervisorID] = $supervisorsAllocated[$supervisorID] + 1;
+
+					        		$confirmedQuery = "UPDATE student SET projectID = '$projectID' WHERE studentID = '$studentID'";
+
+									if ($connection->query($confirmedQuery) === TRUE) {
+										continue 2;
+										echo "second choice true";
+									} else {
+									    echo "Error: " . $confirmedQuery . "<br>" . $connection->error;
+									}
+
+					        	}
+					        }
+					    } else {
+					        echo "Error: No records found in table!";
+					    }
+
 		        	} else {
-		        		// Assign user second choice
+		        		// Assign user first choice
 		        		$projectsAllocated[$projectID] = $projectsAllocated[$projectID] + 1;
 		        		$supervisorsAllocated[$supervisorID] = $supervisorsAllocated[$supervisorID] + 1;
 
 		        		$confirmedQuery = "UPDATE student SET projectID = '$projectID' WHERE studentID = '$studentID'";
 
 						if ($connection->query($confirmedQuery) === TRUE) {
-							break 2;
+							continue;
+							echo "first choice true";
 						} else {
 						    echo "Error: " . $confirmedQuery . "<br>" . $connection->error;
 						}
@@ -151,47 +180,20 @@
 		        echo "Error: No records found in table!";
 		    }
 
-		    $thirdChoiceQuery = "SELECT * FROM student 
-            					INNER JOIN project ON student.projectThirdChoice = project.projectID
-            					INNER JOIN supervisor ON project.supervisorID = supervisor.supervisorID
-            					WHERE studentID = '$studentID'";
-		    $thirdChoiceResult = $connection->query($thirdChoiceQuery);
-
-		    if ($thirdChoiceResult->num_rows > 0) {
-		        while($thirdChoiceRow = $thirdChoiceResult->fetch_assoc()) {
-		        	$projectID = $thirdChoiceRow["projectFirstChoice"];
-		        	$supervisorID = $thirdChoiceRow["supervisorID"];
-		        	$supervisorMax = $thirdChoiceRow["maxStudents"];
-		        	$projectMax = $thirdChoiceRow["maximumStudents"];
-
-		        	// If supervisor max students and project max students reached, skip
-		        	if ($supervisorsAllocated[$supervisorID] == $supervisorMax) {
-		        		continue;
-		        	} else if ($projectsAllocated[$projectID] == $projectMax) {
-		        		continue;
-		        	} else {
-		        		// Assign user third choice
-		        		$projectsAllocated[$projectID] = $projectsAllocated[$projectID] + 1;
-		        		$supervisorsAllocated[$supervisorID] = $supervisorsAllocated[$supervisorID] + 1;
-
-		        		$confirmedQuery = "UPDATE student SET projectID = '$projectID' WHERE studentID = '$studentID'";
-
-						if ($connection->query($confirmedQuery) === TRUE) {
-							break 2;
-						} else {
-						    echo "Error: " . $confirmedQuery . "<br>" . $connection->error;
-						}
-
-		        	}
-		        }
-		    } else {
-		        echo "Error: No records found in table!";
-		    }
 		}
 	} else {
 		echo "Error: No records found in table!";
 	}
 
+	$managementUpdate = "UPDATE management SET projectsAllocated = 1";
+
+	if ($connection->query($managementUpdate) === TRUE) {
+		echo "Updated management table";
+	} else {
+	    echo "Error: " . $managementUpdate . "<br>" . $connection->error;
+	}
+
+	header("Refresh:1; url=../admin/systemmanagement.php");
 
     $connection->close();
 

@@ -65,7 +65,7 @@
                     <div class="control-group form-group">
                         <div class="controls">
                             <label>Deadline Date</label>
-                            <input type="text" class="form-control" name="deadlineDate" placeholder="For example: 10/10/20" required>
+                            <input type="text" class="form-control" name="deadlineDate" placeholder="For example: 20/10/30 (YY/MM/DD)" required>
                         </div>
                     </div>
               

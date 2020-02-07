@@ -23,6 +23,16 @@
             }
         }
 
+        // Query to get whether projects have been allocated or not.
+        $managementQuery = "SELECT * FROM management";
+        $managementResult = $connection->query($managementQuery);
+
+        if ($managementResult->num_rows > 0) {
+            while($managementRow = $managementResult->fetch_assoc()) {
+                $projectsAllocated = $managementRow["projectsAllocated"];
+            }
+        }
+
         // Query to get the number of students chosen projects.
         $studentChoiceQuery = "SELECT COUNT(*) AS studentsChosenProjects FROM student WHERE coalesce(projectFirstChoice, projectSecondChoice, projectThirdChoice) is not null";
         $studentChoiceResult = $connection->query($studentChoiceQuery);
@@ -83,18 +93,26 @@
                 <div class="card">
                     <div class="card-body">
                         <center>
-                            <h4>Allocate Projects</h4>
-
-                            <br>
 
                             <!-- Form posts to php scripts which allocates student projects -->
-                            <form action="../php/allocateProjects.php" method="POST" role="form">
-                                <button class="btn btn-danger" type="submit">ALLOCATE</button>
-                            </form>
+                            <?php 
 
-                            <br>
+                                if ($projectsAllocated == 0) { 
+                                    echo "<h4>Allocate Projects</h4>";
+                                    echo "<br>";
+                                    echo '<form action="../php/allocateProjects.php" method="POST" role="form">';
+                                    echo '<button class="btn btn-danger" type="submit">ALLOCATE</button>';
+                                    echo "</form>";
+                                    echo "<br>";
+                                    echo "<small><p><em>Warning: If any students have not chosen their projects, these will have to be allocated manually.</em></p></small>";
+                                } else {
+                                    echo "<h4>Allocate Projects</h4>";
+                                    echo "<br>";
+                                    echo "Projects have been allocated!";
+                                    echo "<br>";
+                                }
 
-                            <small><p><em>Warning: If any students have not chosen their projects, these will have to be allocated manually.</em></p></small>
+                            ?>
 
                         </center>
                     </div>
