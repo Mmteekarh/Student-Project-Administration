@@ -41,7 +41,7 @@
                 <form method="POST">
                     <select name="courseID">
                         <!-- Adds an option to select all courses -->
-                  	    <option value="0">All Courses</option>
+                  	    <option value="0" <?php if ($_POST['courseID'] == '0') echo 'selected="selected"';?> >All Courses</option>
                         
                         <?php
 
@@ -55,7 +55,14 @@
                                     // Gets course name and course ID and uses them to form a new option.
                                     $courseName = $row['courseName'];
                                     $courseID = $row['courseID'];
-                                    echo '<option value="'.$courseID.'">' . $courseName . '</option>';
+
+                                    if ($_POST['courseID'] == $courseID) {
+                                        echo '<option value="' . $courseID . '" selected="selected" >' . $courseName . '</option>';
+                                    } else {
+                                        echo '<option value="' . $courseID . '" >' . $courseName . '</option>';
+
+                                    }
+
                                 }
                             } else {
                                 echo "Error: No results found in the table!";
@@ -117,40 +124,23 @@
 
                     <?php
 
-                        // Checks if the form was submitted and gets the course ID of the requested course.
-    	                if (isset($_POST["submit"])) {
-    						$courseID = $_POST["courseID"];
+                        if ($loggedIn == true) {
+                            if ($userType == "student") {
+                                $studentCourseQuery = "SELECT * FROM student WHERE studentID = '$loggedInStudentID'";
+                                $studentCourseResult = $connection->query($studentCourseQuery);
 
-    					} else {
+                                if ($studentCourseResult->num_rows > 0) {
+                                    while($studentCourseRow = $studentCourseResult->fetch_assoc()) {
+                                        $loggedInStudentCourse = $studentCourseRow["courseID"];
+                                    }
+                                }
+                            }
+                        }
 
-                            // If the form was not submitted, display all projects.
-    						$query = "SELECT * FROM project";
-                            $result = $connection->query($query);
-
-    	                    if ($result->num_rows > 0) {
-    	                        while($row = $result->fetch_assoc()) {
-
-                                    // Gets details from database table.
-                                    $projectTitle = $row['projectTitle'];
-    	                            $projectBrief = $row['projectBrief'];
-    	                            $projectID = $row['projectID'];
-    	                            $projectSupervisor = getSupervisorName($connection, $row['supervisorID']);
-
-                                    // Create new row of table with new information.
-    	                            echo '<tr>';
-    	                            echo '<th scope="row"><a href="../projects/' . $projectID . '.php">' . $projectTitle . '</a></th>';
-    	                            echo '<td>' . substr($projectBrief, 0, 100) . '...</td>';
-    	                            echo '<td>' . $projectSupervisor . '</td>';
-    	                            echo '</tr>';
-    	                        }
-
-    	                    } else {
-                                echo "Error: No records found in the table!";    	                    
-                            }		
-    					}
+                        $courseID = $_POST["courseID"];
 
                         // Checks if course ID is 0 (all courses have been selected).
-    					if ($courseID == 0) {
+    					if ($courseID == 0 OR !(isset($_POST["submit"]))) {
 
                             // Query to display all projects.
     						$query = "SELECT * FROM project";
@@ -174,24 +164,24 @@
                                 }
 
                             } else {
-                                echo "Error: No records found in the table!";                           
+                                echo "<tr><td>Sorry! There are no projects related to this course.</td></tr>";                           
                             }       		
 
                         // If the user has selected a specific course, find it in the projectCourse table.
     					} else {
 
                             // Query to join projectCourse and project tables and get the details from each.
-    						$query = "SELECT * FROM projectCourse INNER JOIN project ON projectCourse.projectID = project.projectID WHERE projectCourse.courseID = '$courseID'";
-                            $result = $connection->query($query);
+    						$projectCourseQuery = "SELECT * FROM projectCourse INNER JOIN project ON projectCourse.projectID = project.projectID WHERE projectCourse.courseID = '$courseID'";
+                            $projectCourseResult = $connection->query($projectCourseQuery);
 
-    	                    if ($result->num_rows > 0) {
-                                while($row = $result->fetch_assoc()) {
+    	                    if ($projectCourseResult->num_rows > 0) {
+                                while($projectCourseRow = $projectCourseResult->fetch_assoc()) {
 
                                     // Gets details from database table.
-                                    $projectTitle = $row['projectTitle'];
-                                    $projectBrief = $row['projectBrief'];
-                                    $projectID = $row['projectID'];
-                                    $projectSupervisor = getSupervisorName($connection, $row['supervisorID']);
+                                    $projectTitle = $projectCourseRow['projectTitle'];
+                                    $projectBrief = $projectCourseRow['projectBrief'];
+                                    $projectID = $projectCourseRow['projectID'];
+                                    $projectSupervisor = getSupervisorName($connection, $projectCourseRow['supervisorID']);
 
                                     // Create new row of table with new information.
                                     echo '<tr>';
@@ -202,7 +192,7 @@
                                 }
 
                             } else {
-                                echo "Error: No records found in the table!";                           
+                                echo "<tr><td>Sorry! There are no projects related to this course.</td></tr>";                           
                             }       
     					}
 

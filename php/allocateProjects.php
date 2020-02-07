@@ -100,7 +100,7 @@
 			        		$confirmedQuery = "UPDATE student SET projectID = '$projectID' WHERE studentID = '$studentID'";
 
 							if ($connection->query($confirmedQuery) === TRUE) {
-								continue;
+								echo "true";
 							} else {
 							    echo "Error: " . $confirmedQuery . "<br>" . $connection->error;
 							}
