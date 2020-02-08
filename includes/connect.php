@@ -9,7 +9,9 @@
            
     // If the connection failed, log an error including the date and IP address of the user.
     if($connection->connect_error) {
-    	echo "ERROR: MySQL Connection Error at " . $currentDate . " by " . $ip . " Caused by: " . $connection->connect_error;
+        echo '<div class="alert alert-danger" role="alert">
+              		Fatal Error: MySQL connection error at ' . $currentDate . ' by ' . $ip . '. Caused by: ' . $connection->connect_error . '  
+              </div>';
     }
 
 ?>

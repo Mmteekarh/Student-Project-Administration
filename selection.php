@@ -50,7 +50,9 @@
                     $thirdChoice = $row['projectThirdChoice'];
                 }
             } else {
-                echo "Error: No records found in the table!";
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: We could not retrieve your data! Please contact an administrator. 
+                      </div>';
             }
 
             // Query to get first choice and displays a hidden form with a button to remove the choice.

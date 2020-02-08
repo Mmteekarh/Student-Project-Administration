@@ -24,6 +24,97 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/supervisornav.php" ?>
 
+
+    <!-- Script for adding a project to the database -->
+    <?php
+
+        function getNextID($connection) {
+            $projectID = "";
+            
+            $query = "SELECT COUNT(*) AS total FROM project";
+            $result = $connection->query($query);
+
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $projectID = $row["total"] + 1;
+                }
+            } else {
+                echo '<div class="alert alert-danger" role="alert">
+                        Error: Could not retrieve projects! Please contact an administrator.
+                  </div>';
+            }
+
+            return $projectID;
+        }
+
+        $projectTitle = $supervisorID = $courses = $projectID = $projectBrief = $maximumStudents = $projectCode = "";
+
+        if (isset($_POST['submit'])) {
+            $projectTitle = $_POST['projectTitle'];
+            $supervisorID = $_POST['supervisorID'];
+            $courses = $_POST['courses'];
+            $projectID = getNextID($connection);
+            $projectBrief = $_POST['projectBrief'];
+            $maximumStudents = $_POST['maximumStudents'];
+            $projectCode = $_POST['projectCode'];
+
+            // Form validation
+            if (!(is_numeric($maximumStudents))) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Maximum students must be a number!
+                      </div>';
+
+            } else if ($maximumStudents > 1000 or $maximumStudents < 1) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Maximum students must be between 1 and 1000!
+                      </div>';
+
+            } else if (strlen($projectTitle) > 250) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Project title is too long!
+                      </div>';
+
+            } else if (strlen($projectCode) > 50) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Project code is too long!
+                      </div>';
+
+            } else if (empty($courses)) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Please select at least one course!
+                      </div>';
+
+            } else {
+
+                $projectQuery = "INSERT INTO project (projectID, projectTitle, supervisorID, projectBrief, maximumStudents, projectCode, dateCreated, lastUpdated)
+                VALUES ('$projectID', '$projectTitle', '$supervisorID', '$projectBrief', '$maximumStudents', '$projectCode', now(), now())";
+
+                foreach($courses as $item) {
+                    $projectCourseQuery = "INSERT INTO projectCourse (projectID, courseID) VALUES ('$projectID','$item')";
+
+                    if ($connection->query($projectCourseQuery) === TRUE) {
+                        continue;
+                    } else {
+                        echo '<div class="alert alert-danger" role="alert">
+                                    Error: Could not insert project-course match! Please contact an administrator.
+                              </div>';
+                    }
+                }
+
+                if ($connection->query($projectQuery) === TRUE) {
+                    // Create new project file and refresh to supervisor page.
+                    copy('/var/www/html/projectTemplate.php', ('/var/www/html/projects/' . $projectID . '.php'));
+                    header("Refresh:0.01; url=../supervisor.php");
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Could not insert project! Please contact an administrator.
+                          </div>'; 
+                }
+            }
+        }
+
+    ?>
+
     <!-- Page content includes an add project form. -->
     <div class="container">
 
@@ -46,7 +137,7 @@
 
             <div class="col-lg-8 mb-4">
 
-                <form name="addProjectForm" action="../../php/addProject.php" method="POST" enctype="multipart/form-data">
+                <form name="addProjectForm" action="addproject.php" method="POST" enctype="multipart/form-data">
 
                     <input type="hidden" name="supervisorID" value="<?php echo $loggedInSupervisorID; ?>">
 
@@ -98,16 +189,18 @@
                                               </div>';
                                     }
                                 } else {
-                                    echo "Error: No records found in the table!";
+                                    echo '<div class="alert alert-danger" role="alert">
+                                                Error: We could not load the course data! Please contact an administrator. 
+                                          </div>';
                                 }
 
-                                // Closes connection.
                                 $connection->close();
+
                             ?>  
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" id="addButton">Add</button>
+                    <button type="submit" class="btn btn-primary" name="submit" id="addButton">Add</button>
 
                 </form>
 

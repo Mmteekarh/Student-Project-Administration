@@ -96,7 +96,9 @@
                                     echo '</tr>';
                                 }
                             } else {
-                                echo "Error: No records found in table!";
+                                 echo '<div class="alert alert-danger" role="alert">
+                                            Error: Could not retrieve deadline data - No records found. 
+                                      </div>';
                             }
 
                             // Closes connection

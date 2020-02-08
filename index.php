@@ -64,8 +64,6 @@
                                     }
 
                                 }
-                            } else {
-                                echo "Error: No results found in the table!";
                             }
                         ?>
 
@@ -123,19 +121,6 @@
                 <tbody>
 
                     <?php
-
-                        if ($loggedIn == true) {
-                            if ($userType == "student") {
-                                $studentCourseQuery = "SELECT * FROM student WHERE studentID = '$loggedInStudentID'";
-                                $studentCourseResult = $connection->query($studentCourseQuery);
-
-                                if ($studentCourseResult->num_rows > 0) {
-                                    while($studentCourseRow = $studentCourseResult->fetch_assoc()) {
-                                        $loggedInStudentCourse = $studentCourseRow["courseID"];
-                                    }
-                                }
-                            }
-                        }
 
                         $courseID = $_POST["courseID"];
 
@@ -212,7 +197,7 @@
                                 }
                             
                             } else {
-                                echo "Error: No records found in the table!";
+                                echo "<tr><td>Sorry! There are no projects related to this course.</td></tr>";
                             }
 
                             return $supervisorName;

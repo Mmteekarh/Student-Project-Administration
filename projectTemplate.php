@@ -35,6 +35,10 @@
                 $supervisorLastName = $supervisorRow['lastName'];
                 $supervisorName = $supervisorTitle . " " . $supervisorFirstName . " " . $supervisorLastName;
             }
+        } else {
+            echo '<div class="alert alert-danger" role="alert">
+                        Error: We could not retrieve the project data! Please contact an administrator. 
+                  </div>';
         }
 
 
@@ -49,7 +53,9 @@
                     return $row;
                 }
             } else {
-                echo "Error: No records found in the table!";
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: We could not retrieve the supervisor data! Please contact an administrator. 
+                      </div>';
             }
 
             return $row;
@@ -70,7 +76,9 @@
                     array_push($courses,$courseName);
                 }
             } else {
-                echo "Error: No records found in the table!";
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: We could not retrieve the course data! Please contact an administrator. 
+                      </div>';
             }
 
             return $courses;

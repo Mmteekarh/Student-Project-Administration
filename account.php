@@ -28,7 +28,9 @@
                   $user = "Student";
                 }
             } else {
-                echo "Error: No records found in the table!";
+                echo '<div class="alert alert-danger" role="alert">
+                          Error: We could not retrieve your data! Please contact an administrator. 
+                      </div>';
             }
 
         // Checks if user is a supervisor or admin and gets their details.
@@ -51,8 +53,13 @@
                     }
                 }
             } else {
-                echo "Error: No records found in the table!";
+                echo '<div class="alert alert-danger" role="alert">
+                          Error: We could not retrieve your data! Please contact an administrator. 
+                      </div>';
             }
+        } else {
+            // User type error
+            header("Refresh:0.01; url=error/invalidusererror.php");
         }
     ?>
 

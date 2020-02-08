@@ -21,6 +21,10 @@
             while($deadlineRow = $deadlineResult->fetch_assoc()) {
                 $deadlineNumber = $deadlineRow["deadlines"];
             }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: Could not retrieve deadline data - No records found. 
+                   </div>';
         }
 
         // Query to get whether projects have been allocated or not.
@@ -31,6 +35,10 @@
             while($managementRow = $managementResult->fetch_assoc()) {
                 $projectsAllocated = $managementRow["projectsAllocated"];
             }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: Could not retrieve management data - No records found. 
+                   </div>';
         }
 
         // Query to get the number of students chosen projects.
@@ -41,6 +49,10 @@
             while($studentChoiceRow = $studentChoiceResult->fetch_assoc()) {
                 $studentsChosenProjects = $studentChoiceRow["studentsChosenProjects"];
             }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: Could not retrieve student data - No records found. 
+                   </div>';
         }
 
         // Query to get the number of students.
@@ -51,6 +63,10 @@
             while($studentRow = $studentResult->fetch_assoc()) {
                 $studentCount = $studentRow["studentCount"];
             }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: Could not retrieve student data - No records found. 
+                   </div>';
         }
 
         // Closes connection

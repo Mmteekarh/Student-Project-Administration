@@ -27,6 +27,10 @@
             while($studentRow = $studentResult->fetch_assoc()) {
                 $totalStudents = $studentRow["studentCount"];
             }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: We could not load the student data! Please contact an administrator. 
+                   </div>';
         }
 
         // Gets number of projects related to the supervisor and stores in a variable.
@@ -34,6 +38,10 @@
             while($projectRow = $projectResult->fetch_assoc()) {
                 $totalProjects = $projectRow["projectCount"];
             }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: We could not load the project data! Please contact an administrator. 
+                   </div>';
         }
     
         // Gets if the projects have been allocated and stores in a variable.
@@ -41,6 +49,10 @@
             while($allocationRow = $allocationResult->fetch_assoc()) {
                 $projectsAllocated = $allocationRow["projectsAllocated"];
             }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: We could not load the allocation data! Please contact an administrator. 
+                   </div>';
         }
 
     ?>
@@ -191,7 +203,7 @@
                                     echo '</tr>';
                                 }
                             } else {
-                                echo "Error: No records found in the table!";
+                                echo "<tr><td>You do not have any active projects.</td></tr>";
                             }
 
                         ?>
@@ -267,7 +279,7 @@
                                     echo '</tr>';
                                 }
                             } else {
-                                echo "Error: No records found in the table!";
+                                echo "<tr><td>You do not have any students.</td></tr>";
                             }
                         }
 

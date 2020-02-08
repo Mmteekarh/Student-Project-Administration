@@ -26,6 +26,10 @@
             while($studentRow = $studentResult->fetch_assoc()) {
                 $totalStudents = $studentRow["studentCount"];
             }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: We could not load the student data! Please contact an administrator. 
+                   </div>';
         }
 
         // Gets number of supervisors and stores in a variable.
@@ -33,6 +37,10 @@
             while($supervisorRow = $supervisorResult->fetch_assoc()) {
                 $totalSupervisors = $supervisorRow["supervisorCount"];
             }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: We could not load the supervisor data! Please contact an administrator. 
+                   </div>';
         }
 
         // Gets number of projects and stores in a variable.
@@ -40,6 +48,10 @@
             while($projectRow = $projectResult->fetch_assoc()) {
                 $totalProjects = $projectRow["projectCount"];
             }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: We could not load the project data! Please contact an administrator. 
+                   </div>';
         }
 
         // Close connection

@@ -43,6 +43,92 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/supervisornav.php" ?>
 
+    <!-- Script used to edit project -->
+    <?php
+
+        $editedProjectTitle = $editedCourses = $editedProjectBrief = $editedMaximumStudents = $editedProjectCode = "";
+
+        if (isset($_POST['submit'])) {
+            $editedProjectTitle = $_POST['projectTitle'];
+            $editedCourses = $_POST['courses'];
+            $editedProjectBrief = $_POST['projectBrief'];
+            $editedMaximumStudents = $_POST['maximumStudents'];
+            $editedProjectCode = $_POST['projectCode'];
+
+            // Form validation
+            if (!(is_numeric($editedMaximumStudents))) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Maximum students must be a number!
+                      </div>';
+
+            } else if ($editedMaximumStudents > 1000 or $editedMaximumStudents < 1) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Maximum students must be between 1 and 1000!
+                      </div>';
+
+            } else if (strlen($editedProjectTitle) > 250) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Project title is too long!
+                      </div>';
+
+            } else if (strlen($editedProjectCode) > 50) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Project code is too long!
+                      </div>';
+
+            } else if (empty($editedCourses)) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Please select at least one course!
+                      </div>';
+
+            } else {
+
+                $projectQuery = "UPDATE project SET projectTitle = '$editedProjectTitle', projectBrief = '$editedProjectBrief', maximumStudents = '$editedMaximumStudents', projectCode = '$editedProjectCode', lastUpdated = now() WHERE projectID='$projectID'";
+
+                $removeProjectCourseQuery = "DELETE FROM projectCourse WHERE projectID='$projectID'";
+
+                // Removes project-course links.
+                if (!($connection->query($removeProjectCourseQuery) === TRUE)) {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Could not remove original project-course match! Please contact an administrator.
+                          </div>';
+                }
+
+                // Insert records to project-course table based on what courses are related.
+                foreach($editedCourses as $item) {
+
+                    $projectCourseQuery = "INSERT INTO projectCourse (projectID, courseID) VALUES ('$projectID','$item')";
+
+                    if ($connection->query($projectCourseQuery) === TRUE) {
+                        continue;
+                    } else {
+                        echo '<div class="alert alert-danger" role="alert">
+                                    Error: Could not insert project-course match! Please contact an administrator.
+                              </div>';
+                    }
+
+                }
+
+                // Update project in database.
+                if ($connection->query($projectQuery) === TRUE) {
+                    // Remove project file.
+                    unlink('/var/www/html/projects/' . $projectID . '.php');
+
+                    // Create new project file.
+                    copy('/var/www/html/projectTemplate.php', ('/var/www/html/projects/' . $projectID . '.php'));
+
+                    header("Refresh:0.01; url=../supervisor.php");
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Could not update project! Please contact an administrator.
+                          </div>';
+                }
+            }
+            
+        }
+
+    ?>
+
     <!-- Page content includes edit form. -->
     <div class="container">
 
@@ -69,7 +155,7 @@
                 <h3>Editing Project</h3>
 
                 <!-- Displays the project form with a default value in each field from the current value in the database -->
-                <form name="editProjectForm" action="../../php/editProject.php" method="POST" enctype="multipart/form-data">
+                <form name="editProjectForm" action="editingproject.php" method="POST" enctype="multipart/form-data">
 
                     <div class="control-group form-group">
                         <div class="controls">
@@ -121,7 +207,9 @@
                                               </div>';
                                     }
                                 } else {
-                                    echo "Error: No records found in the table!";
+                                    echo '<div class="alert alert-danger" role="alert">
+                                                Error: Could not retrieve courses! Please contact an administrator.
+                                          </div>';
                                 }
 
                                 $connection->close();
@@ -130,7 +218,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" id="editButton">Edit</button>
+                    <button type="submit" class="btn btn-primary" name="submit" id="editButton">Edit</button>
 
                 </form>
 
