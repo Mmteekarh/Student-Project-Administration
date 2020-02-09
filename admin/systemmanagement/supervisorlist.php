@@ -27,7 +27,43 @@
     <!-- Script that removes supervisor from the database -->
     <?php
 
-        if (isset($_POST['submit'])) {
+        if (isset($_POST['updateInactive'])) {
+
+            $supervisorID = $_POST['supervisorID'];
+
+            $query = "UPDATE supervisor SET activeSupervisor = 0 WHERE supervisorID = '$supervisorID'";
+
+            if ($connection->query($query) === TRUE) {
+                echo '<div class="alert alert-success" role="alert">
+                            Successfully made supervisor inactive!
+                      </div>';
+            } else {
+                 echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not update supervisor!
+                       </div>';
+            }
+
+        }
+
+        if (isset($_POST['updateActive'])) {
+
+            $supervisorID = $_POST['supervisorID'];
+
+            $query = "UPDATE supervisor SET activeSupervisor = 1 WHERE supervisorID = '$supervisorID'";
+
+            if ($connection->query($query) === TRUE) {
+                echo '<div class="alert alert-success" role="alert">
+                            Successfully made supervisor active!
+                      </div>';
+            } else {
+                 echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not update supervisor!
+                       </div>';
+            }
+
+        }
+
+        if (isset($_POST['remove'])) {
 
             $supervisorID = $_POST['supervisorID'];
 
@@ -148,10 +184,25 @@
                                                   <button class="btn btn-primary" type="submit">Edit</button>
                                               </form>
                                           </td>';
+                                    if ($activeSupervisor == 1) {
+                                        echo '<td>
+                                                  <form action="supervisorlist.php" method="post" role="form">
+                                                      <input type="hidden" name="supervisorID" value="'. $supervisorID .'">
+                                                      <button class="btn btn-warning" name="updateInactive" type="submit">Set Inactive</button>
+                                                  </form>
+                                              </td>';
+                                    } else {
+                                        echo '<td>
+                                                  <form action="supervisorlist.php" method="post" role="form">
+                                                      <input type="hidden" name="supervisorID" value="'. $supervisorID .'">
+                                                      <button class="btn btn-success" name="updateActive" type="submit">Set Active</button>
+                                                  </form>
+                                              </td>';
+                                    }
                                     echo '<td>
                                               <form action="supervisorlist.php" method="post" role="form">
                                                   <input type="hidden" name="supervisorID" value="'. $supervisorID .'">
-                                                  <button class="btn btn-danger" name="submit" type="submit">Remove</button>
+                                                  <button class="btn btn-danger" name="remove" type="submit">Remove</button>
                                               </form>
                                           </td>';
                                     echo '</tr>';

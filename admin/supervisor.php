@@ -260,6 +260,8 @@
                         <th scope="col">Last Name</th>
                         <th scope="col">Year of Study</th>
                         <th scope="col">PLP?</th>
+                        <th scope="col">EthOS</th>
+                        <th scope="col">Add EthOS</th>
                     </tr>
                 </thead>
 
@@ -271,6 +273,8 @@
                         if ($projectsAllocated == 0) {
                             echo '<tr>';
                             echo '<th scope="row">Not yet allocated</th>';
+                            echo '<td></td>';
+                            echo '<td></td>';
                             echo '<td></td>';
                             echo '<td></td>';
                             echo '<td></td>';
@@ -292,12 +296,19 @@
                                     $lastName = $showStudentsRow['lastName'];
                                     $yearOfStudy = $showStudentsRow['yearOfStudy'];
                                     $plp = $showStudentsRow['plp'];
+                                    $ethos = $showStudentsRow['ethosNumber'];
 
                                     if ($plp == 0) {
                                       $plpText = "No";
                                     } else {
                                       $plpText = "Yes";
                                     }
+
+                                    if (is_null($ethos)) {
+                                        $ethos = "Not Set";
+                                    }
+
+                                    $studentName = $firstName . " " . $lastName;
 
                                     echo '<tr>';
                                     echo '<th scope="row">' . $studentID . '</th>';
@@ -306,6 +317,14 @@
                                     echo '<td>' . $lastName . '</td>';
                                     echo '<td>' . $yearOfStudy . '</td>';
                                     echo '<td>' . $plpText . '</td>';
+                                    echo '<td>' . $ethos . '</td>';
+                                    echo '<td>
+                                              <form action="supervisor/addethos.php" method="POST" role="form">
+                                                  <input type="hidden" name="studentID" value="'. $studentID .'">
+                                                  <input type="hidden" name="studentName" value="'. $studentName .'">
+                                                  <button class="btn btn-success" name="ethos" type="submit">Add EthOS</button>
+                                              </form>
+                                          </td>';
                                     echo '</tr>';
                                 }
                             } else {

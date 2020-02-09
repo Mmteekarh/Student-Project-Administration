@@ -41,6 +41,14 @@
                             Error: Could not remove course!
                        </div>';
             }
+
+            $projectCourseQuery = "DELETE FROM projectCourse WHERE courseID = '$courseID'";
+
+            if (!($connection->query($projectCourseQuery) === TRUE)) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not remove project-course match!
+                      </div>';
+            }
         }
 
 
