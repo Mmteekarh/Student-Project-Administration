@@ -45,6 +45,67 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
 
+    <!-- Script used to edit supervisors -->
+    <?php
+
+        $editedSupervisorTitle = $editedLastName = $editedLastName = $editedOfficeNumber = $editedEmailAddress = $editedActive = $editedAdmin = "";
+
+        if (isset($_POST['submit'])) {
+            $editedSupervisorTitle = $_POST['supervisorTitle'];
+            $editedFirstName = $_POST['firstName'];
+            $editedLastName = $_POST['lastName'];
+            $editedActive = $_POST['activeSupervisor'];
+            $editedOfficeNumber = $_POST['officeNumber'];
+            $editedEmailAddress = $_POST['emailAddress'];
+            $editedAdmin = $_POST['admin'];
+
+            if($editedActive == "Yes") {
+                $activeSupervisor = 1;
+            } else if ($editedActive == "No") {
+                $activeSupervisor = 0;
+            } else {
+                $activeSupervisor = 0;
+            }
+
+            if($editedAdmin == "Yes") {
+                $adminRow = 1;
+            } else if ($editedAdmin == "No") {
+                $adminRow = 0;
+            } else {
+                $adminRow = 0;
+            }
+
+            // Form validation
+            if (strlen($editedFirstName) > 250) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: First name is too long!
+                      </div>';
+
+            } else if (strlen($editedLastName) > 50) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Last name is too long!
+                      </div>';
+
+            } else {
+
+                $query = "UPDATE supervisor SET supervisorTitle = '$editedSupervisorTitle', firstName = '$editedFirstName', lastName = '$editedLastName', activeSupervisor = $activeSupervisor, officeNumber = '$editedOfficeNumber', emailAddress = '$editedEmailAddress', admin = $adminRow, lastUpdated = now() WHERE supervisorID = '$supervisorID'";
+
+                if ($connection->query($query) === TRUE) {
+                    header("Refresh:0.01; url=supervisorlist.php");
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Could not update supervisor! Please contact an administrator.
+                          </div>'; 
+                }
+
+            }
+
+        }
+
+        $connection->close();
+
+    ?>
+
     <!-- Page content includes add course form. -->
     <div class="container">
 
@@ -71,7 +132,7 @@
 
             <div class="col-lg-8 mb-4">
 
-                <form name="supervisorForm" action="../../php/editSupervisor.php" method="post" enctype="multipart/form-data">
+                <form name="supervisorForm" action="editingsupervisor.php" method="post" enctype="multipart/form-data">
 
                     <input type="hidden" name="supervisorID" value="<?php echo $supervisorID; ?>">
 
@@ -132,7 +193,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" id="addButton">Edit</button>
+                    <button name="submit" type="submit" class="btn btn-primary" id="addButton">Edit</button>
           
                 </form>
 

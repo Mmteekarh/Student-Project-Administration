@@ -76,6 +76,99 @@
     <!-- Includes main navbar -->
     <?php include "includes/mainnav.php" ?>
 
+    <!-- Script changes a users password -->
+    <?php
+
+        if (isset($_POST['submit'])) {
+
+            $currentPassword = $_POST['currentPassword'];
+            $newPassword = $_POST['newPassword'];
+            $confirmNewPassword = $_POST['confirmNewPassword'];
+            $userType = $_POST['userType'];
+
+            if ($userType == "student") {
+
+                $studentQuery = "SELECT * FROM student WHERE lastIP = '$ip' AND loggedIn = 1";
+                $studentResult = $connection->query($studentQuery);
+
+                if ($studentResult->num_rows > 0) {
+                    while($studentRow = $studentResult->fetch_assoc()) {
+
+                        if ($currentPassword == $studentRow["password"]) {
+                            if ($newPassword == $confirmNewPassword) {
+
+                                $studentUpdateQuery = "UPDATE student SET password = '$newPassword' WHERE lastIP = '$ip'";
+
+                                if ($connection->query($studentUpdateQuery) === TRUE) {
+                                    echo '<div class="alert alert-success" role="alert">
+                                                Successfully changed password!
+                                          </div>';
+                                } else {
+                                    echo '<div class="alert alert-danger" role="alert">
+                                                Error: Could not update password! Please contact an administrator.
+                                          </div>';
+                                }
+
+                            } else {
+                                echo '<div class="alert alert-danger" role="alert">
+                                            Error: Passwords do not match!
+                                      </div>';
+                            }
+                        } else {
+                            echo '<div class="alert alert-danger" role="alert">
+                                        Error: Incorrect password!
+                                  </div>';
+                        }
+                    }
+                }
+
+            } else if ($userType == "supervisor" or $userType == "admin") {
+
+                $supervisorQuery = "SELECT * FROM supervisor WHERE lastIP = '$ip' AND loggedIn = 1";
+                $supervisorResult = $connection->query($supervisorQuery);
+
+                if ($supervisorResult->num_rows > 0) {
+                    while($supervisorRow = $supervisorResult->fetch_assoc()) {
+
+                        if ($currentPassword == $supervisorRow["password"]) {
+                            if ($newPassword == $confirmNewPassword) {
+
+                                $supervisorUpdateQuery = "UPDATE supervisor SET password = '$newPassword' WHERE lastIP = '$ip'";
+
+                                if ($connection->query($supervisorUpdateQuery) === TRUE) {
+                                    echo '<div class="alert alert-success" role="alert">
+                                                Successfully changed password!
+                                          </div>';
+                                } else {
+                                    echo '<div class="alert alert-danger" role="alert">
+                                                Error: Could not update password! Please contact an administrator.
+                                          </div>';
+                                }
+
+                            } else {
+                                echo '<div class="alert alert-danger" role="alert">
+                                            Error: Passwords do not match!
+                                      </div>';
+                            }
+                        } else {
+                            echo '<div class="alert alert-danger" role="alert">
+                                        Error: Incorrect password!
+                                  </div>';
+                        }
+                    }
+                }
+
+            } else {
+                // Invalid user type
+                header("Refresh:0.01; url=error/usertypeerror.php");
+            }
+        }
+
+        $connection->close();
+
+
+    ?>
+
     <!-- Page content includes change password form and account details. -->
     <div class="container">
 
@@ -100,7 +193,7 @@
                 <br>
 
                 <!-- Form used to change the users password, posts to php script -->
-                <form name="changePassword" action="php/changePassword.php" method="POST" enctype="multipart/form-data">
+                <form name="changePassword" action="account.php" method="POST" enctype="multipart/form-data">
 
                     <input type="hidden" class="form-control" name="userType" value="<?php echo $userType; ?>">
 
@@ -125,7 +218,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" id="changePasswordButton">Change Password</button>
+                    <button type="submit" class="btn btn-primary" name="submit" id="changePasswordButton">Change Password</button>
                 </form>
 
             <br>

@@ -11,13 +11,13 @@
     if ($connection->query($studentLogoutQuery) === TRUE) {
         header("Refresh:0.01; url=../index.php");
     } else {
-        echo "Error: " . $studentLogoutQuery . "<br>" . $connection->error;
+        header("Refresh:0.01; url=../error/logouterror.php");    
     } 
 
     if ($connection->query($supervisorLogoutQuery) === TRUE) {
         header("Refresh:0.01; url=../index.php");
     } else {
-        echo "Error: " . $supervisorLogoutQuery . "<br>" . $connection->error;
+        header("Refresh:0.01; url=../error/logouterror.php");
     }    
 
     $connection->close();

@@ -24,6 +24,55 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
 
+    <!-- Script for adding a student to the database -->
+    <?php
+
+        $studentID = $firstName = $lastName = $middleInitial = $yearOfStudy = $plp = $password = $courseID = "";
+
+        if (isset($_POST['submit'])) {
+            $studentID = $_POST['studentID'];
+            $firstName = $_POST['firstName'];
+            $middleInitial = $_POST['middleInitial'];
+            $lastName = $_POST['lastName'];
+            $yearOfStudy = $_POST['yearOfStudy'];
+            $plp = $_POST['plp'];
+            $password = $_POST['password'];
+            $courseID = $_POST['courseID'];
+
+            // Form validation
+            if (strlen($firstName) > 250) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: First name is too long!
+                      </div>';
+
+            } else if (strlen($lastName) > 50) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Last name is too long!
+                      </div>';
+
+            } else if (!(is_numeric($studentID))) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Student ID must be a number!
+                      </div>';
+
+            } else {
+
+                $query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password, courseID, dateCreated, lastUpdated)
+                VALUES ('$studentID', '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', '$plp', '$password', '$courseID', now(), now())";
+
+                if ($connection->query($query) === TRUE) {
+                    header("Refresh:0.01; url=studentlist.php");
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Could not add student! Please contact an administrator.
+                          </div>'; 
+                }
+            }
+
+        }
+
+    ?>
+
     <!-- Page content includes add student form. -->
     <div class="container">
 
@@ -45,7 +94,7 @@
 
             <div class="col-lg-8 mb-4">
 
-                <form name="addStudentForm" action="../../php/addStudent.php" method="POST" enctype="multipart/form-data">
+                <form name="addStudentForm" action="addstudent.php" method="POST" enctype="multipart/form-data">
 
                     <div class="control-group form-group">
                         <div class="controls">
@@ -121,7 +170,9 @@
                                             echo '<option value="' . $courseID . '">' . $courseName . '</option>';
                                         }
                                     } else {
-                                        echo "Error: No records found in the table!";
+                                        echo '<div class="alert alert-danger" role="alert">
+                                                    Error: Could not retrieve courses - no records found.
+                                              </div>'; 
                                     }
 
                                     $connection->close();
@@ -132,7 +183,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" id="addButton">Add</button>
+                    <button type="submit" class="btn btn-primary" name="submit" id="addButton">Add</button>
                   
                 </form>
 

@@ -25,6 +25,39 @@
     <!-- Includes main navigation bar -->
     <?php include "includes/mainnav.php" ?>
 
+    <!-- Script that removes a selected project from a users selection -->
+    <?php
+
+        if (isset($_POST['submit'])) {
+
+            $studentID = $_POST['studentID'];
+            $choiceNumber = $_POST['choiceNumber'];
+
+            if ($choiceNumber == '1') {
+                $selectionRow = "projectFirstChoice";
+            } else if ($choiceNumber == '2') {
+                $selectionRow = "projectSecondChoice";
+            } else if ($choiceNumber == '3') {
+                $selectionRow = "projectThirdChoice";
+            } else {
+                $selectionRow = "";
+            }
+
+            $query = "UPDATE student SET $selectionRow = NULL WHERE studentID = '$studentID'";
+
+            if ($connection->query($query) === TRUE) {
+                echo '<div class="alert alert-success" role="alert">
+                            Successfully removed selection!
+                      </div>';
+                } else {
+                     echo '<div class="alert alert-danger" role="alert">
+                                Error: Could not remove selection!
+                           </div>';
+                }
+
+        }
+    ?>
+
     <!-- Header containing the title of the page -->
     <header>
 
@@ -63,10 +96,10 @@
                 while($firstChoiceRow = $firstChoiceResult->fetch_assoc()) {
                     $projectTitle = $firstChoiceRow["projectTitle"];
                     echo "<center><p><b>First Choice:</b> <a href='projects/" . $firstChoice . ".php'>" . $projectTitle . "</a>";
-                    echo '<form action="php/removeSelection.php" method="post" role="form">';
+                    echo '<form action="selection.php" method="post" role="form">';
                     echo '<input type="hidden" name="studentID" value="'. $loggedInStudentID .'">';
                     echo '<input type="hidden" name="choiceNumber" value="1">';
-                    echo '<button type="submit">Remove</button></form></center><br>'; 
+                    echo '<button name="submit" type="submit">Remove</button></form></center><br>'; 
                 }
             } else {
                 echo "<center><b>You have not selected a first choice</b></center>";
@@ -80,10 +113,10 @@
                 while($secondChoiceRow = $secondChoiceResult->fetch_assoc()) {
                     $projectTitle = $secondChoiceRow["projectTitle"];
                     echo "<center><p><b>Second Choice:</b> <a href='projects/" . $secondChoice . ".php'>" . $projectTitle . "</a>";
-                    echo '<form action="php/removeSelection.php" method="post" role="form">';
+                    echo '<form action="selection.php" method="post" role="form">';
                     echo '<input type="hidden" name="studentID" value="'. $loggedInStudentID .'">';
                     echo '<input type="hidden" name="choiceNumber" value="2">';
-                    echo '<button type="submit">Remove</button></form></center><br>'; 
+                    echo '<button name="submit" type="submit">Remove</button></form></center><br>'; 
                 }
             } else {
                 echo "<center><b>You have not selected a second choice</b></center>";
@@ -97,10 +130,10 @@
                 while($thirdChoiceRow = $thirdChoiceResult->fetch_assoc()) {
                     $projectTitle = $thirdChoiceRow["projectTitle"];
                     echo "<center><p><b>Third Choice:</b> <a href='projects/" . $thirdChoice . ".php'>" . $projectTitle . "</a>";
-                    echo '<form action="php/removeSelection.php" method="post" role="form">';
+                    echo '<form action="selection.php" method="post" role="form">';
                     echo '<input type="hidden" name="studentID" value="'. $loggedInStudentID .'">';
                     echo '<input type="hidden" name="choiceNumber" value="3">';
-                    echo '<button type="submit">Remove</button></form></center><br>'; 
+                    echo '<button name="submit" type="submit">Remove</button></form></center><br>'; 
                 }
             } else {
                 echo "<center><b>You have not selected a third choice</b></center>";

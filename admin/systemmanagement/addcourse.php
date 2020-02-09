@@ -23,6 +23,58 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
 
+    <!-- Script for adding a course to the database -->
+    <?php
+
+        $courseID = $courseName = $courseLevel = $courseLeader = "";
+
+        if (isset($_POST['submit'])) {
+
+            $courseID = $_POST['courseID'];
+            $courseName = $_POST['courseName'];
+            $courseLevel = $_POST['courseLevel'];
+            $courseLeader = $_POST['courseLeader'];
+
+            // Form validation
+            if (!(is_numeric($courseLevel))) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Course level must be a number!
+                      </div>';
+
+            } else if (strlen($courseLeader) > 250) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Course leader name is too long!
+                      </div>';
+
+            } else if (strlen($courseName) > 50) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Course name is too long!
+                      </div>';
+
+            } else if (!(is_numeric($courseID))) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Course ID must be a number!
+                      </div>';
+            } else {
+
+                $query = "INSERT INTO course (courseID, courseName, courseLevel, courseLeader, dateCreated, lastUpdated)
+                VALUES ('$courseID', '$courseName', '$courseLevel', '$courseLeader', now(), now())";
+
+                if ($connection->query($query) === TRUE) {
+                    header("Refresh:0.01; url=courselist.php");
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Could not insert course!
+                          </div>'; 
+                }
+            }
+        }
+
+
+        $connection->close();
+
+    ?>
+
     <!-- Page content includes add course form. -->
     <div class="container">
 
@@ -47,7 +99,7 @@
 
             <div class="col-lg-8 mb-4">
 
-                <form name="addCourseForm" action="../../php/addCourse.php" method="POST" enctype="multipart/form-data">
+                <form name="addCourseForm" action="addcourse.php" method="POST" enctype="multipart/form-data">
 
                     <div class="control-group form-group">
                         <div class="controls">
@@ -77,7 +129,7 @@
                         </div>
                     </div>
                   
-                    <button type="submit" class="btn btn-primary" id="addButton">Add</button>
+                    <button type="submit" class="btn btn-primary" name="submit" id="addButton">Add</button>
               
                 </form>
 

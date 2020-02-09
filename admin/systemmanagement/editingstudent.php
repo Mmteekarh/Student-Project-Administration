@@ -15,7 +15,7 @@
 
         $studentID = $_POST['studentID'];
 
-        $query = "SELECT * FROM student WHERE studentID='$studentID'";
+        $query = "SELECT * FROM student WHERE studentID = '$studentID'";
         $result = $connection->query($query);
 
         if ($result->num_rows > 0) {
@@ -43,6 +43,47 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
 
+    <!-- Script used to edit a student -->
+    <?php
+
+        $editedFirstName = $editedLastName = $editedMiddleInitial = $editedYearOfStudy = $editedPlp = $editedCourseID = "";
+
+        if (isset($_POST['submit'])) {
+            $editedMiddleInitial = $_POST['middleInitial'];
+            $editedFirstName = $_POST['firstName'];
+            $editedLastName = $_POST['lastName'];
+            $editedYearOfStudy = $_POST['yearOfStudy'];
+            $editedPlp = $_POST['plp'];
+            $editedCourseID = $_POST['courseID'];
+
+            // Form validation
+            if (strlen($editedFirstName) > 250) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: First name is too long!
+                      </div>';
+
+            } else if (strlen($editedLastName) > 50) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Last name is too long!
+                      </div>';
+
+            } else {
+
+                $query = "UPDATE student SET firstName = '$editedFirstName', middleInitial = '$editedMiddleInitial', lastName = '$editedLastName', yearOfStudy = '$editedYearOfStudy', plp = '$editedPlp', courseID = '$editedCourseID', lastUpdated = now() WHERE studentID = '$studentID'";
+
+                if ($connection->query($query) === TRUE) {
+                    header("Refresh:0.01; url=studentlist.php");
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Could not update student table!
+                          </div>'; 
+                }
+
+            }
+        }
+
+    ?>
+
     <!-- Page content includes add course form. -->
     <div class="container">
 
@@ -69,7 +110,7 @@
 
             <div class="col-lg-8 mb-4">
 
-                <form name="editStudentForm" action="../../php/editStudent.php" method="POST" enctype="multipart/form-data">
+                <form name="editStudentForm" action="editingstudent.php" method="POST" enctype="multipart/form-data">
           
                     <input type="hidden" name="studentID" value="<?php echo $studentID; ?>">
 
@@ -132,15 +173,20 @@
                                             echo '<option value="' . $courseID . '">' . $courseName . '</option>';
                                         }
                                     } else {
-                                        echo "Error: No records found in the table!";
+                                         echo '<div class="alert alert-danger" role="alert">
+                                                    Error: Could not retrieve courses - no records found.
+                                              </div>'; 
                                     }
+
+                                    $connection->close();
+
                                 ?>
 
                             </select>
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" id="editButton">Edit</button>
+                    <button type="submit" name="submit" class="btn btn-primary" id="editButton">Edit</button>
           
                 </form>
 

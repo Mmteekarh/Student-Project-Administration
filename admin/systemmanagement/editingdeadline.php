@@ -41,6 +41,33 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
 
+    <!-- Script used to edit deadlines -->
+    <?php
+
+        $editedDeadlineName = $editedDeadlineWeighting = $editedDeadlineDate = "";
+
+        if (isset($_POST['submit'])) {
+
+            $editedDeadlineName = $_POST['deadlineName'];
+            $editedDeadlineWeighting = $_POST['deadlineWeighting'];
+            $editedDeadlineDate = $_POST['deadlineDate'];
+
+            $query = "UPDATE deadlines SET deadlineName='$editedDeadlineName', deadlineWeighting='$editedDeadlineWeighting', deadlineDate='$editedDeadlineDate', lastUpdated = now() WHERE deadlineID='$deadlineID'";
+
+            if ($connection->query($query) === TRUE) {
+                header("Refresh:0.01; url=deadlines.php");
+            } else {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not update deadline!
+                      </div>'; 
+            }
+
+        }
+
+        $connection->close();
+
+    ?>
+
     <!-- Page content includes add course form. -->
     <div class="container">
 
@@ -66,7 +93,7 @@
 
             <div class="col-lg-8 mb-4">
 
-                <form name="editDeadlineForm" action="../../php/editDeadline.php" method="POST" enctype="multipart/form-data">
+                <form name="editDeadlineForm" action="editingdeadline.php" method="POST" enctype="multipart/form-data">
 
                     <input type="hidden" name="deadlineID" value="<?php echo $deadlineID; ?>">
 
@@ -91,7 +118,7 @@
                         </div>
                     </div>
           
-                    <button type="submit" class="btn btn-primary" id="editButton">Edit</button>
+                    <button type="submit" name="submit" class="btn btn-primary" id="editButton">Edit</button>
           
                 </form>
 

@@ -70,6 +70,36 @@
     <!-- Includes admin navigation bar -->
     <?php include "../includes/supervisornav.php" ?>
 
+    <!-- Script used to remove a project -->
+    <?php
+
+        if (isset($_POST['submit'])) {
+
+            $projectID = $_POST['projectID'];
+
+            $projectQuery = "DELETE FROM project WHERE projectID = '$projectID'";
+
+            if ($connection->query($projectQuery) === TRUE) {
+                echo '<div class="alert alert-success" role="alert">
+                            Successfully removed project!
+                      </div>';
+            } else {
+                 echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not remove project!
+                       </div>';
+            }
+
+            $projectCourseQuery = "DELETE FROM projectCourse WHERE projectID = '$projectID'";
+
+            if (!($connection->query($projectCourseQuery) === TRUE)) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not remove project-course match!
+                      </div>';
+            }
+        }
+
+    ?>
+
     <!-- Main page content - shows supervisor specific statistics -->
     <div class="container">
 
@@ -195,9 +225,9 @@
                                               </form>
                                           </td>';
                                     echo '<td>
-                                              <form action="../php/removeProject.php" method="POST" role="form">
+                                              <form action="supervisor.php" method="POST" role="form">
                                                   <input type="hidden" name="projectID" value="'. $projectID .'">
-                                                  <button class="btn btn-danger" type="submit">Remove</button>
+                                                  <button class="btn btn-danger" name="submit" type="submit">Remove</button>
                                               </form>
                                           </td>';
                                     echo '</tr>';

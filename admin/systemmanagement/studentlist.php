@@ -24,6 +24,27 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
 
+    <!-- Script that removes students from the database -->
+    <?php
+        if (isset($_POST['submit'])) {
+
+            $studentID = $_POST['studentID'];
+
+            $query = "DELETE FROM student WHERE studentID='$studentID'";
+
+            if ($connection->query($query) === TRUE) {
+                echo '<div class="alert alert-success" role="alert">
+                            Successfully removed student!
+                      </div>';
+            } else {
+                 echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not remove student!
+                       </div>';
+            }
+        }
+
+    ?>
+
     <!-- Page content includes add course form. -->
     <div class="container">
 
@@ -128,9 +149,9 @@
                                               </form>
                                           </td>';
                                     echo '<td>
-                                              <form action="../../php/removeStudent.php" method="POST" role="form">
+                                              <form action="studentlist.php" method="POST" role="form">
                                                   <input type="hidden" name="studentID" value="'. $studentID .'">
-                                                  <button class="btn btn-danger" type="submit">Remove</button>
+                                                  <button class="btn btn-danger" name="submit" type="submit">Remove</button>
                                               </form>
                                           </td>';
                                     echo '</tr>';

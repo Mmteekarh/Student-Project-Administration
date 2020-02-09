@@ -41,7 +41,7 @@
             } else {
                 echo '<div class="alert alert-danger" role="alert">
                         Error: Could not retrieve projects! Please contact an administrator.
-                  </div>';
+                      </div>';
             }
 
             return $projectID;

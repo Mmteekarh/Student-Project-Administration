@@ -24,6 +24,28 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
 
+    <!-- Script used to remove a deadline -->
+    <?php
+        
+        if (isset($_POST['submit'])) {
+
+            $deadlineID = $_POST['deadlineID'];
+
+            $query = "DELETE FROM deadlines WHERE deadlineID='$deadlineID'";
+
+            if ($connection->query($query) === TRUE) {
+                echo '<div class="alert alert-success" role="alert">
+                            Successfully removed deadline!
+                      </div>';
+            } else {
+                 echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not remove deadline!
+                       </div>';
+            }
+        }
+
+    ?>
+
     <!-- Page content includes add course form. -->
     <div class="container">
 
@@ -89,9 +111,9 @@
                                             <button class="btn btn-primary" type="submit">Edit</button></form>
                                           </td>';
                                     echo '<td>
-                                            <form action="../../php/removeDeadline.php" method="POST" role="form">
+                                            <form action="deadlines.php" method="POST" role="form">
                                             <input type="hidden" name="deadlineID" value="' . $deadlineID . '">
-                                            <button class="btn btn-danger" type="submit">Remove</button></form>
+                                            <button class="btn btn-danger" name="submit" type="submit">Remove</button></form>
                                           </td>';
                                     echo '</tr>';
                                 }

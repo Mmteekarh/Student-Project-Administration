@@ -42,6 +42,50 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
 
+    <!-- Form used to edit a course -->
+    <?php
+
+        $editedCourseName = $editedCourseLevel = $editedCourseLeader = "";
+
+        if (isset($_POST['submit'])) {
+            $editedCourseName = $_POST['courseName'];
+            $editedCourseLevel = $_POST['courseLevel'];
+            $editedCourseLeader = $_POST['courseLeader'];
+
+            // Form validation
+            if (!(is_numeric($courseLevel))) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Course level must be a number!
+                      </div>';
+
+            } else if (strlen($courseLeader) > 250) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Course leader name is too long!
+                      </div>';
+
+            } else if (strlen($courseName) > 50) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Course name is too long!
+                      </div>';
+
+            } else {
+
+                $query = "UPDATE course SET courseName='$editedCourseName', courseLevel='$editedCourseLevel', courseLeader='$editedCourseLeader', lastUpdated = now() WHERE courseID='$courseID'";
+
+                if ($connection->query($query) === TRUE) {
+                    header("Refresh:0.01; url=courselist.php");
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Could not update course!
+                          </div>'; 
+                }
+            }
+        }
+
+        $connection->close();
+
+    ?>
+
     <!-- Page content includes add course form. -->
     <div class="container">
 
@@ -68,7 +112,7 @@
 
             <div class="col-lg-8 mb-4">
 
-                <form name="editCourseForm" action="../../php/editCourse.php" method="POST" enctype="multipart/form-data">
+                <form name="editCourseForm" action="editingcourse.php" method="POST" enctype="multipart/form-data">
 
                     <input type="hidden" name="courseID" value="<?php echo $courseID; ?>">
 
@@ -93,7 +137,7 @@
                         </div>
                     </div>
           
-                    <button type="submit" class="btn btn-primary" id="addButton">Edit</button>
+                    <button type="submit" class="btn btn-primary" name="submit" id="addButton">Edit</button>
           
                 </form>
 

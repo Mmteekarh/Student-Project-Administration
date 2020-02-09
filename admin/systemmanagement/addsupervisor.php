@@ -23,6 +23,76 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
 
+    <!-- Script for adding a supervisor to the database -->
+	<?php
+
+	    $supervisorID = $supervisorTitle = $firstName = $lastName = $officeNumber = $emailAddress = $password = $active = $admin = "";
+
+		if (isset($_POST['submit'])) {
+		    $supervisorID = $_POST['supervisorID'];
+			$supervisorTitle = $_POST['supervisorTitle'];
+		    $firstName = $_POST['firstName'];
+		    $lastName = $_POST['lastName'];
+		    $officeNumber = $_POST['officeNumber'];
+		    $emailAddress = $_POST['emailAddress'];
+		    $password = $_POST['password'];
+		    $active = $_POST['activeSupervisor'];
+		    $admin = $_POST['admin'];
+
+		    // Converting active and admin variables to enter to the database.
+		    if($active == "Yes") {
+		        $activeSupervisor = 1;
+		    } else if ($active == "No") {
+		        $activeSupervisor = 0;
+		    } else {
+		        $activeSupervisor = 0;
+		    }
+
+		    if($admin == "Yes") {
+		        $adminRow = 1;
+		    } else if ($admin == "No") {
+		        $adminRow = 0;
+		    } else {
+		        $adminRow = 0;
+		    }
+
+		    // Form validation
+            if (strlen($firstName) > 250) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: First name is too long!
+                      </div>';
+
+            } else if (strlen($lastName) > 50) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Last name is too long!
+                      </div>';
+
+            } else if (!(is_numeric($supervisorID))) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Supervisor ID must be a number!
+                      </div>';
+
+            } else {
+
+				$query = "INSERT INTO supervisor (supervisorID, supervisorTitle, firstName, lastName, activeSupervisor, officeNumber, emailAddress, password, loggedIn, admin, dateCreated, lastUpdated)
+				VALUES ('$supervisorID', '$supervisorTitle', '$firstName', '$lastName', $activeSupervisor, '$officeNumber', '$emailAddress', '$password', 0, $adminRow, now(), now())";
+
+				if ($connection->query($query) === TRUE) {
+					header("Refresh:0.01; url=supervisorlist.php");
+				} else {
+				    echo '<div class="alert alert-danger" role="alert">
+                                Error: Could not insert supervisor! Please contact an administrator.
+                          </div>'; 
+				}
+
+			}
+
+		}
+
+		$connection->close();
+
+	?>
+
     <!-- Page content includes add supervisor form. -->
     <div class="container">
 
@@ -44,7 +114,7 @@
 
             <div class="col-lg-8 mb-4">
 
-                <form name="addSupervisorForm" action="../../php/addSupervisor.php" method="POST" enctype="multipart/form-data">
+                <form name="addSupervisorForm" action="addsupervisor.php" method="POST" enctype="multipart/form-data">
 
                     <div class="control-group form-group">
                         <div class="controls">
@@ -117,7 +187,7 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" id="addButton">Add</button>
+                    <button name="submit" type="submit" class="btn btn-primary" id="addButton">Add</button>
           
                 </form>
 

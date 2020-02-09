@@ -7,6 +7,7 @@
     <!-- Includes required scripts. -->
     <?php include "../../includes/header.php" ?>
     <?php include "../../includes/userscript.php" ?>
+    <?php include "../../includes/connect.php" ?>
 
     <title>Import Students - SPAS</title>
 
@@ -22,6 +23,59 @@
 
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
+
+    <!-- Script used to insert students via a CSV file -->
+    <?php
+
+        // Check if a file has been posted and get its name.
+        if(isset($_POST["Import"])) {
+            $filename = $_FILES["file"]["tmp_name"]; 
+
+            // Check if the file has any data and opens it.
+            if($_FILES["file"]["size"] > 0) {
+                $file = fopen($filename, "r");
+
+                $i = 0;
+
+                // Loops through each line of the file using the comma as a separator, gets each field and stores in a variable.
+                while (($data = fgetcsv($file, 0, ",")) !== FALSE) {
+
+                    // Ignores first line of CSV file.
+                    if($i == 0) { 
+                        $i++; 
+                        continue; 
+                    } 
+                    
+                    $studentID = $data[0];
+                    $firstName = $data[1];
+                    $middleInitial = $data[2];
+                    $lastName = $data[3];
+                    $yearOfStudy = $data[4];
+                    $plp = $data[5];
+                    $password = $data[6];
+                    $courseID = $data[7];
+
+                    $query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password, courseID, dateCreated, lastUpdated) VALUES ($studentID, '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', $plp, '$password', $courseID, now(), now())";
+
+                    if ($connection->query($query) == TRUE) {
+                        echo '<div class="alert alert-success" role="alert">
+                                    Imported student file!
+                              </div>';                   
+                    } else {
+                        echo '<div class="alert alert-danger" role="alert">
+                                Error: Cannot insert students! 
+                              </div>' . $query . $connection->error;;                
+                    }
+
+                }
+            }
+        }
+
+        $connection->close();
+
+    ?>
+
+
 
     <!-- Page content includes add course form. -->
     <div class="container">
@@ -47,7 +101,7 @@
         <!-- Main content for import students form. -->
         <div class="row">
 
-            <form class="form-horizontal" action="../../php/importstudents.php" method="post" name="upload_excel" enctype="multipart/form-data">
+            <form class="form-horizontal" action="importstudents.php" method="post" name="upload_excel" enctype="multipart/form-data">
 
                 <div class="form-group">
                     <label>Select CSV File</label>

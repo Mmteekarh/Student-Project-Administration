@@ -99,6 +99,104 @@
     <!-- Includes main navbar -->
     <?php include "../includes/mainnav.php" ?>
 
+    <!-- Script adds a selected project to the database -->
+    <?php
+    
+        if (isset($_POST['submit'])) {
+
+            $projectID = $_POST['projectID'];
+            $studentID = $_POST['studentID'];
+            $choiceNumber = $_POST['choiceNumber'];
+
+            $studentQuery = "SELECT * FROM student WHERE studentID='$studentID'";
+            $studentResult = $connection->query($studentQuery);
+
+            if ($studentResult->num_rows > 0) {
+                while($studentRow = $studentResult->fetch_assoc()) {
+                    $firstChoice = $studentRow["projectFirstChoice"];
+                    $secondChoice = $studentRow["projectSecondChoice"];
+                    $thirdChoice = $studentRow["projectThirdChoice"];
+                }
+            } else {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Problem getting student data, please contact an administrator!
+                      </div>';
+            }
+
+            if ($choiceNumber == "1") {
+
+                // Checks if the user has already selected the project.
+                if ($secondChoice == $projectID or $thirdChoice == $projectID) {
+                    echo '<div class="alert alert-warning" role="alert">
+                                You have already selected this project!
+                          </div>';
+                } else {
+
+                    $firstChoiceQuery = "UPDATE student SET projectFirstChoice = '$projectID' WHERE studentID = '$studentID'";
+
+                    if ($connection->query($firstChoiceQuery) === TRUE) {
+                        echo '<div class="alert alert-success" role="alert">
+                                Selected project as first choice!
+                              </div>';     
+                    } else {
+                        echo '<div class="alert alert-danger" role="alert">
+                                    Error: Problem getting student data, please contact an administrator!
+                              </div>';
+                    }
+                }
+
+            } else if ($choiceNumber == "2") {
+                
+                // Checks if the user has already selected the project.
+                if ($firstChoice == $projectID or $thirdChoice == $projectID) {
+                    echo '<div class="alert alert-warning" role="alert">
+                                You have already selected this project!
+                          </div>';
+                } else {
+                    $secondChoiceQuery = "UPDATE student SET projectSecondChoice='$projectID' WHERE studentID='$studentID'";
+
+                    if ($connection->query($secondChoiceQuery) === TRUE) {
+                        echo '<div class="alert alert-success" role="alert">
+                                    Selected project as second choice!
+                              </div>';                         
+                    } else {
+                        echo '<div class="alert alert-danger" role="alert">
+                                    Error: Problem getting student data, please contact an administrator!
+                              </div>';                    
+                    }
+                }
+
+            } else if ($choiceNumber == "3") {
+
+                // Checks if the user has already selected the project.
+                if ($secondChoice == $projectID or $firstChoice == $projectID) {
+                    echo '<div class="alert alert-warning" role="alert">
+                                You have already selected this project!
+                          </div>';
+                } else {
+                    $thirdChoiceQuery = "UPDATE student SET projectThirdChoice='$projectID' WHERE studentID='$studentID'";
+
+                    if ($connection->query($thirdChoiceQuery) === TRUE) {
+                        echo '<div class="alert alert-success" role="alert">
+                                Selected project as third choice!
+                              </div>';                    
+                    } else {
+                        echo '<div class="alert alert-danger" role="alert">
+                                    Error: Problem getting student data, please contact an administrator!
+                              </div>';                    
+                    }
+                }
+
+            } else {
+                echo '<div class="alert alert-warning" role="alert">
+                            You have selected the maximum amount of projects, please remove one before selecting more!
+                      </div>';           
+            }
+        }
+
+    ?>
+
+
     <!-- Main Page Content -->
     <div class="container">
 
@@ -151,29 +249,29 @@
     	        ?>
 
                 <!-- Each button posts to the same php script and a hidden value posts the choice number -->
-                <form action="../php/selectProject.php" method="POST" role="form">
+                <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" role="form">
                     <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
                     <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
                     <input type="hidden" name="choiceNumber" value="1">
-                    <center><button type="submit" class="btn btn-success">Select First Choice</button></center>
+                    <center><button name="submit" type="submit" class="btn btn-success">Select First Choice</button></center>
                 </form>
 
                 <br>
 
-                <form action="../php/selectProject.php" method="POST" role="form">
+                <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" role="form">
                     <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
                     <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
                     <input type="hidden" name="choiceNumber" value="2">
-                    <center><button type="submit" class="btn btn-success">Select Second Choice</button></center>
+                    <center><button name="submit" type="submit" class="btn btn-success">Select Second Choice</button></center>
                 </form>
 
                 <br>
 
-                <form action="../php/selectProject.php" method="POST" role="form">
+                <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" role="form">
                     <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
                     <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
                     <input type="hidden" name="choiceNumber" value="3">
-                    <center><button type="submit" class="btn btn-success">Select Third Choice</button></center>
+                    <center><button name="submit" type="submit" class="btn btn-success">Select Third Choice</button></center>
                 </form>
 
                 <br>

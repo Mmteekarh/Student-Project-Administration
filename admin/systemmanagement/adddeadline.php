@@ -23,6 +23,33 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
 
+    <!-- Script for adding deadlines to the database -->
+    <?php
+
+        $deadlineName = $deadlineWeighting = $deadlineDate = "";
+
+        if (isset($_POST['submit'])) {
+            $deadlineName = $_POST['deadlineName'];
+            $deadlineWeighting = $_POST['deadlineWeighting'];
+            $deadlineDate = $_POST['deadlineDate'];
+
+            $query = "INSERT INTO deadlines (deadlineName, deadlineWeighting, deadlineDate, dateCreated, lastUpdated)
+            VALUES ('$deadlineName', '$deadlineWeighting', '$deadlineDate', now(), now())";
+
+            if ($connection->query($query) === TRUE) {
+                header("Refresh:0.01; url=deadlines.php");
+            } else {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not insert deadline!
+                      </div>'; 
+            }
+
+        }
+        $connection->close();
+
+
+    ?>
+
     <!-- Page content includes add deadline form. -->
     <div class="container">
 
@@ -46,7 +73,7 @@
 
             <div class="col-lg-8 mb-4">
 
-                <form name="addDeadlineForm" action="../../php/addDeadline.php" method="POST" enctype="multipart/form-data">
+                <form name="addDeadlineForm" action="adddeadline.php" method="POST" enctype="multipart/form-data">
 
                     <div class="control-group form-group">
                         <div class="controls">
@@ -69,7 +96,7 @@
                         </div>
                     </div>
               
-                    <button type="submit" class="btn btn-primary" id="addButton">Add</button>
+                    <button type="submit" class="btn btn-primary" name="submit" id="addButton">Add</button>
               
                 </form>
 

@@ -24,6 +24,29 @@
     <!-- Includes navigation bar -->
     <?php include "../../includes/systemnav.php" ?>
 
+    <!-- Script that removes supervisor from the database -->
+    <?php
+
+        if (isset($_POST['submit'])) {
+
+            $supervisorID = $_POST['supervisorID'];
+
+            $query = "DELETE FROM supervisor WHERE supervisorID = '$supervisorID'";
+
+            if ($connection->query($query) === TRUE) {
+                echo '<div class="alert alert-success" role="alert">
+                            Successfully removed supervisor!
+                      </div>';
+            } else {
+                 echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not remove supervisor!
+                       </div>';
+            }
+
+        }
+
+    ?>
+
     <!-- Page content includes add course form. -->
     <div class="container">
 
@@ -126,9 +149,9 @@
                                               </form>
                                           </td>';
                                     echo '<td>
-                                              <form action="../../php/removeSupervisor.php" method="post" role="form">
+                                              <form action="supervisorlist.php" method="post" role="form">
                                                   <input type="hidden" name="supervisorID" value="'. $supervisorID .'">
-                                                  <button class="btn btn-danger" type="submit">Remove</button>
+                                                  <button class="btn btn-danger" name="submit" type="submit">Remove</button>
                                               </form>
                                           </td>';
                                     echo '</tr>';
