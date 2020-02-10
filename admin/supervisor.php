@@ -343,6 +343,25 @@
 
         </div>
 
+        <br>
+
+        <?php if ($projectsAllocated == 1) { ?>
+
+        <div class="row">
+            <div class="col-md-12">
+                <form action="../php/generateProjectReport.php" method="POST" role="form">
+                    <center>
+                        <input type="hidden" name="supervisorID" value="<?php echo $loggedInSupervisorID; ?>">
+                        <button class="btn btn-warning" name="submit" type="submit">Generate Project Report</button>
+                    </center>
+                </form>
+            </div>
+        </div>
+
+        <?php } ?>
+
+        <br>
+
     </div>
 
     <?php include "../includes/footer.php" ?>
