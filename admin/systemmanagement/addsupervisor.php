@@ -39,6 +39,9 @@
 		    $active = $_POST['activeSupervisor'];
 		    $admin = $_POST['admin'];
 
+            // Used built-in php function to hash the password.
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
 		    // Converting active and admin variables to enter to the database.
 		    if($active == "Yes") {
 		        $activeSupervisor = 1;
@@ -75,7 +78,7 @@
             } else {
 
 				$query = "INSERT INTO supervisor (supervisorID, supervisorTitle, firstName, lastName, activeSupervisor, officeNumber, emailAddress, password, loggedIn, admin, dateCreated, lastUpdated)
-				VALUES ('$supervisorID', '$supervisorTitle', '$firstName', '$lastName', $activeSupervisor, '$officeNumber', '$emailAddress', '$password', 0, $adminRow, now(), now())";
+				VALUES ('$supervisorID', '$supervisorTitle', '$firstName', '$lastName', $activeSupervisor, '$officeNumber', '$emailAddress', '$hashedPassword', 0, $adminRow, now(), now())";
 
 				if ($connection->query($query) === TRUE) {
 					header("Refresh:0.01; url=supervisorlist.php");
@@ -105,6 +108,9 @@
             </li>
             <li class="breadcrumb-item">
                 <a href="../systemmanagement.php">System Management</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="../supervisorlist.php">Supervisor List</a>
             </li>
             <li class="breadcrumb-item active">Add Supervisor</li>
         </ol>

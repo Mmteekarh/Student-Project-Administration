@@ -36,7 +36,7 @@
         <!-- Bootstrap accessibility information -->
         <div class="row">
 
-            
+            <p>This website is built using Bootstrap which contains built-in accessibility features such as default colour contrast and has an emphasis on simplicity. More information can be found at <a href="https://getbootstrap.com/">GetBootstrap.com</a></p>
 
         </div>
 

@@ -39,6 +39,10 @@
             $password = $_POST['password'];
             $courseID = $_POST['courseID'];
 
+            // Used built-in php function to hash the password.
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            echo $hashedPassword;
+
             // Form validation
             if (strlen($firstName) > 250) {
                 echo '<div class="alert alert-danger" role="alert">
@@ -58,7 +62,7 @@
             } else {
 
                 $query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password, courseID, dateCreated, lastUpdated)
-                VALUES ('$studentID', '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', '$plp', '$password', '$courseID', now(), now())";
+                VALUES ('$studentID', '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', '$plp', '$hashedPassword', '$courseID', now(), now())";
 
                 if ($connection->query($query) === TRUE) {
                     header("Refresh:0.01; url=studentlist.php");
@@ -85,6 +89,9 @@
             </li>
             <li class="breadcrumb-item">
                 <a href="../systemmanagement.php">System Management</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="../studentlist.php">Student List</a>
             </li>
             <li class="breadcrumb-item active">Add Student</li>
         </ol>

@@ -49,7 +49,8 @@
                     while($studentLoginRow = $studentLoginResult->fetch_assoc()) {
                         $passFromDB = $studentLoginRow["password"];
 
-                        if ($loginPassword == $passFromDB) {
+                        // Uses php function to check if the entered password is the same as the hashed password from the database.
+                        if (password_verify($loginPassword, $passFromDB)) {
                             
                             $updateStudentQuery = "UPDATE student SET loggedIn = 1, lastIP = '$ip', lastLoggedIn = now() WHERE studentID = '$loginID'";
                             
@@ -68,7 +69,7 @@
                     while($supervisorLoginRow = $supervisorLoginResult->fetch_assoc()) {
                         $passFromDB = $supervisorLoginRow["password"];
 
-                        if ($loginPassword == $passFromDB) {
+                        if (password_verify($loginPassword, $passFromDB)) {
 
                             $updateSupervisorQuery = "UPDATE supervisor SET loggedIn = 1, lastIP = '$ip', lastLoggedIn = now() WHERE supervisorID = '$loginID'";
                             

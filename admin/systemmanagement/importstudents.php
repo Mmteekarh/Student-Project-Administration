@@ -55,7 +55,10 @@
                     $password = $data[6];
                     $courseID = $data[7];
 
-                    $query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password, courseID, dateCreated, lastUpdated) VALUES ($studentID, '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', $plp, '$password', $courseID, now(), now())";
+                    // Used built-in php function to hash the password.
+                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                    $query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password, courseID, dateCreated, lastUpdated) VALUES ($studentID, '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', $plp, '$hashedPassword', $courseID, now(), now())";
 
                     if ($connection->query($query) == TRUE) {
                         echo '<div class="alert alert-success" role="alert">
