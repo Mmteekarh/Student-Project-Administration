@@ -53,17 +53,17 @@
             $editedCourseLeader = $_POST['courseLeader'];
 
             // Form validation
-            if (!(is_numeric($courseLevel))) {
+            if (!(is_numeric($editedCourseLevel))) {
                 echo '<div class="alert alert-danger" role="alert">
                             Error: Course level must be a number!
                       </div>';
 
-            } else if (strlen($courseLeader) > 250) {
+            } else if (strlen($editedCourseLeader) > 250) {
                 echo '<div class="alert alert-danger" role="alert">
                             Error: Course leader name is too long!
                       </div>';
 
-            } else if (strlen($courseName) > 50) {
+            } else if (strlen($editedCourseName) > 50) {
                 echo '<div class="alert alert-danger" role="alert">
                             Error: Course name is too long!
                       </div>';

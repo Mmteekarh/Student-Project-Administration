@@ -36,15 +36,22 @@
         if (isset($_POST['submit'])) {
             $ethosNumber = $_POST['ethosnumber'];
 
-            $ethosQuery = "UPDATE student SET ethosNumber = $ethosNumber WHERE studentID = $studentID";
-
-            if ($connection->query($ethosQuery) === TRUE) {
-                header("Refresh:0.01; url=../supervisor.php");
-            } else {
+            if (!(is_numeric($ethosNumber))) {
                 echo '<div class="alert alert-danger" role="alert">
-                            Error: Could not update student! Please contact an administrator.
+                            Error: EthOS number must be numeric!
                       </div>'; 
+            } else {
+                $ethosQuery = "UPDATE student SET ethosNumber = $ethosNumber WHERE studentID = $studentID";
+
+                if ($connection->query($ethosQuery) === TRUE) {
+                    header("Refresh:0.01; url=../supervisor.php");
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Could not update student! Please contact an administrator.
+                          </div>'; 
+                }
             }
+
         }
 
     ?>

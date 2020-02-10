@@ -65,7 +65,7 @@
 
         <div class="row">
 
-            <div class="col-lg-8 mb-4">
+            <div class="col-md-12">
 
                 <form action="addstudent.php" method="POST" role="form">
                     <button class="btn btn-success" type="submit">Add New Student</button>

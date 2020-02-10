@@ -100,7 +100,9 @@
     <div class="container">
 
         <!-- Page Heading/Breadcrumbs -->
-        <h1 class="mt-4 mb-3">Add Supervisor</h1>
+        <center>
+            <h1 class="mt-4 mb-3">Add Supervisor</h1>
+        </center>
 
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
@@ -110,7 +112,7 @@
                 <a href="../systemmanagement.php">System Management</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="../supervisorlist.php">Supervisor List</a>
+                <a href="supervisorlist.php">Supervisor List</a>
             </li>
             <li class="breadcrumb-item active">Add Supervisor</li>
         </ol>

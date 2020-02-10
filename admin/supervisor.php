@@ -174,7 +174,7 @@
         <!-- Second row shows a list of the supervisors projects in a table with options to edit and remove. -->
         <div class="row">
             
-            <div class="col-lg-12">
+            <div class="col-md-12">
 
                 <!-- Button to add new projects -->
                 <form action="supervisor/addproject.php" method="POST" role="form">
@@ -250,96 +250,104 @@
         <!-- Second row displays a table of students related to the supervisor -->
         <div class="row">
 
-            <h3>Your Students:</h3>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th scope="col">Student ID</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Middle Initial</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Year of Study</th>
-                        <th scope="col">PLP?</th>
-                        <th scope="col">EthOS</th>
-                        <th scope="col">Add EthOS</th>
-                    </tr>
-                </thead>
+            <div class="col-md-12">
 
-                <tbody>
+                <h3>Your Students:</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Student ID</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Middle Initial</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Year of Study</th>
+                            <th scope="col">PLP?</th>
+                            <th scope="col">EthOS</th>
+                            <th scope="col">Add EthOS</th>
+                        </tr>
+                    </thead>
 
-                    <?php
+                    <tbody>
 
-                        // If projects have not been allocated - display an empty table.
-                        if ($projectsAllocated == 0) {
-                            echo '<tr>';
-                            echo '<th scope="row">Not yet allocated</th>';
-                            echo '<td></td>';
-                            echo '<td></td>';
-                            echo '<td></td>';
-                            echo '<td></td>';
-                            echo '<td></td>';
-                            echo '<td></td>';
-                            echo '<td></td>';
-                            echo '</tr>';
-                        } else {
+                        <?php
 
-                            // If projects are allocated, display a list of students related to the supervisor.
-
-                            $showStudentsQuery = "SELECT * FROM student INNER JOIN project ON student.projectID = project.projectID WHERE supervisorID = '$loggedInSupervisorID'";
-                            $showStudentsResult = $connection->query($showStudentsQuery);
-
-                            if ($showStudentsResult->num_rows > 0) {
-                                while($showStudentsRow = $showStudentsResult->fetch_assoc()) {
-                                    $studentID = $showStudentsRow['studentID'];
-                                    $firstName = $showStudentsRow['firstName'];
-                                    $middleInitial = $showStudentsRow['middleInitial'];
-                                    $lastName = $showStudentsRow['lastName'];
-                                    $yearOfStudy = $showStudentsRow['yearOfStudy'];
-                                    $plp = $showStudentsRow['plp'];
-                                    $ethos = $showStudentsRow['ethosNumber'];
-
-                                    if ($plp == 0) {
-                                      $plpText = "No";
-                                    } else {
-                                      $plpText = "Yes";
-                                    }
-
-                                    if (is_null($ethos)) {
-                                        $ethos = "Not Set";
-                                    }
-
-                                    $studentName = $firstName . " " . $lastName;
-
-                                    echo '<tr>';
-                                    echo '<th scope="row">' . $studentID . '</th>';
-                                    echo '<td>' . $firstName . '</td>';
-                                    echo '<td>' . $middleInitial . '</td>';
-                                    echo '<td>' . $lastName . '</td>';
-                                    echo '<td>' . $yearOfStudy . '</td>';
-                                    echo '<td>' . $plpText . '</td>';
-                                    echo '<td>' . $ethos . '</td>';
-                                    echo '<td>
-                                              <form action="supervisor/addethos.php" method="POST" role="form">
-                                                  <input type="hidden" name="studentID" value="'. $studentID .'">
-                                                  <input type="hidden" name="studentName" value="'. $studentName .'">
-                                                  <button class="btn btn-success" name="ethos" type="submit">Add EthOS</button>
-                                              </form>
-                                          </td>';
-                                    echo '</tr>';
-                                }
+                            // If projects have not been allocated - display an empty table.
+                            if ($projectsAllocated == 0) {
+                                echo '<tr>';
+                                echo '<th scope="row">Not yet allocated</th>';
+                                echo '<td></td>';
+                                echo '<td></td>';
+                                echo '<td></td>';
+                                echo '<td></td>';
+                                echo '<td></td>';
+                                echo '<td></td>';
+                                echo '<td></td>';
+                                echo '</tr>';
                             } else {
-                                echo "<tr><td>You do not have any students.</td></tr>";
+
+                                // If projects are allocated, display a list of students related to the supervisor.
+
+                                $showStudentsQuery = "SELECT * FROM student INNER JOIN project ON student.projectID = project.projectID WHERE supervisorID = '$loggedInSupervisorID'";
+                                $showStudentsResult = $connection->query($showStudentsQuery);
+
+                                if ($showStudentsResult->num_rows > 0) {
+                                    while($showStudentsRow = $showStudentsResult->fetch_assoc()) {
+                                        $studentID = $showStudentsRow['studentID'];
+                                        $firstName = $showStudentsRow['firstName'];
+                                        $middleInitial = $showStudentsRow['middleInitial'];
+                                        $lastName = $showStudentsRow['lastName'];
+                                        $yearOfStudy = $showStudentsRow['yearOfStudy'];
+                                        $plp = $showStudentsRow['plp'];
+                                        $ethos = $showStudentsRow['ethosNumber'];
+
+                                        if ($plp == 0) {
+                                          $plpText = "No";
+                                        } else {
+                                          $plpText = "Yes";
+                                        }
+
+                                        if (is_null($ethos)) {
+                                            $ethos = "Not Set";
+                                        }
+
+                                        $studentName = $firstName . " " . $lastName;
+
+                                        echo '<tr>';
+                                        echo '<th scope="row">' . $studentID . '</th>';
+                                        echo '<td>' . $firstName . '</td>';
+                                        echo '<td>' . $middleInitial . '</td>';
+                                        echo '<td>' . $lastName . '</td>';
+                                        echo '<td>' . $yearOfStudy . '</td>';
+                                        echo '<td>' . $plpText . '</td>';
+                                        echo '<td>' . $ethos . '</td>';
+                                        if ($ethos == "Not Set") {
+                                            echo '<td>
+                                                      <form action="supervisor/addethos.php" method="POST" role="form">
+                                                          <input type="hidden" name="studentID" value="'. $studentID .'">
+                                                          <input type="hidden" name="studentName" value="'. $studentName .'">
+                                                          <button class="btn btn-success" name="ethos" type="submit">Add EthOS</button>
+                                                      </form>
+                                                  </td>';
+                                        } else {
+                                            echo '<td>EthOS Set</td>';
+                                        }
+                                        echo '</tr>';
+                                    }
+                                } else {
+                                    echo "<tr><td>You do not have any students.</td></tr>";
+                                }
                             }
-                        }
 
-                        // Closes connection
-                        $connection->close();
+                            // Closes connection
+                            $connection->close();
 
-                      ?>
+                          ?>
 
-                </tbody>
+                    </tbody>
 
-            </table>
+                </table>
+
+            </div>
 
         </div>
 

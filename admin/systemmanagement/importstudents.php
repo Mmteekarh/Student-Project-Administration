@@ -67,10 +67,14 @@
                     } else {
                         echo '<div class="alert alert-danger" role="alert">
                                 Error: Cannot insert students! 
-                              </div>' . $query . $connection->error;;                
+                              </div>';             
                     }
 
                 }
+            } else {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: No file was selected! 
+                      </div>';       
             }
         }
 

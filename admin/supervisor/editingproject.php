@@ -152,8 +152,6 @@
 
             <div class="col-lg-8 mb-4">
 
-                <h3>Editing Project</h3>
-
                 <!-- Displays the project form with a default value in each field from the current value in the database -->
                 <form name="editProjectForm" action="editingproject.php" method="POST" enctype="multipart/form-data">
 

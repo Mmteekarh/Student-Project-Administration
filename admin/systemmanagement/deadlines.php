@@ -66,7 +66,7 @@
 
         <div class="row">
 
-            <div class="col-lg-8 mb-4">
+            <div class="col-md-12">
 
                 <form action="adddeadline.php" method="POST" role="form">
                     <button class="btn btn-success" type="submit">Add New Deadline</button>
@@ -118,9 +118,7 @@
                                     echo '</tr>';
                                 }
                             } else {
-                                 echo '<div class="alert alert-danger" role="alert">
-                                            Error: Could not retrieve deadline data - No records found. 
-                                      </div>';
+                                 echo '<tr><td>No deadlines!</td></tr>';
                             }
 
                             // Closes connection
