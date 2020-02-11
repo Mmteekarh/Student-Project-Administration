@@ -102,6 +102,7 @@
     <!-- Script adds a selected project to the database -->
     <?php
 
+    if ($loggedIn == true AND $userType == "student") {
         $studentQuery = "SELECT * FROM student WHERE studentID = '$loggedInStudentID'";
         $studentResult = $connection->query($studentQuery);
 
@@ -116,83 +117,84 @@
                         Error: Problem getting student data, please contact an administrator!
                   </div>';
         }
+    }
     
-        if (isset($_POST['submit'])) {
+    if (isset($_POST['submit'])) {
 
-            $projectID = $_POST['projectID'];
-            $studentID = $_POST['studentID'];
-            $choiceNumber = $_POST['choiceNumber'];
+        $projectID = $_POST['projectID'];
+        $studentID = $_POST['studentID'];
+        $choiceNumber = $_POST['choiceNumber'];
 
-            if ($choiceNumber == "1") {
+        if ($choiceNumber == "1") {
 
-                // Checks if the user has already selected the project.
-                if ($firstChoice == $projectID or $secondChoice == $projectID or $thirdChoice == $projectID) {
-                    echo '<div class="alert alert-warning" role="alert">
-                                You have already selected this project!
-                          </div>';
-                } else {
-
-                    $firstChoiceQuery = "UPDATE student SET projectFirstChoice = '$projectID' WHERE studentID = '$studentID'";
-
-                    if ($connection->query($firstChoiceQuery) === TRUE) {
-                        echo '<div class="alert alert-success" role="alert">
-                                Selected project as first choice!
-                              </div>';     
-                    } else {
-                        echo '<div class="alert alert-danger" role="alert">
-                                    Error: Problem getting student data, please contact an administrator!
-                              </div>';
-                    }
-                }
-
-            } else if ($choiceNumber == "2") {
-                
-                // Checks if the user has already selected the project.
-                if ($secondChoice == $projectID or $firstChoice == $projectID or $thirdChoice == $projectID) {
-                    echo '<div class="alert alert-warning" role="alert">
-                                You have already selected this project!
-                          </div>';
-                } else {
-                    $secondChoiceQuery = "UPDATE student SET projectSecondChoice='$projectID' WHERE studentID='$studentID'";
-
-                    if ($connection->query($secondChoiceQuery) === TRUE) {
-                        echo '<div class="alert alert-success" role="alert">
-                                    Selected project as second choice!
-                              </div>';                         
-                    } else {
-                        echo '<div class="alert alert-danger" role="alert">
-                                    Error: Problem getting student data, please contact an administrator!
-                              </div>';                    
-                    }
-                }
-
-            } else if ($choiceNumber == "3") {
-
-                // Checks if the user has already selected the project.
-                if ($thirdChoice == $projectID or $secondChoice == $projectID or $firstChoice == $projectID) {
-                    echo '<div class="alert alert-warning" role="alert">
-                                You have already selected this project!
-                          </div>';
-                } else {
-                    $thirdChoiceQuery = "UPDATE student SET projectThirdChoice='$projectID' WHERE studentID='$studentID'";
-
-                    if ($connection->query($thirdChoiceQuery) === TRUE) {
-                        echo '<div class="alert alert-success" role="alert">
-                                Selected project as third choice!
-                              </div>';                    
-                    } else {
-                        echo '<div class="alert alert-danger" role="alert">
-                                    Error: Problem getting student data, please contact an administrator!
-                              </div>';                    
-                    }
-                }
-
-            } else {
+            // Checks if the user has already selected the project.
+            if ($firstChoice == $projectID or $secondChoice == $projectID or $thirdChoice == $projectID) {
                 echo '<div class="alert alert-warning" role="alert">
-                            You have selected the maximum amount of projects, please remove one before selecting more!
-                      </div>';           
+                            You have already selected this project!
+                      </div>';
+            } else {
+
+                $firstChoiceQuery = "UPDATE student SET projectFirstChoice = '$projectID' WHERE studentID = '$studentID'";
+
+                if ($connection->query($firstChoiceQuery) === TRUE) {
+                    echo '<div class="alert alert-success" role="alert">
+                            Selected project as first choice!
+                          </div>';     
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Problem getting student data, please contact an administrator!
+                          </div>';
+                }
             }
+
+        } else if ($choiceNumber == "2") {
+            
+            // Checks if the user has already selected the project.
+            if ($secondChoice == $projectID or $firstChoice == $projectID or $thirdChoice == $projectID) {
+                echo '<div class="alert alert-warning" role="alert">
+                            You have already selected this project!
+                      </div>';
+            } else {
+                $secondChoiceQuery = "UPDATE student SET projectSecondChoice='$projectID' WHERE studentID='$studentID'";
+
+                if ($connection->query($secondChoiceQuery) === TRUE) {
+                    echo '<div class="alert alert-success" role="alert">
+                                Selected project as second choice!
+                          </div>';                         
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Problem getting student data, please contact an administrator!
+                          </div>';                    
+                }
+            }
+
+        } else if ($choiceNumber == "3") {
+
+            // Checks if the user has already selected the project.
+            if ($thirdChoice == $projectID or $secondChoice == $projectID or $firstChoice == $projectID) {
+                echo '<div class="alert alert-warning" role="alert">
+                            You have already selected this project!
+                      </div>';
+            } else {
+                $thirdChoiceQuery = "UPDATE student SET projectThirdChoice='$projectID' WHERE studentID='$studentID'";
+
+                if ($connection->query($thirdChoiceQuery) === TRUE) {
+                    echo '<div class="alert alert-success" role="alert">
+                            Selected project as third choice!
+                          </div>';                    
+                } else {
+                    echo '<div class="alert alert-danger" role="alert">
+                                Error: Problem getting student data, please contact an administrator!
+                          </div>';                    
+                }
+            }
+
+        } else {
+            echo '<div class="alert alert-warning" role="alert">
+                        You have selected the maximum amount of projects, please remove one before selecting more!
+                  </div>';           
         }
+    }
 
     ?>
 

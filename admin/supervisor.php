@@ -96,6 +96,38 @@
                             Error: Could not remove project-course match!
                       </div>';
             }
+
+            $firstChoiceQuery = "UPDATE student SET projectFirstChoice = NULL WHERE projectFirstChoice = '$projectID'";
+
+            if (!($connection->query($firstChoiceQuery) === TRUE)) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not remove student-first choice match!
+                      </div>';
+            }
+
+            $secondChoiceQuery = "UPDATE student SET projectSecondChoice = NULL WHERE projectSecondChoice = '$projectID'";
+
+            if (!($connection->query($secondChoiceQuery) === TRUE)) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not remove student-second choice match!
+                      </div>';
+            }
+
+            $thirdChoiceQuery = "UPDATE student SET projectThirdChoice = NULL WHERE projectThirdChoice = '$projectID'";
+
+            if (!($connection->query($thirdChoiceQuery) === TRUE)) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not student-third choice match!
+                      </div>';
+            }
+
+            $confirmedChoiceQuery = "UPDATE student SET projectID = NULL WHERE projectID = '$projectID'";
+
+            if (!($connection->query($confirmedChoiceQuery) === TRUE)) {
+                echo '<div class="alert alert-danger" role="alert">
+                            Error: Could not student-confirmed choice match!
+                      </div>';
+            }
         }
 
     ?>
@@ -218,18 +250,23 @@
                                     echo '<td>' . $projectTitle . '</td>';
                                     echo '<td>' . $maxStudents . '</td>';
                                     echo '<td>' . $projectCode . '</td>';
-                                    echo '<td>
-                                              <form action="supervisor/editingproject.php" method="POST" role="form">
-                                                  <input type="hidden" name="projectID" value="'. $projectID .'">
-                                                  <button class="btn btn-primary" type="submit">Edit</button>
-                                              </form>
-                                          </td>';
-                                    echo '<td>
-                                              <form action="supervisor.php" method="POST" role="form">
-                                                  <input type="hidden" name="projectID" value="'. $projectID .'">
-                                                  <button class="btn btn-danger" name="submit" type="submit">Remove</button>
-                                              </form>
-                                          </td>';
+                                    if ($projectsAllocated == 0) {
+                                        echo '<td>
+                                                  <form action="supervisor/editingproject.php" method="POST" role="form">
+                                                      <input type="hidden" name="projectID" value="'. $projectID .'">
+                                                      <button class="btn btn-primary" type="submit">Edit</button>
+                                                  </form>
+                                              </td>';
+                                        echo '<td>
+                                                  <form action="supervisor.php" method="POST" role="form">
+                                                      <input type="hidden" name="projectID" value="'. $projectID .'">
+                                                      <button class="btn btn-danger" name="submit" type="submit">Remove</button>
+                                                  </form>
+                                              </td>';
+                                    } else {
+                                        echo '<td>Cannot edit or remove once projects have been allocated.</td>';
+                                    }
+                                    
                                     echo '</tr>';
                                 }
                             } else {
@@ -357,10 +394,10 @@
 
         <div class="row">
             <div class="col-md-12">
-                <form action="../php/generateProjectReport.php" method="POST" role="form">
+                <form action="../php/generateStudentReport.php" method="POST" role="form">
                     <center>
                         <input type="hidden" name="supervisorID" value="<?php echo $loggedInSupervisorID; ?>">
-                        <button class="btn btn-warning" name="submit" type="submit">Generate Project Report</button>
+                        <button class="btn btn-warning" name="submit" type="submit">Generate Student Report</button>
                     </center>
                 </form>
             </div>

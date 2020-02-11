@@ -1,4 +1,4 @@
-<!-- Script generates a report with project information relating to the supervisor -->
+<!-- Script generates a report with student information relating to the supervisor -->
 <?php
 
     include "../includes/connect.php";
@@ -45,6 +45,8 @@
         
         // Reads current position in the file then outputs the data.
         fpassthru($file);
+
+        fclose($file);
     }
 
     $connection->close();

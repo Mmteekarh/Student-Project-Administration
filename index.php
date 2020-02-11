@@ -143,7 +143,11 @@
                                     // Create new row of table with new information.
                                     echo '<tr>';
                                     echo '<th scope="row"><a href="../projects/' . $projectID . '.php">' . $projectTitle . '</a></th>';
-                                    echo '<td>' . substr($projectBrief, 0, 100) . '...</td>';
+                                    if (strlen($projectBrief) > 100) {
+                                        echo '<td>' . substr($projectBrief, 0, 100) . '...</td>';
+                                    } else {
+                                        echo '<td>' . $projectBrief . '</td>';
+                                    }
                                     echo '<td>' . $projectSupervisor . '</td>';
                                     echo '</tr>';
                                 }

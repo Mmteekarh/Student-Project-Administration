@@ -94,10 +94,12 @@
                 if ($studentResult->num_rows > 0) {
                     while($studentRow = $studentResult->fetch_assoc()) {
 
-                        if ($currentPassword == $studentRow["password"]) {
+                        if (password_verify($currentPassword, $studentRow["password"])) {
                             if ($newPassword == $confirmNewPassword) {
 
-                                $studentUpdateQuery = "UPDATE student SET password = '$newPassword' WHERE lastIP = '$ip'";
+                                $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+                                $studentUpdateQuery = "UPDATE student SET password = '$hashedPassword' WHERE lastIP = '$ip'";
 
                                 if ($connection->query($studentUpdateQuery) === TRUE) {
                                     echo '<div class="alert alert-success" role="alert">
@@ -130,10 +132,12 @@
                 if ($supervisorResult->num_rows > 0) {
                     while($supervisorRow = $supervisorResult->fetch_assoc()) {
 
-                        if ($currentPassword == $supervisorRow["password"]) {
+                        if (password_verify($currentPassword, $supervisorRow["password"])) {
                             if ($newPassword == $confirmNewPassword) {
 
-                                $supervisorUpdateQuery = "UPDATE supervisor SET password = '$newPassword' WHERE lastIP = '$ip'";
+                                $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+                                $supervisorUpdateQuery = "UPDATE supervisor SET password = '$hashedPassword' WHERE lastIP = '$ip'";
 
                                 if ($connection->query($supervisorUpdateQuery) === TRUE) {
                                     echo '<div class="alert alert-success" role="alert">
