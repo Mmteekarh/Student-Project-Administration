@@ -5,7 +5,7 @@
 
     $supervisorID = $_POST["supervisorID"];
    
-    $supervisorQuery = "SELECT student.firstName, student.middleInitial, student.lastName, project.projectTitle 
+    $supervisorQuery = "SELECT student.firstName, student.middleInitial, student.lastName, project.projectTitle, student.mainMark, student.secondaryMark 
                         FROM supervisor INNER JOIN project ON supervisor.supervisorID = project.supervisorID 
                         INNER JOIN student ON project.projectID = student.projectID WHERE supervisor.supervisorID = '$supervisorID'";
     $supervisorResult = $connection->query($supervisorQuery);
@@ -20,7 +20,7 @@
         $file = fopen('php://memory', 'w');
         
         // Sets column headers and adds to file.
-        $fields = array('firstName', 'middleInitial', 'lastName', 'projectTitle');
+        $fields = array('firstName', 'middleInitial', 'lastName', 'projectTitle', 'mainMark', 'secondaryMark');
         fputcsv($file, $fields, $delimiter);
 
         while($supervisorRow = $supervisorResult->fetch_assoc()) {
@@ -29,9 +29,11 @@
             $lastName = $supervisorRow["lastName"];
             $middleInitial = $supervisorRow["middleInitial"];
             $projectTitle = $supervisorRow["projectTitle"];
+            $mainMark = $supervisorRow["mainMark"];
+            $secondaryMark = $supervisorRow["secondaryMark"];
 
             // Creates a new array with the data and puts data on a new line in the file.
-            $row = array($firstName, $middleInitial, $lastName, $projectTitle);
+            $row = array($firstName, $middleInitial, $lastName, $projectTitle, $mainMark, $secondaryMark);
             fputcsv($file, $row, $delimiter);
 
         }

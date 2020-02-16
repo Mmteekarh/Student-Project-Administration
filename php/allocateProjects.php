@@ -96,7 +96,7 @@
 								        		continue 2;
 								        	} else {
 								        		// Assign third choice
-		        								assignChoice($connection, $studentID, $thirdProjectID);
+		        								assignChoice($connection, $studentID, $thirdProjectID, $thirdSupervisorID);
 
 								        	}
 								        }
@@ -106,7 +106,7 @@
 					        	
 					        	} else {
 					        		// Assign second choice
-		        					assignChoice($connection, $studentID, $secondProjectID);
+		        					assignChoice($connection, $studentID, $secondProjectID, $secondSupervisorID);
 
 					        	}
 					        }
@@ -116,7 +116,7 @@
 
 		        	} else {
 		        		// Assign first choice
-		        		assignChoice($connection, $studentID, $firstProjectID);
+		        		assignChoice($connection, $studentID, $firstProjectID, $firstSupervisorID);
 		        	}
 		        }
 		    } else {
@@ -159,7 +159,7 @@
 	    }
     }
 
-    function assignChoice($connection, $studentID, $projectID) {
+    function assignChoice($connection, $studentID, $projectID, $supervisorID) {
 
 		// Assign choice to user
 		$projectsAllocated[$projectID] = $projectsAllocated[$projectID] + 1;
@@ -169,9 +169,7 @@
 
 		$confirmedQuery = "UPDATE student SET secondMarker = '$randomSupervisor', projectID = '$projectID' WHERE studentID = '$studentID'";
 
-		if ($connection->query($confirmedQuery) === TRUE) {
-			continue;
-		} else {
+		if (!($connection->query($confirmedQuery) === TRUE)) {
 		    echo "Error: " . $confirmedQuery . "<br>" . $connection->error;
 		}
 

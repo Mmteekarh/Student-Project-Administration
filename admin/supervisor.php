@@ -300,7 +300,8 @@
                             <th scope="col">Year of Study</th>
                             <th scope="col">PLP?</th>
                             <th scope="col">EthOS</th>
-                            <th scope="col">Add EthOS</th>
+                            <th scope="col">1st Mark</th>
+                            <th scope="col">2nd Mark</th>
                         </tr>
                     </thead>
 
@@ -312,6 +313,7 @@
                             if ($projectsAllocated == 0) {
                                 echo '<tr>';
                                 echo '<th scope="row">Not yet allocated</th>';
+                                echo '<td></td>';
                                 echo '<td></td>';
                                 echo '<td></td>';
                                 echo '<td></td>';
@@ -336,6 +338,8 @@
                                         $yearOfStudy = $showStudentsRow['yearOfStudy'];
                                         $plp = $showStudentsRow['plp'];
                                         $ethos = $showStudentsRow['ethosNumber'];
+                                        $mainMark = $showStudentsRow['mainMark'];
+                                        $secondaryMark = $showStudentsRow['secondaryMark'];
 
                                         if ($plp == 0) {
                                           $plpText = "No";
@@ -356,7 +360,6 @@
                                         echo '<td>' . $lastName . '</td>';
                                         echo '<td>' . $yearOfStudy . '</td>';
                                         echo '<td>' . $plpText . '</td>';
-                                        echo '<td>' . $ethos . '</td>';
                                         if ($ethos == "Not Set") {
                                             echo '<td>
                                                       <form action="supervisor/addethos.php" method="POST" role="form">
@@ -366,7 +369,23 @@
                                                       </form>
                                                   </td>';
                                         } else {
-                                            echo '<td>EthOS Set</td>';
+                                            echo '<td>' . $ethos . '</td>';
+                                        }
+                                        if ($mainMark == 0 or is_null($mainMark)) {
+                                            echo '<td>
+                                                      <form action="supervisor/setmainmark.php" method="POST" role="form">
+                                                          <input type="hidden" name="studentID" value="'. $studentID .'">
+                                                          <input type="hidden" name="studentName" value="'. $studentName .'">
+                                                          <button class="btn btn-success" name="mainmark" type="submit">Set Mark</button>
+                                                      </form>
+                                                  </td>';
+                                        } else {
+                                            echo '<td>' . $mainMark . '</td>';
+                                        }
+                                        if ($secondaryMark == 0 or is_null($secondaryMark)) {
+                                            echo '<td>Not Marked</td>';
+                                        } else {
+                                            echo '<td>' . $secondaryMark . '</td>';
                                         }
                                         echo '</tr>';
                                     }
@@ -374,9 +393,6 @@
                                     echo "<tr><td>You do not have any students.</td></tr>";
                                 }
                             }
-
-                            // Closes connection
-                            $connection->close();
 
                           ?>
 
@@ -407,6 +423,97 @@
 
         <br>
 
+        <div class="row">
+
+            <div class="col-md-12">
+
+                <h3>Projects to Mark:</h3>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Student ID</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Supervisor</th>
+                            <th scope="col">Project Code</th>
+                            <th scope="col">Your Mark</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <?php
+
+                            // If projects have not been allocated - display an empty table.
+                            if ($projectsAllocated == 0) {
+                                echo '<tr>';
+                                echo '<th scope="row">Not yet allocated</th>';
+                                echo '<td></td>';
+                                echo '<td></td>';
+                                echo '<td></td>';
+                                echo '<td></td>';
+                                echo '</tr>';
+                            } else {
+
+                                $showStudentsQuery = "SELECT student.studentID AS 'studentID', student.firstName AS 'firstName', student.lastName AS 'lastName', supervisor.supervisorTitle 
+                                                             AS 'supervisorTitle', supervisor.firstName AS 'supervisorFirstName', supervisor.lastName AS 'supervisorLastName',
+                                                             project.projectCode AS 'projectCode', student.secondaryMark as 'secondaryMark' FROM student 
+                                                      INNER JOIN project ON student.projectID = project.projectID 
+                                                      INNER JOIN supervisor ON supervisor.supervisorID = project.supervisorID
+                                                      WHERE student.secondMarker = '$loggedInSupervisorID'";
+                                $showStudentsResult = $connection->query($showStudentsQuery);
+
+                                if ($showStudentsResult->num_rows > 0) {
+                                    while($showStudentsRow = $showStudentsResult->fetch_assoc()) {
+                                        $studentID = $showStudentsRow['studentID'];
+                                        $firstName = $showStudentsRow['firstName'];
+                                        $lastName = $showStudentsRow['lastName'];
+                                        $supervisorTitle = $showStudentsRow['supervisorTitle'];
+                                        $supervisorFirstName = $showStudentsRow['supervisorFirstName'];
+                                        $supervisorLastName = $showStudentsRow['supervisorLastName'];
+                                        $projectCode = $showStudentsRow['projectCode'];
+                                        $secondaryMark = $showStudentsRow['secondaryMark'];
+
+                                        $supervisorName = $supervisorTitle . " " . $supervisorFirstName . " " . $supervisorLastName;
+                                        $studentName = $firstName . " " . $lastName;
+
+                                        echo '<tr>';
+                                        echo '<th scope="row">' . $studentID . '</th>';
+                                        echo '<td>' . $firstName . '</td>';
+                                        echo '<td>' . $lastName . '</td>';
+                                        echo '<td>' . $supervisorName . '</td>';
+                                        echo '<td>' . $projectCode . '</td>';
+                                        if ($secondaryMark == 0 or is_null($secondaryMark)) {
+                                            echo '<td>
+                                                      <form action="supervisor/setsecondmark.php" method="POST" role="form">
+                                                          <input type="hidden" name="studentID" value="'. $studentID .'">
+                                                          <input type="hidden" name="studentName" value="'. $studentName .'">
+                                                          <button class="btn btn-success" name="secondmark" type="submit">Set Mark</button>
+                                                      </form>
+                                                  </td>';
+                                        } else {
+                                            echo '<td>' . $secondaryMark . '</td>';
+                                        }
+                                        
+                                        echo '</tr>';
+                                    }
+                                } else {
+                                    echo "<tr><td>No projects to mark.</td></tr>";
+                                }
+                            }
+
+                            // Closes connection
+                            $connection->close();
+
+                          ?>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
     </div>
 
     <?php include "../includes/footer.php" ?>
