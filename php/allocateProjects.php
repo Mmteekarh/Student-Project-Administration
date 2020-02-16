@@ -4,39 +4,12 @@
     include "../includes/vars.php";
     include "../includes/connect.php";
 
-    //for all students in table
-    	// if student has not selected 3 choices
-    		// put in manual queue
-    	// for all student first choice
-    		// if super limit reached
-    			// skip
-    		// else if project limit reached
-    			// skip
-    		// else
-    			// assign first choice to student
-    			// assign random marker to student
-    	// for all student second choice
-    		// if super limit reached
-    			// skip
-    		// else if project limit reached
-    			// skip
-    		// else
-    			// assign second choice to student
-    			// assign random marker to student
-    	// for all student third choice
-    		// if super limit reached
-    			// skip
-    		// else if project limit reached
-    			// skip
-    		// else
-    			// assign third choice to student
-    			// assign random marker to student
-
     $manualQueue = array();
     $studentsAllocated = array();
     $projectsAllocated = array();
     $supervisorsAllocated = array();
 
+    // Populate arrays with keys
     $supervisorQuery = "SELECT * FROM supervisor";
     $supervisorResult = $connection->query($supervisorQuery);
 
@@ -57,7 +30,7 @@
         }
     }
 
-
+    // Main allocation outer loop
 	$studentQuery = "SELECT * FROM student";
     $studentResult = $connection->query($studentQuery);
 
@@ -74,110 +47,80 @@
         	}
 
             $firstChoiceQuery = "SELECT * FROM student 
-            					INNER JOIN project ON student.projectFirstChoice = project.projectID
-            					INNER JOIN supervisor ON project.supervisorID = supervisor.supervisorID
-            					WHERE studentID = '$studentID'";
+            					 INNER JOIN project ON student.projectFirstChoice = project.projectID
+            					 INNER JOIN supervisor ON project.supervisorID = supervisor.supervisorID
+            					 WHERE studentID = '$studentID'";
 		    $firstChoiceResult = $connection->query($firstChoiceQuery);
 
 		    if ($firstChoiceResult->num_rows > 0) {
 		        while($firstChoiceRow = $firstChoiceResult->fetch_assoc()) {
-		        	$projectID = $firstChoiceRow["projectFirstChoice"];
-		        	$supervisorID = $firstChoiceRow["supervisorID"];
-		        	$supervisorMax = $firstChoiceRow["maxStudents"];
-		        	$projectMax = $firstChoiceRow["maximumStudents"];
+		        	$firstProjectID = $firstChoiceRow["projectFirstChoice"];
+		        	$firstSupervisorID = $firstChoiceRow["supervisorID"];
+		        	$firstSupervisorMax = $firstChoiceRow["maxStudents"];
+		        	$firstProjectMax = $firstChoiceRow["maximumStudents"];
 
-		        	// If supervisor max students and project max students reached, skip
-		        	if ($supervisorsAllocated[$supervisorID] == $supervisorMax OR $projectsAllocated[$projectID] == $projectMax) {
+		        	// If supervisor max students and project max students reached, skip to second choice
+		        	if ($supervisorsAllocated[$firstSupervisorID] == $firstSupervisorMax OR $projectsAllocated[$firstProjectID] == $firstProjectMax) {
 		        		
 		        		$secondChoiceQuery = "SELECT * FROM student 
-        					INNER JOIN project ON student.projectSecondChoice = project.projectID
-        					INNER JOIN supervisor ON project.supervisorID = supervisor.supervisorID
-        					WHERE studentID = '$studentID'";
+        									  INNER JOIN project ON student.projectSecondChoice = project.projectID
+        									  INNER JOIN supervisor ON project.supervisorID = supervisor.supervisorID
+        									  WHERE studentID = '$studentID'";
 					    $secondChoiceResult = $connection->query($secondChoiceQuery);
 
 					    if ($secondChoiceResult->num_rows > 0) {
 					        while($secondChoiceRow = $secondChoiceResult->fetch_assoc()) {
-					        	$projectID = $secondChoiceRow["projectSecondChoice"];
-					        	$supervisorID = $secondChoiceRow["supervisorID"];
-					        	$supervisorMax = $secondChoiceRow["maxStudents"];
-					        	$projectMax = $secondChoiceRow["maximumStudents"];
+					        	$secondProjectID = $secondChoiceRow["projectSecondChoice"];
+					        	$secondSupervisorID = $secondChoiceRow["supervisorID"];
+					        	$secondSupervisorMax = $secondChoiceRow["maxStudents"];
+					        	$secondProjectMax = $secondChoiceRow["maximumStudents"];
 
-					        	// If supervisor max students and project max students reached, skip
-					        	if ($supervisorsAllocated[$supervisorID] == $supervisorMax or $projectsAllocated[$projectID] == $projectMax) {
+					        	// If supervisor max students and project max students reached, skip to third choice
+					        	if ($supervisorsAllocated[$secondSupervisorID] == $secondSupervisorMax or $projectsAllocated[$secondProjectID] == $secondProjectMax) {
 
 					        		$thirdChoiceQuery = "SELECT * FROM student 
-						            					INNER JOIN project ON student.projectThirdChoice = project.projectID
-						            					INNER JOIN supervisor ON project.supervisorID = supervisor.supervisorID
-						            					WHERE studentID = '$studentID'";
+						            					 INNER JOIN project ON student.projectThirdChoice = project.projectID
+						            					 INNER JOIN supervisor ON project.supervisorID = supervisor.supervisorID
+						            					 WHERE studentID = '$studentID'";
 								    $thirdChoiceResult = $connection->query($thirdChoiceQuery);
 
 								    if ($thirdChoiceResult->num_rows > 0) {
 								        while($thirdChoiceRow = $thirdChoiceResult->fetch_assoc()) {
-								        	$projectID = $thirdChoiceRow["projectThirdChoice"];
-								        	$supervisorID = $thirdChoiceRow["supervisorID"];
-								        	$supervisorMax = $thirdChoiceRow["maxStudents"];
-								        	$projectMax = $thirdChoiceRow["maximumStudents"];
+								        	$thirdProjectID = $thirdChoiceRow["projectThirdChoice"];
+								        	$thirdSupervisorID = $thirdChoiceRow["supervisorID"];
+								        	$thirdSupervisorMax = $thirdChoiceRow["maxStudents"];
+								        	$thirdProjectMax = $thirdChoiceRow["maximumStudents"];
 
 								        	// If supervisor max students and project max students reached, skip
-								        	if ($supervisorsAllocated[$supervisorID] == $supervisorMax or $projectsAllocated[$projectID] == $projectMax) {
+								        	if ($supervisorsAllocated[$thirdSupervisorID] == $thirdSupervisorMax or $projectsAllocated[$thirdProjectID] == $thirdProjectMax) {
 								        		continue 2;
 								        	} else {
-								        		// Assign user third choice
-								        		$projectsAllocated[$projectID] = $projectsAllocated[$projectID] + 1;
-								        		$supervisorsAllocated[$supervisorID] = $supervisorsAllocated[$supervisorID] + 1;
-
-								        		$confirmedQuery = "UPDATE student SET projectID = '$projectID' WHERE studentID = '$studentID'";
-
-												if ($connection->query($confirmedQuery) === TRUE) {
-													break 2;
-												} else {
-												    echo "Error: " . $confirmedQuery . "<br>" . $connection->error;
-												}
+								        		// Assign third choice
+		        								assignChoice($connection, $studentID, $thirdProjectID);
 
 								        	}
 								        }
 								    } else {
-								        echo "Error: No records found in table!";
+								        echo "Error: user does not have a third choice!";
 								    }
 					        	
 					        	} else {
-					        		// Assign user second choice
-					        		$projectsAllocated[$projectID] = $projectsAllocated[$projectID] + 1;
-					        		$supervisorsAllocated[$supervisorID] = $supervisorsAllocated[$supervisorID] + 1;
-
-					        		$confirmedQuery = "UPDATE student SET projectID = '$projectID' WHERE studentID = '$studentID'";
-
-									if ($connection->query($confirmedQuery) === TRUE) {
-										continue 2;
-										echo "second choice true";
-									} else {
-									    echo "Error: " . $confirmedQuery . "<br>" . $connection->error;
-									}
+					        		// Assign second choice
+		        					assignChoice($connection, $studentID, $secondProjectID);
 
 					        	}
 					        }
 					    } else {
-					        echo "Error: No records found in table!";
+					        echo "Error: user does not have a second choice!";
 					    }
 
 		        	} else {
-		        		// Assign user first choice
-		        		$projectsAllocated[$projectID] = $projectsAllocated[$projectID] + 1;
-		        		$supervisorsAllocated[$supervisorID] = $supervisorsAllocated[$supervisorID] + 1;
-
-		        		$confirmedQuery = "UPDATE student SET projectID = '$projectID' WHERE studentID = '$studentID'";
-
-						if ($connection->query($confirmedQuery) === TRUE) {
-							continue;
-							echo "first choice true";
-						} else {
-						    echo "Error: " . $confirmedQuery . "<br>" . $connection->error;
-						}
-
+		        		// Assign first choice
+		        		assignChoice($connection, $studentID, $firstProjectID);
 		        	}
 		        }
 		    } else {
-		        echo "Error: No records found in table!";
+		        echo "Error: user does not have a first choice!";
 		    }
 
 		}
@@ -195,6 +138,44 @@
 
 	header("Refresh:1; url=../admin/systemmanagement.php");
 
-    $connection->close();
+    function getRandomMarker($connection, $supervisorID) {
+    	$secondMarkerQuery = "SELECT COUNT(*) AS total FROM supervisor";
+		$secondMarkerResult = $connection->query($secondMarkerQuery);
 
+		$randomSupervisor = 0;
+
+	    if ($secondMarkerResult->num_rows > 0) {
+	        while($secondMarkerRow = $secondMarkerResult->fetch_assoc()) {
+	        	$totalSupervisors = $secondMarkerRow["total"];
+
+	        	$randomSupervisor = rand(1, $totalSupervisors);
+
+	        	if ($randomSupervisor == $supervisorID) {
+	        		getRandomMarker($connection, $supervisorID);
+	        	} else {
+	        		return $randomSupervisor;
+	        	}
+	        }
+	    }
+    }
+
+    function assignChoice($connection, $studentID, $projectID) {
+
+		// Assign choice to user
+		$projectsAllocated[$projectID] = $projectsAllocated[$projectID] + 1;
+		$supervisorsAllocated[$supervisorID] = $supervisorsAllocated[$supervisorID] + 1;
+
+		$randomSupervisor = getRandomMarker($connection, $supervisorID);
+
+		$confirmedQuery = "UPDATE student SET secondMarker = '$randomSupervisor', projectID = '$projectID' WHERE studentID = '$studentID'";
+
+		if ($connection->query($confirmedQuery) === TRUE) {
+			continue;
+		} else {
+		    echo "Error: " . $confirmedQuery . "<br>" . $connection->error;
+		}
+
+    }
+
+    $connection->close();
 ?>
