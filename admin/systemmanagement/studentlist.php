@@ -157,9 +157,7 @@
                                     echo '</tr>';
                                 }
                             } else {
-                                 echo '<div class="alert alert-danger" role="alert">
-                                            Error: Could not retrieve student data - No records found. 
-                                      </div>';
+                                 echo '<tr><td>No students! Add some using the buttons above.</td></tr>';
                             }
 
                             // Closes connection

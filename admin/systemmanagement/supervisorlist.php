@@ -208,9 +208,7 @@
                                     echo '</tr>';
                                 }
                             } else {
-                                echo '<div class="alert alert-danger" role="alert">
-                                            Error: Could not retrieve supervisor data - No records found. 
-                                      </div>';
+                                echo '<tr><td>No supervisors! Add some using the buttons above.</td></tr>';
                             }
 
                             // Closes connection

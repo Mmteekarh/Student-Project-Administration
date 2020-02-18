@@ -16,7 +16,7 @@
     if ($supervisorResult->num_rows > 0) {
         while($supervisorRow = $supervisorResult->fetch_assoc()) {
         	$sid = $supervisorRow["supervisorID"];
-        	array_push($supervisorsAllocated, $sid);
+        	array_push($supervisorsAllocated[$sid] = 0);
         }
     }
 
@@ -26,7 +26,7 @@
     if ($projectResult->num_rows > 0) {
         while($projectRow = $projectResult->fetch_assoc()) {
         	$pid = $projectRow["projectID"];
-        	array_push($projectsAllocated, $pid);
+        	array_push($projectsAllocated[$pid] = 0);
         }
     }
 

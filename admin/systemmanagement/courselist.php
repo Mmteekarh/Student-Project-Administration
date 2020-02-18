@@ -127,9 +127,7 @@
                                     echo '</tr>';
                                 }
                             } else {
-                                echo '<div class="alert alert-danger" role="alert">
-                                            Error: Could not retrieve project course data - No records found. 
-                                      </div>';
+                                echo '<tr><td>No courses! Add some using the button above.</td></tr>';
                             }
 
                             // Closes connection

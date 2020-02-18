@@ -7,6 +7,7 @@
     <!-- Includes required scripts. -->
     <?php include "../../includes/header.php" ?>
     <?php include "../../includes/userscript.php" ?>
+    <?php include "../../includes/connect.php" ?>
 
     <title>Add Supervisor - SPAS</title>
 
