@@ -60,18 +60,18 @@
 
                     $query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password, courseID, dateCreated, lastUpdated) VALUES ($studentID, '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', $plp, '$hashedPassword', $courseID, now(), now())";
 
-                    if ($connection->query($query) == TRUE) {
-                        echo '<div class="alert alert-success" role="alert">
-                                    Imported student file!
-                              </div>';                   
-                    } else {
+                    // If query executed correctly, refresh to student page. If not, display an error.
+                    if (!($connection->query($query) == TRUE)) {
                         echo '<div class="alert alert-danger" role="alert">
                                 Error: Cannot insert students! 
                               </div>';             
+                    } else {
+                    	header("Refresh:0.01; url=studentlist.php");
                     }
 
                 }
             } else {
+            	// Error runs if there was not a file uploaded or the file type was incorrect.
                 echo '<div class="alert alert-danger" role="alert">
                             Error: No file was selected! 
                       </div>';       

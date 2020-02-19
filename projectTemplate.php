@@ -244,56 +244,60 @@
 
                 <p><b>Project Code: </b><?php echo $projectCode; ?></p>
 
-                <!-- Checks if user is logged in as a student, if so, display select project buttons -->
-    			<?php
-                    if ($loggedIn == true) {
-    	                if ($userType == "student") {
-    	        ?>
+                <div class="col-md-5">
 
-                <!-- Each button posts to the same php script and a hidden value posts the choice number -->
-                <?php if ($projectID == $firstChoice) { ?>
-                    <center><button name="submit" type="submit" class="btn btn-danger">Already First Choice</button></center>
-                <?php } else { ?>
-                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" role="form">
-                        <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
-                        <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
-                        <input type="hidden" name="choiceNumber" value="1">
-                        <center><button name="submit" type="submit" class="btn btn-success">Select First Choice</button></center>
-                    </form>
-                <?php } ?>
+	                <!-- Checks if user is logged in as a student, if so, display select project buttons -->
+	    			<?php
+	                    if ($loggedIn == true) {
+	    	                if ($userType == "student") {
+	    	        ?>
 
-                <br>
+	                <!-- Each button posts to the same php script and a hidden value posts the choice number -->
+	                <?php if ($projectID == $firstChoice) { ?>
+	                    <center><button name="submit" type="submit" class="btn btn-danger btn-block">Already First Choice</button></center>
+	                <?php } else { ?>
+	                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" role="form">
+	                        <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
+	                        <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
+	                        <input type="hidden" name="choiceNumber" value="1">
+	                        <center><button name="submit" type="submit" class="btn btn-success btn-block">Select First Choice</button></center>
+	                    </form>
+	                <?php } ?>
 
-                <?php if ($projectID == $secondChoice) { ?>
-                        <center><button name="submit" type="submit" class="btn btn-danger">Already Second Choice</button></center>
-                <?php } else { ?>
-                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" role="form">
-                        <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
-                        <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
-                        <input type="hidden" name="choiceNumber" value="2">
-                        <center><button name="submit" type="submit" class="btn btn-success">Select Second Choice</button></center>
-                    </form>
-                <?php } ?>
+	                <br>
 
-                <br>
-                
-                <?php if ($projectID == $thirdChoice) { ?>
-                        <center><button name="submit" type="submit" class="btn btn-danger">Already Third Choice</button></center>
-                <?php } else { ?>
-                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" role="form">
-                        <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
-                        <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
-                        <input type="hidden" name="choiceNumber" value="3">
-                        <center><button name="submit" type="submit" class="btn btn-success">Select Third Choice</button></center>
-                    </form>
-                <?php } ?>
+	                <?php if ($projectID == $secondChoice) { ?>
+	                        <center><button name="submit" type="submit" class="btn btn-danger btn-block">Already Second Choice</button></center>
+	                <?php } else { ?>
+	                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" role="form">
+	                        <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
+	                        <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
+	                        <input type="hidden" name="choiceNumber" value="2">
+	                        <center><button name="submit" type="submit" class="btn btn-success btn-block">Select Second Choice</button></center>
+	                    </form>
+	                <?php } ?>
 
-                <br>
+	                <br>
+	                
+	                <?php if ($projectID == $thirdChoice) { ?>
+	                        <center><button name="submit" type="submit" class="btn btn-danger btn-block">Already Third Choice</button></center>
+	                <?php } else { ?>
+	                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="POST" role="form">
+	                        <input type="hidden" name="projectID" value="<?php echo $projectID; ?>">
+	                        <input type="hidden" name="studentID" value="<?php echo $loggedInStudentID; ?>">
+	                        <input type="hidden" name="choiceNumber" value="3">
+	                        <center><button name="submit" type="submit" class="btn btn-success btn-block">Select Third Choice</button></center>
+	                    </form>
+	                <?php } ?>
 
-                <?php 
-    	            	}
-    	            }
-                ?>
+	                <br>
+
+	                <?php 
+	    	            	}
+	    	            }
+	                ?>
+
+	            </div>
 
             </div>
 
