@@ -13,6 +13,8 @@
 
     <?php
 
+        $hasStudents = false;
+
         // Queries to get statistics from the database. Includes student count, project count and gets if the projects have been allocated
         $studentQuery = "SELECT COUNT(*) AS studentCount FROM student INNER JOIN project ON student.projectID = project.projectID WHERE supervisorID='$loggedInSupervisorID'";
         $studentResult = $connection->query($studentQuery);
@@ -117,7 +119,7 @@
 
             if (!($connection->query($thirdChoiceQuery) === TRUE)) {
                 echo '<div class="alert alert-danger" role="alert">
-                            Error: Could not student-third choice match!
+                            Error: Could not update student-third choice match!
                       </div>';
             }
 
@@ -125,7 +127,7 @@
 
             if (!($connection->query($confirmedChoiceQuery) === TRUE)) {
                 echo '<div class="alert alert-danger" role="alert">
-                            Error: Could not student-confirmed choice match!
+                            Error: Could not update student-confirmed choice match!
                       </div>';
             }
         }
@@ -331,6 +333,7 @@
 
                                 if ($showStudentsResult->num_rows > 0) {
                                     while($showStudentsRow = $showStudentsResult->fetch_assoc()) {
+                                        $hasStudents = true;
                                         $studentID = $showStudentsRow['studentID'];
                                         $firstName = $showStudentsRow['firstName'];
                                         $middleInitial = $showStudentsRow['middleInitial'];
@@ -391,6 +394,7 @@
                                     }
                                 } else {
                                     echo "<tr><td>You do not have any students.</td></tr>";
+                                    $hasStudents = false;
                                 }
                             }
 
@@ -406,7 +410,8 @@
 
         <br>
 
-        <?php if ($projectsAllocated == 1) { ?>
+        <!-- Display the generate student report button if the supervisor has students and projects have been allocated. -->
+        <?php if ($projectsAllocated == 1 AND $hasStudents == true) { ?>
 
         <div class="row">
             <div class="col-md-12">

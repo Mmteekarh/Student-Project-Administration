@@ -125,6 +125,7 @@
                             <th scope="col">System Admin?</th>
                             <th scope="col">Last IP</th>
                             <th scope="col">Edit</th>
+                            <th scope="col">Change Activity</th>
                             <th scope="col">Remove</th>
                         </tr>
                     </thead>

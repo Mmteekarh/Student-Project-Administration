@@ -35,12 +35,12 @@
             <center>
 
                 <h4>How do I select my project preferences?</h4>
-                <p>By reading the projects on the project list, these can be clicked on for more information. On each project's specific page are buttons for making your selection.</p>
+                <p>By reading the projects on the project list. These can be clicked on for more information. On each project's specific page are buttons for making your choices.</p>
 
                 <br><br>
 
                 <h4>Can I change my selection?</h4>
-                <p>Yes! You can come back and change your selection until the selection deadline, just select a different project and it will replace your current choice.</p>
+                <p>Yes! You can come back and change your choices until the selection deadline, just select a different project and it will replace your current choice.</p>
 
                 <br><br>
 
@@ -50,7 +50,7 @@
                 <br><br>
 
                 <h4>I forgot my password?/I have not recieved my login details?</h4>
-                <p>Passwords are not the same as your MMU login, if you have not recieved yours, please contact your tutor or course leader.</p>
+                <p>Passwords are not the same as your university login. If you have not recieved your password, please contact your tutor or course leader.</p>
 
             </center>
             

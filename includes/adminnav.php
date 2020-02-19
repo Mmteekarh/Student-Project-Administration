@@ -6,7 +6,7 @@
 
     echo '
             <!-- Class attributes ensure navbar stays fixed at the top and gives it a darker background. -->
-            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
                 <div class="container">
 
                     <!-- Bootstrap brand for the site, links back to main admin page. -->

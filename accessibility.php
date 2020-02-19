@@ -36,7 +36,7 @@
         <!-- Bootstrap accessibility information -->
         <div class="row">
 
-            <p>This website is built using Bootstrap which contains built-in accessibility features such as default colour contrast and has an emphasis on simplicity. More information can be found at <a href="https://getbootstrap.com/">GetBootstrap.com</a></p>
+            <p>This website is built using Bootstrap which contains built-in accessibility features such as default colour contrast and has an emphasis on simplicity. More information can be found at <a href="https://getbootstrap.com/">GetBootstrap.com</a>.</p>
 
         </div>
 
@@ -48,7 +48,7 @@
 
             <center>
                 <h4>More Information</h4>
-                <p>If you require extra accessibility features or any help with the website, please contact a system administrator. This website is designed to be easy to follow and as simple as possible.</p>
+                <p>If you require any extra accessibility features or any help with the website, please contact a system administrator. This website is designed to be easy to use and uses a black-and-white theme to enhance contrast.</p>
             </center>
 
         </div>

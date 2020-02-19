@@ -69,7 +69,7 @@
 
                     </select>
 
-                    <button type="submit" name="submit">Submit</button>
+                    <button type="submit" name="submit">Change Course</button>
 
                 </form>
 
