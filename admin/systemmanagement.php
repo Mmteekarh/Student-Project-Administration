@@ -122,9 +122,11 @@
                                     echo "<br>";
                                     echo "<small><p><em>Warning: If any students have not chosen their projects, these will have to be allocated manually.</em></p></small>";
                                 } else {
-                                    echo "<h4>Allocate Projects</h4>";
-                                    echo "<br>";
-                                    echo "Projects have been allocated!";
+                                    echo "<h4>Projects Allocated</h4>";
+                                    echo '<br>';
+                                    echo '<form action="../php/generateAllocationReport.php" method="POST" role="form">';
+                                    echo '<button class="btn btn-success" type="submit">Download Report</button>';
+                                    echo "</form>";
                                     echo "<br>";
                                 }
 

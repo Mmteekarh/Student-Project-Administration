@@ -10,25 +10,25 @@
     $supervisorsAllocated = array();
 
     // Populate arrays with keys
-    $supervisorQuery = "SELECT * FROM supervisor";
-    $supervisorResult = $connection->query($supervisorQuery);
+    //$supervisorQuery = "SELECT * FROM supervisor";
+    //$supervisorResult = $connection->query($supervisorQuery);
+//
+   //if ($supervisorResult->num_rows > 0) {
+    //    while($supervisorRow = $supervisorResult->fetch_assoc()) {
+     //   	$sid = $supervisorRow["supervisorID"];
+    //    	array_push($supervisorsAllocated, $sid);
+     //   }
+   // }
 
-    if ($supervisorResult->num_rows > 0) {
-        while($supervisorRow = $supervisorResult->fetch_assoc()) {
-        	$sid = $supervisorRow["supervisorID"];
-        	array_push($supervisorsAllocated[$sid] = 0);
-        }
-    }
+   // $projectQuery = "SELECT * FROM project";
+   // $projectResult = $connection->query($projectQuery);
 
-    $projectQuery = "SELECT * FROM project";
-    $projectResult = $connection->query($projectQuery);
-
-    if ($projectResult->num_rows > 0) {
-        while($projectRow = $projectResult->fetch_assoc()) {
-        	$pid = $projectRow["projectID"];
-        	array_push($projectsAllocated[$pid] = 0);
-        }
-    }
+    //if ($projectResult->num_rows > 0) {
+    //    while($projectRow = $projectResult->fetch_assoc()) {
+     //   	$pid = $projectRow["projectID"];
+     //   	array_push($projectsAllocated, $pid);
+      //  }
+   // }
 
     // Main allocation outer loop
 	$studentQuery = "SELECT * FROM student";
@@ -58,6 +58,11 @@
 		        	$firstSupervisorID = $firstChoiceRow["supervisorID"];
 		        	$firstSupervisorMax = $firstChoiceRow["maxStudents"];
 		        	$firstProjectMax = $firstChoiceRow["maximumStudents"];
+
+		        	if (empty($supervisorsAllocated) OR empty($projectsAllocated)) {
+        				// Assign first choice
+		        		assignChoice($connection, $studentID, $firstProjectID, $firstSupervisorID);
+        			}	
 
 		        	// If supervisor max students and project max students reached, skip to second choice
 		        	if ($supervisorsAllocated[$firstSupervisorID] == $firstSupervisorMax OR $projectsAllocated[$firstProjectID] == $firstProjectMax) {
@@ -131,7 +136,8 @@
 	$managementUpdate = "UPDATE management SET projectsAllocated = 1";
 
 	if ($connection->query($managementUpdate) === TRUE) {
-		echo "Updated management table";
+		// Redirect to system management.
+		header("Refresh:0.01; url=../admin/systemmanagement.php");
 	} else {
 	    echo "Error: " . $managementUpdate . "<br>" . $connection->error;
 	}
