@@ -1,5 +1,5 @@
-<!-- Establishes a connection to the database. -->
 <?php
+  //Establishes a connection to the database.
 
   // Includes the "vars" file to get IP address and date.
 	include 'vars.php';

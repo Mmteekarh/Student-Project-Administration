@@ -1,5 +1,5 @@
-<!-- Script generates a report with allocation information after the projects have been allocated -->
 <?php
+    // Script generates a report with allocation information after the projects have been allocated
 
     include "../includes/connect.php";
    

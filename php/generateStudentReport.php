@@ -1,5 +1,6 @@
-<!-- Script generates a report with student information relating to the supervisor -->
 <?php
+
+    // Script generates a report with student information relating to the supervisor
 
     include "../includes/connect.php";
 
@@ -20,7 +21,7 @@
         $file = fopen('php://memory', 'w');
         
         // Sets column headers and adds to file.
-        $fields = array('firstName', 'middleInitial', 'lastName', 'projectTitle', 'mainMark', 'secondaryMark');
+        $fields = array('First Name', 'Middle Initial', 'Last Name', 'Project Title', 'Main Mark', 'Secondary Mark');
         fputcsv($file, $fields, $delimiter);
 
         while($supervisorRow = $supervisorResult->fetch_assoc()) {

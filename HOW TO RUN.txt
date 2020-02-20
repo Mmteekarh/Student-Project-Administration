@@ -1,0 +1,22 @@
+--- Student Project Administration System (SPAS) ---
+--- By: Jake Taylor (17004940) ---
+--- Supervisor: Dr Stephen Doswell ---
+
+The project is developed using PHP (https://www.php.net/) and Bootstrap (https://getbootstrap.com/) and requires PHP installed on a local machine before running.
+
+To run the project:
+
+1. Download and install XAMPP (https://xampp.site/) which is a PHP development environment which can run php scripts on a local machine.
+2. Open the XAMPP control panel and start Apache, this will start the PHP web server.
+3. Copy the content of the "project files" folder into C:\xampp\htdocs and go to "localhost/index.php" in your web browser to run the website.
+
+MOCK LOGIN DETAILS:
+Details used for testing as student, supervisor and administrator. You can use the login form to log into any of these accounts.
+
+Student
+ID: 17001010
+Password: password
+
+Admin / Supervisor
+ID: 0
+Password: password
