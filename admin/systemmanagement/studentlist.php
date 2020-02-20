@@ -11,6 +11,23 @@
 
     <title>Student List - SPAS</title>
 
+    <?php
+
+        $allocationQuery = "SELECT * FROM management";
+        $allocationResult = $connection->query($allocationQuery);
+        // Gets if the projects have been allocated and stores in a variable.
+        if ($allocationResult->num_rows > 0) {
+            while($allocationRow = $allocationResult->fetch_assoc()) {
+                $projectsAllocated = $allocationRow["projectsAllocated"];
+            }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: We could not load the allocation data! Please contact an administrator. 
+                   </div>';
+        }
+
+    ?>
+
 </head>
 
 <body>
@@ -83,14 +100,19 @@
                     <thead>
                         <tr>
                             <th scope="col">Student ID</th>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Middle Initial</th>
-                            <th scope="col">Last Name</th>
+                            <th scope="col">Name</th>
                             <th scope="col">Year of Study</th>
                             <th scope="col">PLP?</th>
                             <th scope="col">Course</th>
                             <th scope="col">Logged In?</th>
                             <th scope="col">Last IP</th>
+                            <?php 
+                                if ($projectsAllocated == 1) {
+                                    echo '<th scope="col">Supervisor</th>';
+                                } else {
+                                    echo '<th scope="col">Choices Made</th>';
+                                }
+                            ?>
                             <th scope="col">Edit</th>
                             <th scope="col">Remove</th>
                         </tr>
@@ -100,11 +122,32 @@
 
                         <?php
 
+                            $supervisorName = "Unknown";
+
                             $query = "SELECT * FROM student INNER JOIN course ON student.courseID = course.courseID";
                             $result = $connection->query($query);
 
                             if ($result->num_rows > 0) {
                                 while($row = $result->fetch_assoc()) {
+
+                                    if ($projectsAllocated == 1) {
+                                        $supervisorQuery = "SELECT supervisor.supervisorTitle, supervisor.firstName, supervisor.lastName FROM supervisor 
+                                                            INNER JOIN project ON supervisor.supervisorID = project.supervisorID 
+                                                            INNER JOIN student ON project.projectID = student.projectID 
+                                                            WHERE studentID='$studentID'";
+                                        $supervisorResult = $connection->query($supervisorQuery);
+
+                                        if ($supervisorResult->num_rows > 0) {
+                                            while($supervisorRow = $supervisorResult->fetch_assoc()) {
+                                                $supervisorFirstName = $supervisorRow["firstName"];
+                                                $supervisorLastName = $supervisorRow["lastName"];
+                                                $supervisorTitle = $supervisorRow["supervisorTitle"];
+
+                                                $supervisorName = $supervisorTitle . " " . $supervisorFirstName . " " . $supervisorLastName;
+                                            }
+                                        }
+                                    }
+
                                     $studentID = $row['studentID'];
                                     $firstName = $row['firstName'];
                                     $middleInitial = $row['middleInitial'];
@@ -113,6 +156,22 @@
                                     $plp = $row['plp'];
                                     $loggedIn = $row['loggedIn'];
                                     $lastIP = $row['lastIP'];
+                                    $projectFirstChoice = $row['projectFirstChoice'];
+                                    $projectSecondChoice = $row['projectSecondChoice'];
+                                    $projectThirdChoice = $row['projectThirdChoice'];
+
+                                    $choicesMade = 0;
+
+                                    if (!(is_null($row['projectFirstChoice']))) {
+                                        $choicesMade = $choicesMade + 1;
+                                    } 
+                                    if (!(is_null($row['projectSecondChoice']))) {
+                                        $choicesMade = $choicesMade + 1;
+                                    }
+                                    if (!(is_null($row['projectThirdChoice']))) {
+                                        $choicesMade = $choicesMade + 1;
+                                    }
+
 
                                     if (is_null($row['courseName'])) {
                                         $courseName = "No Course";
@@ -132,16 +191,21 @@
                                         $loggedInText = "No";
                                     }
 
+                                    $studentName = $firstName . " " . $middleInitial . " " . $lastName;
+
                                     echo '<tr>';
                                     echo '<th scope="row">' . $studentID . '</th>';
-                                    echo '<td>' . $firstName . '</td>';
-                                    echo '<td>' . $middleInitial . '</td>';
-                                    echo '<td>' . $lastName . '</td>';
+                                    echo '<td>' . $studentName . '</td>';
                                     echo '<td>' . $yearOfStudy . '</td>';
                                     echo '<td>' . $plpText . '</td>';
                                     echo '<td>' . $courseName . '</td>';
                                     echo '<td>' . $loggedInText . '</td>';
                                     echo '<td>' . $lastIP . '</td>';
+                                    if ($projectsAllocated == 1) {
+                                        echo '<td>' . $supervisorName . '</td>';
+                                    } else {
+                                        echo '<td>' . $choicesMade . '/3</td>';
+                                    }
                                     echo '<td>
                                               <form action="editingstudent.php" method="POST" role="form">
                                                   <input type="hidden" name="studentID" value="'. $studentID .'">

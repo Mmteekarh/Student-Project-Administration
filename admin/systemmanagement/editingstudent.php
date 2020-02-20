@@ -97,10 +97,10 @@
                 <a href="../admin.php">Admin</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="../systemnav.php">System Management</a>
+                <a href="../systemmanagement.php">System Management</a>
             </li>
             <li class="breadcrumb-item">
-                <a href="editstudent.php">Edit Student</a>
+                <a href="studentlist.php">Student List</a>
             </li>
             <li class="breadcrumb-item active">Editing Student</li>
         </ol>

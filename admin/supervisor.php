@@ -22,6 +22,8 @@
         $projectResult = $connection->query($projectQuery);
         $allocationQuery = "SELECT * FROM management";
         $allocationResult = $connection->query($allocationQuery);
+        $activeSupervisorQuery = "SELECT * FROM supervisor WHERE supervisorID='$loggedInSupervisorID'";
+        $activeSupervisorResult = $connection->query($activeSupervisorQuery);
         $projectsAllocated = 0;
 
         // Gets number of students related to the supervisor and stores in a variable.
@@ -45,7 +47,7 @@
                         Error: We could not load the project data! Please contact an administrator. 
                    </div>';
         }
-    
+
         // Gets if the projects have been allocated and stores in a variable.
         if ($allocationResult->num_rows > 0) {
             while($allocationRow = $allocationResult->fetch_assoc()) {
@@ -54,6 +56,16 @@
         } else {
              echo '<div class="alert alert-danger" role="alert">
                         Error: We could not load the allocation data! Please contact an administrator. 
+                   </div>';
+        }
+
+        if ($activeSupervisorResult->num_rows > 0) {
+            while($activeSupervisorRow = $activeSupervisorResult->fetch_assoc()) {
+                $activeSupervisor = $activeSupervisorRow["activeSupervisor"];
+            }
+        } else {
+             echo '<div class="alert alert-danger" role="alert">
+                        Error: We could not load the supervisor data! Please contact an administrator. 
                    </div>';
         }
 
@@ -149,6 +161,13 @@
             <li class="breadcrumb-item active">Supervisor Tools</li>
         </ol>
 
+        <?php 
+            if ($activeSupervisor == 0) {
+                echo "<center><h4>You are not an active supervisor!</h4></center>";
+                echo "<br>";
+            } else {
+        ?>
+
         <!-- First row shows general supervisor statistics -->
         <div class="row">
 
@@ -210,12 +229,19 @@
             
             <div class="col-md-12">
 
-                <!-- Button to add new projects -->
-                <form action="supervisor/addproject.php" method="POST" role="form">
-                    <button class="btn btn-success" type="submit">Add New Project</button>
-                </form>
+                <?php
+                    if ($projectsAllocated == 0) {
+                ?>
+                    <!-- Button to add new projects -->
+                    <form action="supervisor/addproject.php" method="POST" role="form">
+                        <button class="btn btn-success" type="submit">Add New Project</button>
+                    </form>
 
-                <br>
+                    <br>
+
+                <?php
+                    }
+                ?>
 
                 <h3>Your Projects:</h3>
                 <table class="table table-striped">
@@ -519,6 +545,10 @@
             </div>
 
         </div>
+
+        <?php    
+            }
+        ?>
     </div>
 
     <?php include "../includes/footer.php" ?>
