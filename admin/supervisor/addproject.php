@@ -87,21 +87,27 @@
             } else {
 
                 $projectQuery = "INSERT INTO project (projectID, projectTitle, supervisorID, projectBrief, maximumStudents, projectCode, dateCreated, lastUpdated)
-                VALUES ('$projectID', '$projectTitle', '$supervisorID', '$projectBrief', '$maximumStudents', '$projectCode', now(), now())";
+                VALUES (?, ?, ?, ?, ?, ?, now(), now())";
 
                 foreach($courses as $item) {
-                    $projectCourseQuery = "INSERT INTO projectCourse (projectID, courseID) VALUES ('$projectID','$item')";
+                    $projectCourseQuery = "INSERT INTO projectCourse (projectID, courseID) VALUES (?,?)";
 
-                    if ($connection->query($projectCourseQuery) === TRUE) {
+                    if($courseStatement = mysqli_prepare($connection, $projectCourseQuery)) {
+                        mysqli_stmt_bind_param($courseStatement, "ii", $projectID, $item);
+                        mysqli_stmt_execute($courseStatement);
                         continue;
                     } else {
                         echo '<div class="alert alert-danger" role="alert">
                                     Error: Could not insert project-course match! Please contact an administrator.
                               </div>';
                     }
+
+                    mysqli_stmt_close($courseStatement);
                 }
 
-                if ($connection->query($projectQuery) === TRUE) {
+                if($projectStatement = mysqli_prepare($connection, $projectQuery)) {
+                    mysqli_stmt_bind_param($projectStatement, "isisis", $projectID, $projectTitle, $supervisorID, $projectBrief, $maximumStudents, $projectCode);
+                    mysqli_stmt_execute($projectStatement);
                     // Create new project file and refresh to supervisor page.
                     copy('/var/www/html/projectTemplate.php', ('/var/www/html/projects/' . $projectID . '.php'));
                     header("Refresh:0.01; url=../supervisor.php");
@@ -110,6 +116,8 @@
                                 Error: Could not insert project! Please contact an administrator.
                           </div>'; 
                 }
+
+                mysqli_stmt_close($projectStatement);
             }
         }
 

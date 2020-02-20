@@ -99,9 +99,11 @@
 
                                 $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-                                $studentUpdateQuery = "UPDATE student SET password = '$hashedPassword' WHERE lastIP = '$ip'";
+                                $studentUpdateQuery = "UPDATE student SET password = ? WHERE lastIP = ?";
 
-                                if ($connection->query($studentUpdateQuery) === TRUE) {
+                                if($studentStatement = mysqli_prepare($connection, $studentUpdateQuery)) {
+                                    mysqli_stmt_bind_param($studentStatement, "ss", $hashedPassword, $ip);
+                                    mysqli_stmt_execute($studentStatement);
                                     echo '<div class="alert alert-success" role="alert">
                                                 Successfully changed password!
                                           </div>';
@@ -110,6 +112,8 @@
                                                 Error: Could not update password! Please contact an administrator.
                                           </div>';
                                 }
+
+                                mysqli_stmt_close($statement);
 
                             } else {
                                 echo '<div class="alert alert-danger" role="alert">
@@ -137,9 +141,11 @@
 
                                 $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-                                $supervisorUpdateQuery = "UPDATE supervisor SET password = '$hashedPassword' WHERE lastIP = '$ip'";
+                                $supervisorUpdateQuery = "UPDATE supervisor SET password = ? WHERE lastIP = ?";
 
-                                if ($connection->query($supervisorUpdateQuery) === TRUE) {
+                                if($supervisorStatement = mysqli_prepare($connection, $supervisorUpdateQuery)) {
+                                    mysqli_stmt_bind_param($supervisorStatement, "ss", $hashedPassword, $ip);
+                                    mysqli_stmt_execute($supervisorStatement);
                                     echo '<div class="alert alert-success" role="alert">
                                                 Successfully changed password!
                                           </div>';
@@ -148,6 +154,7 @@
                                                 Error: Could not update password! Please contact an administrator.
                                           </div>';
                                 }
+                                mysqli_stmt_close($statement);
 
                             } else {
                                 echo '<div class="alert alert-danger" role="alert">

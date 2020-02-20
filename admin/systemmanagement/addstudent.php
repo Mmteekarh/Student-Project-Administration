@@ -61,15 +61,19 @@
             } else {
 
                 $query = "INSERT INTO student (studentID, firstName, middleInitial, lastName, yearOfStudy, plp, password, courseID, dateCreated, lastUpdated)
-                VALUES ('$studentID', '$firstName', '$middleInitial', '$lastName', '$yearOfStudy', '$plp', '$hashedPassword', '$courseID', now(), now())";
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, now(), now())";
 
-                if ($connection->query($query) === TRUE) {
+                if($statement = mysqli_prepare($connection, $query)) {
+                    mysqli_stmt_bind_param($statement, "issssisi", $studentID, $firstName, $middleInitial, $lastName, $yearOfStudy, $plp, $hashedPassword, $courseID);
+                    mysqli_stmt_execute($statement);
                     header("Refresh:0.01; url=studentlist.php");
                 } else {
                     echo '<div class="alert alert-danger" role="alert">
                                 Error: Could not add student! Please contact an administrator.
                           </div>'; 
                 }
+
+                mysqli_stmt_close($statement);
             }
 
         }

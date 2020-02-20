@@ -70,15 +70,19 @@
 
             } else {
 
-                $query = "UPDATE course SET courseName='$editedCourseName', courseLevel='$editedCourseLevel', courseLeader='$editedCourseLeader', lastUpdated = now() WHERE courseID='$courseID'";
+                $query = "UPDATE course SET courseName = ?, courseLevel = ?, courseLeader = ?, lastUpdated = now() WHERE courseID = ?";
 
-                if ($connection->query($query) === TRUE) {
+                if($statement = mysqli_prepare($connection, $query)) {
+                    mysqli_stmt_bind_param($statement, "sisi", $editedCourseName, $editedCourseLevel, $editedCourseLeader, $courseID);
+                    mysqli_stmt_execute($statement);    
                     header("Refresh:0.01; url=courselist.php");
                 } else {
                     echo '<div class="alert alert-danger" role="alert">
                                 Error: Could not update course!
                           </div>'; 
                 }
+
+                mysqli_stmt_close($statement);
             }
         }
 

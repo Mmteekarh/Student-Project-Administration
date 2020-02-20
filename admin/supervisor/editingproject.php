@@ -83,9 +83,9 @@
 
             } else {
 
-                $projectQuery = "UPDATE project SET projectTitle = '$editedProjectTitle', projectBrief = '$editedProjectBrief', maximumStudents = '$editedMaximumStudents', projectCode = '$editedProjectCode', lastUpdated = now() WHERE projectID='$projectID'";
+                $projectQuery = "UPDATE project SET projectTitle = ?, projectBrief = ?, maximumStudents = ?, projectCode = ?, lastUpdated = now() WHERE projectID = ?";
 
-                $removeProjectCourseQuery = "DELETE FROM projectCourse WHERE projectID='$projectID'";
+                $removeProjectCourseQuery = "DELETE FROM projectCourse WHERE projectID = '$projectID'";
 
                 // Removes project-course links.
                 if (!($connection->query($removeProjectCourseQuery) === TRUE)) {
@@ -97,9 +97,11 @@
                 // Insert records to project-course table based on what courses are related.
                 foreach($editedCourses as $item) {
 
-                    $projectCourseQuery = "INSERT INTO projectCourse (projectID, courseID) VALUES ('$projectID','$item')";
+                    $projectCourseQuery = "INSERT INTO projectCourse (projectID, courseID) VALUES (?, ?)";
 
-                    if ($connection->query($projectCourseQuery) === TRUE) {
+                    if($projectCourseStatement = mysqli_prepare($connection, $projectCourseQuery)) {
+                        mysqli_stmt_bind_param($projectCourseStatement, "ii", $projectID, $item);
+                        mysqli_stmt_execute($projectCourseStatement);
                         continue;
                     } else {
                         echo '<div class="alert alert-danger" role="alert">
@@ -107,10 +109,14 @@
                               </div>';
                     }
 
+                    mysqli_stmt_close($projectCourseStatement);
+
                 }
 
                 // Update project in database.
-                if ($connection->query($projectQuery) === TRUE) {
+                if($projectStatement = mysqli_prepare($connection, $projectQuery)) {
+                    mysqli_stmt_bind_param($projectStatement, "ssisi", $editedProjectTitle, $editedProjectBrief, $editedMaximumStudents, $editedProjectCode, $projectID);
+                    mysqli_stmt_execute($projectStatement);
                     // Remove project file.
                     unlink('/var/www/html/projects/' . $projectID . '.php');
 
@@ -123,6 +129,9 @@
                                 Error: Could not update project! Please contact an administrator.
                           </div>';
                 }
+
+                mysqli_stmt_close($projectStatement);
+
             }
             
         }

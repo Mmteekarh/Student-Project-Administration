@@ -52,15 +52,19 @@
             $editedDeadlineWeighting = $_POST['deadlineWeighting'];
             $editedDeadlineDate = $_POST['deadlineDate'];
 
-            $query = "UPDATE deadlines SET deadlineName='$editedDeadlineName', deadlineWeighting='$editedDeadlineWeighting', deadlineDate='$editedDeadlineDate', lastUpdated = now() WHERE deadlineID='$deadlineID'";
+            $query = "UPDATE deadlines SET deadlineName = ?, deadlineWeighting = ?, deadlineDate = ?, lastUpdated = now() WHERE deadlineID = ?";
 
-            if ($connection->query($query) === TRUE) {
+            if($statement = mysqli_prepare($connection, $query)) {
+                mysqli_stmt_bind_param($statement, "sisi", $editedDeadlineName, $editedDeadlineWeighting, $editedDeadlineDate, $deadlineID);
+                mysqli_stmt_execute($statement);
                 header("Refresh:0.01; url=deadlines.php");
             } else {
                 echo '<div class="alert alert-danger" role="alert">
                             Error: Could not update deadline!
                       </div>'; 
             }
+
+            mysqli_stmt_close($statement);
 
         }
 

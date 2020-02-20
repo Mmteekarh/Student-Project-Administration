@@ -79,15 +79,19 @@
             } else {
 
 				$query = "INSERT INTO supervisor (supervisorID, supervisorTitle, firstName, lastName, activeSupervisor, officeNumber, emailAddress, password, loggedIn, admin, dateCreated, lastUpdated)
-				VALUES ('$supervisorID', '$supervisorTitle', '$firstName', '$lastName', $activeSupervisor, '$officeNumber', '$emailAddress', '$hashedPassword', 0, $adminRow, now(), now())";
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, now(), now())";
 
-				if ($connection->query($query) === TRUE) {
+				if($statement = mysqli_prepare($connection, $query)) {
+                    mysqli_stmt_bind_param($statement, "isssisssi", $supervisorID, $supervisorTitle, $firstName, $lastName, $activeSupervisor, $officeNumber, $emailAddress, $hashedPassword, $adminRow);
+                    mysqli_stmt_execute($statement);
 					header("Refresh:0.01; url=supervisorlist.php");
 				} else {
 				    echo '<div class="alert alert-danger" role="alert">
                                 Error: Could not insert supervisor! Please contact an administrator.
                           </div>'; 
 				}
+
+                mysqli_stmt_close($statement);
 
 			}
 

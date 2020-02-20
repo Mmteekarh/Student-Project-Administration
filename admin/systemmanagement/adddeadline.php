@@ -34,9 +34,11 @@
             $deadlineDate = $_POST['deadlineDate'];
 
             $query = "INSERT INTO deadlines (deadlineName, deadlineWeighting, deadlineDate, dateCreated, lastUpdated)
-            VALUES ('$deadlineName', '$deadlineWeighting', '$deadlineDate', now(), now())";
+            VALUES (?, ?, ?, now(), now())";
 
-            if ($connection->query($query) === TRUE) {
+            if($statement = mysqli_prepare($connection, $query)) {
+                mysqli_stmt_bind_param($statement, "sis", $deadlineName, $deadlineWeighting, $deadlineDate);
+                mysqli_stmt_execute($statement);
                 header("Refresh:0.01; url=deadlines.php");
             } else {
                 echo '<div class="alert alert-danger" role="alert">
@@ -44,7 +46,10 @@
                       </div>'; 
             }
 
+            mysqli_stmt_close($statement);
+
         }
+
         $connection->close();
 
 

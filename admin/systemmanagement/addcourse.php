@@ -58,15 +58,20 @@
             } else {
 
                 $query = "INSERT INTO course (courseID, courseName, courseLevel, courseLeader, dateCreated, lastUpdated)
-                VALUES ('$courseID', '$courseName', '$courseLevel', '$courseLeader', now(), now())";
+                VALUES (?, ?, ?, ?, now(), now())";
 
-                if ($connection->query($query) === TRUE) {
+                if($statement = mysqli_prepare($connection, $query)) {
+                    mysqli_stmt_bind_param($statement, "isis", $courseID, $courseName, $courseLevel, $courseLeader);
+                    mysqli_stmt_execute($statement);
                     header("Refresh:0.01; url=courselist.php");
                 } else {
                     echo '<div class="alert alert-danger" role="alert">
                                 Error: Could not insert course!
                           </div>'; 
                 }
+                
+                mysqli_stmt_close($statement);
+
             }
         }
 

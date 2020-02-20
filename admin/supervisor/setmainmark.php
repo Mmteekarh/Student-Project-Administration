@@ -41,15 +41,19 @@
                             Error: Mark must be numeric!
                       </div>'; 
             } else {
-                $markQuery = "UPDATE student SET mainMark = $mainMark WHERE studentID = $studentID";
+                $query = "UPDATE student SET mainMark = ? WHERE studentID = ?";
 
-                if ($connection->query($markQuery) === TRUE) {
+                if($statement = mysqli_prepare($connection, $query)) {
+                    mysqli_stmt_bind_param($statement, "ii", $mainMark, $studentID);
+                    mysqli_stmt_execute($statement);
                     header("Refresh:0.01; url=../supervisor.php");
                 } else {
                     echo '<div class="alert alert-danger" role="alert">
                                 Error: Could not update student! Please contact an administrator.
                           </div>'; 
                 }
+
+                mysqli_stmt_close($statement);
             }
 
         }

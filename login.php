@@ -52,12 +52,16 @@
                         // Uses php function to check if the entered password is the same as the hashed password from the database.
                         if (password_verify($loginPassword, $passFromDB)) {
                             
-                            $updateStudentQuery = "UPDATE student SET loggedIn = 1, lastIP = '$ip', lastLoggedIn = now() WHERE studentID = '$loginID'";
-                            
-                            if ($connection->query($updateStudentQuery) === TRUE) {
+                            $updateStudentQuery = "UPDATE student SET loggedIn = 1, lastIP = ?, lastLoggedIn = now() WHERE studentID = ?";
+
+                            if($studentStatement = mysqli_prepare($connection, $updateStudentQuery)) {
+                                mysqli_stmt_bind_param($studentStatement, "si", $ip, $loginID);
+                                mysqli_stmt_execute($studentStatement);
                                 header("Refresh:0.01; url=../index.php");
                             } else {
-                                echo "Error: " . $updateStudentQuery . "<br>" . $connection->error;
+                                echo '<div class="alert alert-danger" role="alert">
+                                            Error: Can not update student table. Please contact an administrator.
+                                      </div>'; 
                             }
                         } else {
                             echo '<div class="alert alert-danger" role="alert">
@@ -71,13 +75,18 @@
 
                         if (password_verify($loginPassword, $passFromDB)) {
 
-                            $updateSupervisorQuery = "UPDATE supervisor SET loggedIn = 1, lastIP = '$ip', lastLoggedIn = now() WHERE supervisorID = '$loginID'";
+                            $updateSupervisorQuery = "UPDATE supervisor SET loggedIn = 1, lastIP = ?, lastLoggedIn = now() WHERE supervisorID = ?";
                             
-                            if ($connection->query($updateSupervisorQuery) === TRUE) {
+                            if($supervisorStatement = mysqli_prepare($connection, $updateSupervisorQuery)) {
+                                mysqli_stmt_bind_param($supervisorStatement, "si", $ip, $loginID);
+                                mysqli_stmt_execute($supervisorStatement);
                                 header("Refresh:0.01; url=../index.php");
                             } else {
-                                echo "Error: " . $updateSupervisorQuery . "<br>" . $connection->error;
+                                echo '<div class="alert alert-danger" role="alert">
+                                            Error: Can not update supervisor table. Please contact an administrator.
+                                      </div>'; 
                             }
+                            mysqli_stmt_close($statement);
                         } else {
                             echo '<div class="alert alert-danger" role="alert">
                                         Error: Incorrect details!

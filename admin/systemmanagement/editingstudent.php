@@ -69,15 +69,19 @@
 
             } else {
 
-                $query = "UPDATE student SET firstName = '$editedFirstName', middleInitial = '$editedMiddleInitial', lastName = '$editedLastName', yearOfStudy = '$editedYearOfStudy', plp = '$editedPlp', courseID = '$editedCourseID', lastUpdated = now() WHERE studentID = '$studentID'";
+                $query = "UPDATE student SET firstName = ?, middleInitial = ?, lastName = ?, yearOfStudy = ?, plp = ?, courseID = ?, lastUpdated = now() WHERE studentID = ?";
 
-                if ($connection->query($query) === TRUE) {
+                if($statement = mysqli_prepare($connection, $query)) {
+                    mysqli_stmt_bind_param($statement, "ssssiii", $editedFirstName, $editedMiddleInitial, $editedLastName, $editedYearOfStudy, $editedPlp, $editedCourseID, $studentID);
+                    mysqli_stmt_execute($statement);
                     header("Refresh:0.01; url=studentlist.php");
                 } else {
                     echo '<div class="alert alert-danger" role="alert">
                                 Error: Could not update student table!
                           </div>'; 
                 }
+
+                mysqli_stmt_close($statement);
 
             }
         }

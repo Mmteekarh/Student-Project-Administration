@@ -41,15 +41,19 @@
                             Error: EthOS number must be numeric!
                       </div>'; 
             } else {
-                $ethosQuery = "UPDATE student SET ethosNumber = $ethosNumber WHERE studentID = $studentID";
+                $query = "UPDATE student SET ethosNumber = ? WHERE studentID = ?";
 
-                if ($connection->query($ethosQuery) === TRUE) {
+                if($statement = mysqli_prepare($connection, $query)) {
+                    mysqli_stmt_bind_param($statement, "ii", $ethosNumber, $studentID);
+                    mysqli_stmt_execute($statement);
                     header("Refresh:0.01; url=../supervisor.php");
                 } else {
                     echo '<div class="alert alert-danger" role="alert">
                                 Error: Could not update student! Please contact an administrator.
                           </div>'; 
                 }
+
+                mysqli_stmt_close($statement);
             }
 
         }

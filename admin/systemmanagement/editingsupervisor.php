@@ -88,15 +88,19 @@
 
             } else {
 
-                $query = "UPDATE supervisor SET supervisorTitle = '$editedSupervisorTitle', firstName = '$editedFirstName', lastName = '$editedLastName', activeSupervisor = $activeSupervisor, officeNumber = '$editedOfficeNumber', emailAddress = '$editedEmailAddress', admin = $adminRow, lastUpdated = now() WHERE supervisorID = '$supervisorID'";
+                $query = "UPDATE supervisor SET supervisorTitle = ?, firstName = ?, lastName = ?, activeSupervisor = ?, officeNumber = ?, emailAddress = ?, admin = ?, lastUpdated = now() WHERE supervisorID = ?";
 
-                if ($connection->query($query) === TRUE) {
+                if($statement = mysqli_prepare($connection, $query)) {
+                    mysqli_stmt_bind_param($statement, "sssissii", $editedSupervisorTitle, $editedFirstName, $editedLastName, $activeSupervisor, $editedOfficeNumber, $editedEmailAddress, $adminRow, $supervisorID);
+                    mysqli_stmt_execute($statement);
                     header("Refresh:0.01; url=supervisorlist.php");
                 } else {
                     echo '<div class="alert alert-danger" role="alert">
                                 Error: Could not update supervisor! Please contact an administrator.
                           </div>'; 
                 }
+
+                mysqli_stmt_close($statement);
 
             }
 
