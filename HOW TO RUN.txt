@@ -12,6 +12,7 @@ To run the project:
 
 MOCK LOGIN DETAILS:
 Details used for testing as student, supervisor and administrator. You can use the login form to log into any of these accounts.
+(Student accounts are populated with three choices made, this replicates what would happen during a real-life use of the system).
 
 Student
 ID: 17001010
@@ -26,3 +27,26 @@ Password: password
 
 ID: 57665423 (supervisor)
 Password: password
+
+SYSTEM FEATURES:
+- Home page with list of projects which can be sorted by course.
+- Login area where supervisors/students can securely log in (protected with prepared statements and password hashing)
+- Account page where a user can securely change their password and view their saved details.
+- Help and accessibility page for general information.
+- Each project has its own page generated from a template. For students, they can select up to 3 project choices.
+- For students, a selection page which allows students to view and remove their choices.
+- Admin panel for supervisors and system administrators.
+
+Admin panel includes:
+- Supervisor tools, supervisor can add/edit/remove projects, view their assigned students when projects have been allocated and view/mark secondary students which are randomly assigned.
+- Supervisor tools also includes a CSV download of a file containing all student information and their marks.
+- System management area allows admin to add/edit/remove courses, deadlines, supervisors and students.
+- Students can also be imported with a CSV file.
+- Admin can allocate projects, assigning users projects based on their choices and also assigning them a random second marker.
+- Once projects are allocated, admin can download a report which shows them what projects each student has been assigned to.
+
+Extra features include:
+- Ability to set supervisor to inactive/active, disallowing them from adding/editing projects.
+- Password hashing and prepared statements for protection against SQL injections.
+- Form verification ensuring all data into the database is the correct format.
+- Site is populated with dummy data which consists of random names and details. These do not reflect the details of real people.

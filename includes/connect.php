@@ -8,6 +8,9 @@
 	include 'vars.php';
   include 'pass.php';
 
+  ini_set('display_errors', 0);
+  ini_set('display_startup_errors', 0);
+
 	// Attempts to make a connection to the database with host -> username -> password -> database name.
 	$connection = new mysqli($HOSTNAME, $USERNAME, $PASSWORD, $DATABASE);
            
