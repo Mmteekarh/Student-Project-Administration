@@ -16,7 +16,7 @@
         $hasStudents = false;
 
         // Queries to get statistics from the database. Includes student count, project count and gets if the projects have been allocated
-        $studentQuery = "SELECT COUNT(*) AS studentCount FROM student INNER JOIN project ON student.projectID = project.projectID WHERE supervisorID='$loggedInSupervisorID'";
+        $studentQuery = "SELECT COUNT(*) AS studentCount FROM student INNER JOIN project ON student.projectID = project.projectID WHERE supervisorID = '$loggedInSupervisorID'";
         $studentResult = $connection->query($studentQuery);
         $projectQuery = "SELECT COUNT(*) AS projectCount FROM project WHERE supervisorID='$loggedInSupervisorID'";
         $projectResult = $connection->query($projectQuery);
@@ -325,6 +325,7 @@
                             <th scope="col">First Name</th>
                             <th scope="col">Middle Initial</th>
                             <th scope="col">Last Name</th>
+                            <th scope="col">Project Code</th>
                             <th scope="col">Year of Study</th>
                             <th scope="col">PLP?</th>
                             <th scope="col">EthOS</th>
@@ -341,6 +342,7 @@
                             if ($projectsAllocated == 0) {
                                 echo '<tr>';
                                 echo '<th scope="row">Not yet allocated</th>';
+                                echo '<td></td>';
                                 echo '<td></td>';
                                 echo '<td></td>';
                                 echo '<td></td>';
@@ -369,6 +371,7 @@
                                         $ethos = $showStudentsRow['ethosNumber'];
                                         $mainMark = $showStudentsRow['mainMark'];
                                         $secondaryMark = $showStudentsRow['secondaryMark'];
+                                        $projectCode = $showStudentsRow['projectCode'];
 
                                         if ($plp == 0) {
                                           $plpText = "No";
@@ -387,6 +390,7 @@
                                         echo '<td>' . $firstName . '</td>';
                                         echo '<td>' . $middleInitial . '</td>';
                                         echo '<td>' . $lastName . '</td>';
+                                        echo '<td>' . $projectCode . '</td>';
                                         echo '<td>' . $yearOfStudy . '</td>';
                                         echo '<td>' . $plpText . '</td>';
                                         if ($ethos == "Not Set") {

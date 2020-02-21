@@ -18,5 +18,11 @@ ID: 17001010
 Password: password
 
 Admin / Supervisor
-ID: 0
+ID: 0 (admin)
+Password: password
+
+ID: 43227854 (supervisor)
+Password: password
+
+ID: 57665423 (supervisor)
 Password: password

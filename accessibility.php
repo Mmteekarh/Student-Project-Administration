@@ -7,7 +7,7 @@
     <!-- Includes required scripts. -->
     <?php include "includes/header.php" ?>
 
-    <link rel="shortcut icon" type="image/png" href="../images/favicon.png"/>
+    <link rel="shortcut icon" type="image/png" href="images/favicon.png"/>
 
     <title>Accessibility</title>
 

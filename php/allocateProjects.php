@@ -5,30 +5,8 @@
     include "../includes/connect.php";
 
     $manualQueue = array();
-    $studentsAllocated = array();
     $projectsAllocated = array();
     $supervisorsAllocated = array();
-
-    // Populate arrays with keys
-    //$supervisorQuery = "SELECT * FROM supervisor";
-    //$supervisorResult = $connection->query($supervisorQuery);
-//
-   //if ($supervisorResult->num_rows > 0) {
-    //    while($supervisorRow = $supervisorResult->fetch_assoc()) {
-     //   	$sid = $supervisorRow["supervisorID"];
-    //    	array_push($supervisorsAllocated, $sid);
-     //   }
-   // }
-
-   // $projectQuery = "SELECT * FROM project";
-   // $projectResult = $connection->query($projectQuery);
-
-    //if ($projectResult->num_rows > 0) {
-    //    while($projectRow = $projectResult->fetch_assoc()) {
-     //   	$pid = $projectRow["projectID"];
-     //   	array_push($projectsAllocated, $pid);
-      //  }
-   // }
 
     // Main allocation outer loop
 	$studentQuery = "SELECT * FROM student";
@@ -59,13 +37,14 @@
 		        	$firstSupervisorMax = $firstChoiceRow["maxStudents"];
 		        	$firstProjectMax = $firstChoiceRow["maximumStudents"];
 
-		        	if (empty($supervisorsAllocated) OR empty($projectsAllocated)) {
+		        	if (!(array_key_exists($projectID, $projectsAllocated)) OR !(array_key_exists($supervisorID, $supervisorsAllocated))) {
         				// Assign first choice
 		        		assignChoice($connection, $studentID, $firstProjectID, $firstSupervisorID);
+		        		break;
         			}	
 
 		        	// If supervisor max students and project max students reached, skip to second choice
-		        	if ($supervisorsAllocated[$firstSupervisorID] == $firstSupervisorMax OR $projectsAllocated[$firstProjectID] == $firstProjectMax) {
+		        	if ($supervisorsAllocated['$firstSupervisorID'] >= $firstSupervisorMax OR $projectsAllocated['$firstProjectID'] >= $firstProjectMax) {
 		        		
 		        		$secondChoiceQuery = "SELECT * FROM student 
         									  INNER JOIN project ON student.projectSecondChoice = project.projectID
@@ -81,7 +60,7 @@
 					        	$secondProjectMax = $secondChoiceRow["maximumStudents"];
 
 					        	// If supervisor max students and project max students reached, skip to third choice
-					        	if ($supervisorsAllocated[$secondSupervisorID] == $secondSupervisorMax or $projectsAllocated[$secondProjectID] == $secondProjectMax) {
+					        	if ($supervisorsAllocated['$secondSupervisorID'] >= $secondSupervisorMax OR $projectsAllocated['$secondProjectID'] >= $secondProjectMax) {
 
 					        		$thirdChoiceQuery = "SELECT * FROM student 
 						            					 INNER JOIN project ON student.projectThirdChoice = project.projectID
@@ -97,7 +76,7 @@
 								        	$thirdProjectMax = $thirdChoiceRow["maximumStudents"];
 
 								        	// If supervisor max students and project max students reached, skip
-								        	if ($supervisorsAllocated[$thirdSupervisorID] == $thirdSupervisorMax or $projectsAllocated[$thirdProjectID] == $thirdProjectMax) {
+								        	if ($supervisorsAllocated['$thirdSupervisorID'] >= $thirdSupervisorMax OR $projectsAllocated['$thirdProjectID'] >= $thirdProjectMax) {
 								        		continue 2;
 								        	} else {
 								        		// Assign third choice
@@ -145,18 +124,14 @@
 	header("Refresh:1; url=../admin/systemmanagement.php");
 
     function getRandomMarker($connection, $supervisorID) {
-    	$secondMarkerQuery = "SELECT COUNT(*) AS total FROM supervisor";
+    	$secondMarkerQuery = "SELECT * FROM supervisor WHERE supervisorID NOT IN (0) ORDER BY RAND() LIMIT 1";
 		$secondMarkerResult = $connection->query($secondMarkerQuery);
-
-		$randomSupervisor = 0;
 
 	    if ($secondMarkerResult->num_rows > 0) {
 	        while($secondMarkerRow = $secondMarkerResult->fetch_assoc()) {
-	        	$totalSupervisors = $secondMarkerRow["total"];
+	        	$randomSupervisor = $secondMarkerRow["supervisorID"];
 
-	        	$randomSupervisor = rand(1, $totalSupervisors);
-
-	        	if ($randomSupervisor == $supervisorID) {
+	        	if ($randomSupervisor == $supervisorID OR $randomSupervisor == '0') {
 	        		getRandomMarker($connection, $supervisorID);
 	        	} else {
 	        		return $randomSupervisor;
@@ -168,8 +143,16 @@
     function assignChoice($connection, $studentID, $projectID, $supervisorID) {
 
 		// Assign choice to user
-		$projectsAllocated[$projectID] = $projectsAllocated[$projectID] + 1;
-		$supervisorsAllocated[$supervisorID] = $supervisorsAllocated[$supervisorID] + 1;
+		if (!(array_key_exists($projectID, $projectsAllocated))) {
+			$projectsAllocated['$projectID'] = 1;
+		} else {
+			$projectsAllocated['$projectID'] = ($projectsAllocated['$projectID'] + 1);
+		}
+		if (!(array_key_exists($supervisorID, $supervisorsAllocated))) {
+			$supervisorsAllocated['$supervisorID'] = 1;
+		} else {
+			$supervisorsAllocated['$supervisorID'] = ($supervisorsAllocated['$supervisorID'] + 1);
+		}
 
 		$randomSupervisor = getRandomMarker($connection, $supervisorID);
 
