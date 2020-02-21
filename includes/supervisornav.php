@@ -2,26 +2,40 @@
 <?php
 
 echo '
+
+        <!-- Required JQuery scripts for running the drop down on the collapse button -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
             <div class="container">
 
                 <a class="navbar-brand" href="../../admin/admin.php">Admin</a>
 
-                <ul class="navbar-nav">
+                <!-- Creates a toggle button which activates when the page gets small (runs on mobile devices) -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsableNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="../../index.php">Back To Site</a>
-                    </li>
+                <div class="collapse navbar-collapse" id="collapsableNavbar">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="../../admin/admin.php">Admin Home</a>
-                    </li>
+                    <ul class="nav navbar-nav ml-auto">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="../../admin/supervisor.php">Supervisor Tools</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../../index.php">Back To Site</a>
+                        </li>
 
-                </ul>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../../admin/admin.php">Admin Home</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="../../admin/supervisor.php">Supervisor Tools</a>
+                        </li>
+
+                    </ul>
+
+                </div>
 
             </div>
 
