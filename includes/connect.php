@@ -1,5 +1,8 @@
 <?php
   //Establishes a connection to the database.
+  
+  // Loads favicon
+  echo '<link rel="shortcut icon" type="image/png" href="../images/favicon.png"/>';
 
   // Includes the "vars" file to get IP address and date.
 	include 'vars.php';
