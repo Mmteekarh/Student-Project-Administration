@@ -1,6 +1,4 @@
 --- Student Project Administration System (SPAS) ---
---- By: Jake Taylor (17004940) ---
---- Supervisor: Dr Stephen Doswell ---
 
 The project is developed using PHP (https://www.php.net/) and Bootstrap (https://getbootstrap.com/) and requires PHP installed on a local machine before running.
 
@@ -14,19 +12,7 @@ MOCK LOGIN DETAILS:
 Details used for testing as student, supervisor and administrator. You can use the login form to log into any of these accounts.
 (Student accounts are populated with three choices made, this replicates what would happen during a real-life use of the system).
 
-Student
-ID: 17001010
-Password: password
-
-Admin / Supervisor
-ID: 0 (admin)
-Password: password
-
-ID: 43227854 (supervisor)
-Password: password
-
-ID: 57665423 (supervisor)
-Password: password
+[Removed]
 
 SYSTEM FEATURES:
 - Home page with list of projects which can be sorted by course.
